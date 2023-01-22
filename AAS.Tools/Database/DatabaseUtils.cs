@@ -3,7 +3,7 @@
 namespace AAS.Tools.Database;
 public class DatabaseUtils
 {
-    const String connectionString = "Server=localhost;Username=postgres;Password=1111;Database=aas";
+    const String connectionString = "Server=localhost;Username=postgres;Password=1234;Database=aas";
 
     public static void UseSqlCommand(Action<NpgsqlCommand> getCommand)
     {
