@@ -7,10 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Users\Repositories\Queries\Users\Users_GetById.sql" />
+    <None Remove="Users\Repositories\Queries\Users\Users_GetByName.sql" />
     <None Remove="Users\Repositories\Queries\Users\Users_Save.sql" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Users\Repositories\Queries\Users\Users_GetByName.sql" />
+    <EmbeddedResource Include="Users\Repositories\Queries\Users\Users_GetById.sql" />
     <EmbeddedResource Include="Users\Repositories\Queries\Users\Users_Save.sql" />
   </ItemGroup>
 

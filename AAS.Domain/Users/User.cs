@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PMS.Tools.Types.IDs;
 
 namespace AAS.Domain.Users;
 
 public class User
 {
-    public Guid Id { get; }
+    public ID Id { get; }
     public string FirstName { get; }
     public string? MiddleName { get; }
     public string LastName { get; }
@@ -16,7 +12,7 @@ public class User
     public string PasswordHash { get; }
     public string PhoneNumber { get; }
 
-    public User(Guid id, string firstName, string? middleName, string lastName, string email, string passwordHash, string phoneNumber)
+    public User(ID id, string firstName, string? middleName, string lastName, string email, string passwordHash, string phoneNumber)
     {
         Id = id;
         FirstName = firstName;
