@@ -20,9 +20,9 @@ packages/
 *.cache
 packages/*
 node_modules
-PMS.BackOffice/wwwroot/dist
-PMS.BackOffice/ClientApps/package-lock.json
-PMS.BackOffice/wwwroot/dist
-PMS.BackOffice/ClientApps/package-lock.json
+AAS.BackOffice/wwwroot/dist
+AAS.BackOffice/ClientApps/package-lock.json
+AAS.BackOffice/wwwroot/dist
+AAS.BackOffice/ClientApps/package-lock.json
 /.vscode/
 /publish
