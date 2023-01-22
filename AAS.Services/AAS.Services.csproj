@@ -7,11 +7,20 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Users\" />
+    <None Remove="Users\Repositories\Queries\Users\Users_Save.sql" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.0" />
+    <EmbeddedResource Include="Users\Repositories\Queries\Users\Users_Save.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="7.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AAS.Domain\AAS.Domain.csproj" />
+    <ProjectReference Include="..\AAS.Tools\AAS.Tools.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,5 +1,4 @@
 ﻿namespace AAS.Domain.Users;
-
 public class UserBlank
 {
     public Guid? Id { get; set; }
@@ -9,5 +8,4 @@ public class UserBlank
     public string? Email { get; set; }
     public string? PasswordHash { get; set; }
     public string? PhoneNumber { get; set; }
-
 }
