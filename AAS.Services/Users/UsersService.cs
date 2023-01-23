@@ -23,4 +23,9 @@ public class UsersService : IUsersService
         return _usersRepository.GetUser(userName);
     }
 
+    public User? DeleteUser(String userName)
+    {
+        return _usersRepository.DeleteUser(userName);
+    }
+
 }

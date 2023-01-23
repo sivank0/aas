@@ -59,4 +59,20 @@ public class UsersRepositry
             return null;
         });
     }
+
+    public User? DeleteUser(String userName)
+    {
+        return DatabaseUtils.UseSqlCommand(command =>
+        {
+            command.CommandText = Sql.Users_DeleteByName;
+
+            command.Parameters.AddWithValue("p_name", userName);
+
+            using (NpgsqlDataReader reader = command.ExecuteReader())
+                while (reader.Read())
+                    return reader.ToUser();
+
+            return null;
+        });
+    }
 }
