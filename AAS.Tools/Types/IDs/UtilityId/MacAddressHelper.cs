@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Net.NetworkInformation;
 
-namespace PMS.Tools.Types.IDs.UtilityId
+namespace AAS.Tools.Types.IDs.UtilityId
 {
     internal static class MacAddressHelper
     {

@@ -1,24 +1,16 @@
 ﻿using AAS.Domain.Users;
-using Npgsql;
-using PMS.Tools.Types.IDs;
+using AAS.Services.Users.Models;
 
 namespace AAS.Services.Users.Converters;
 public static class UserConverter
 {
-    public static User? ToUser(this NpgsqlDataReader reader)
+    public static User ToUser(this UserDb db)
     {
-        Object? userId = reader["id"];
+        return new User(db.Id, db.FirstName, db.MiddleName, db.LastName, db.Email, db.PasswordHash, db.PhoneNumber);
+    }
 
-        if (userId is null) return null;
-
-        return new User(
-            new ID((Byte[])userId),
-            (String)reader["firstname"],
-            (String)reader["middlename"],
-            (String)reader["lastname"],
-            (String)reader["email"],
-            (String)reader["passwordhash"],
-            (String)reader["phonenumber"]
-        );
+    public static User[] ToUsers(this UserDb[] dbs)
+    {
+        return dbs.Select(ToUser).ToArray();
     }
 }

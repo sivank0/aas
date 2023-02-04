@@ -1,8 +1,8 @@
-﻿using PMS.Tools.Types.IDs.UtilityId;
+﻿using AAS.Tools.Types.IDs.UtilityId;
 using System;
 using System.Runtime.InteropServices;
 
-namespace PMS.Tools.Types.IDs
+namespace AAS.Tools.Types.IDs
 {
     public class UUId : IComparable
     {

@@ -1,7 +1,7 @@
 using AAS.Tools.Converters;
 using Newtonsoft.Json;
 
-namespace PMS.Tools.Types.IDs;
+namespace AAS.Tools.Types.IDs;
 
 [Serializable]
 [JsonConverter(typeof(IDJsonConverter))]

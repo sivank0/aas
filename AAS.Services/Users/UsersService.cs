@@ -1,14 +1,20 @@
 ﻿using AAS.Domain.Services;
 using AAS.Domain.Users;
 using AAS.Services.Users.Repositories;
-using PMS.Tools.Types.IDs;
+using AAS.Tools.Types.IDs;
+using AAS.Tools.Types.Results;
 
 namespace AAS.Services.Users;
 public class UsersService : IUsersService
 {
-    private readonly UsersRepositry _usersRepository = new UsersRepositry();
+    private readonly IUsersRepository _usersRepository;
 
-    public string SaveUser(UserBlank userBlank)
+    public UsersService(IUsersRepository usersRepository)
+    {
+        _usersRepository = usersRepository;
+    }
+
+    public Result SaveUser(UserBlank userBlank)
     {
         throw new NotImplementedException();
     }
@@ -23,9 +29,11 @@ public class UsersService : IUsersService
         return _usersRepository.GetUser(userName);
     }
 
-    public User? DeleteUser(String userName)
+    public Result RemoveUser(ID userId)
     {
-        return _usersRepository.DeleteUser(userName);
+        _usersRepository.RemoveUser(userId);
+
+        return Result.Success();
     }
 
 }

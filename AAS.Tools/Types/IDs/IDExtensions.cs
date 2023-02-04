@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace PMS.Tools.Types.IDs
+namespace AAS.Tools.Types.IDs
 {
     public static class IDExtensions
     {

@@ -1,0 +1,4 @@
+{
+    "ConnectionString": "Server=localhost;Username=pms_admin;Database=pms_prod;Port=5432;Password=odos3{j%vxZ988D",
+    "Environment": "Production"
+}

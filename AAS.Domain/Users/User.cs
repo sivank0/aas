@@ -1,16 +1,17 @@
-﻿using PMS.Tools.Types.IDs;
+﻿using AAS.Tools.Types.IDs;
 
 namespace AAS.Domain.Users;
 
 public class User
 {
     public ID Id { get; }
-    public string FirstName { get; }
-    public string? MiddleName { get; }
-    public string LastName { get; }
-    public string Email { get; }
-    public string PasswordHash { get; }
-    public string PhoneNumber { get; }
+    public String FirstName { get; }
+    public String? MiddleName { get; }
+    public String LastName { get; }
+    public String FullName => String.IsNullOrWhiteSpace(MiddleName) ? LastName + FirstName : LastName + FirstName + MiddleName;
+    public String Email { get; }
+    public String PasswordHash { get; }
+    public String PhoneNumber { get; }
 
     public User(ID id, string firstName, string? middleName, string lastName, string email, string passwordHash, string phoneNumber)
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace PMS.Tools.Types.IDs.UtilityId
+namespace AAS.Tools.Types.IDs.UtilityId
 {
     internal static class IdCreateSequentialWinApi
     {

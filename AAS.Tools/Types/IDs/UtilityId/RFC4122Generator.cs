@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading;
 
-namespace PMS.Tools.Types.IDs.UtilityId
+namespace AAS.Tools.Types.IDs.UtilityId
 {
     internal static class RFC4122Generator
 	{

@@ -1,78 +1,73 @@
 ﻿using AAS.Domain.Users;
 using AAS.Services.Users.Converters;
+using AAS.Services.Users.Models;
 using AAS.Services.Users.Repositories.Queries;
-using AAS.Tools.Database;
-using Npgsql;
-using PMS.Tools.Types.IDs;
+using AAS.Tools.DB;
+using AAS.Tools.Types.IDs;
 
 namespace AAS.Services.Users.Repositories;
-public class UsersRepositry
+
+public class UsersRepository : NpgSqlRepository, IUsersRepository
 {
-    //CRUD
+    public UsersRepository(String connectionString) : base(connectionString) { }
+
+    //public void SaveUserAccess(UserAccessBlank userAccessBlank, ID userId)
+    //{
+    //    ExecutionInTransaction(command =>
+    //    {
+
+    //        UserAccessDb accessDb = userAccessBlank.ToUserAccessDb(userId);
+    //        accessDb.ModifiedDateTimeUtc = accessDb.CreatedDateTimeUtc = DateTime.UtcNow;
+    //        accessDb.ModifiedUserId = accessDb.CreatedUserId = userId;
+
+    //        command.Execute(Sql.UserAccesses_Save, accessDb);
+
+    //    });
+    //}
     public void SaveUser(UserBlank userBlank)
     {
-        DatabaseUtils.UseSqlCommand(command =>
+        SqlParameter[] parameters =
         {
-            command.CommandText = Sql.Users_Save;
+            new("p_id", userBlank.Id!),
+            new("p_firstname", userBlank.FirstName!),
+            new("p_middlename", userBlank.MiddleName!),
+            new("p_lastname", userBlank.LastName!),
+            new("p_email", userBlank.Email!),
+            new("p_passwordhash", userBlank.PasswordHash!),
+            new("p_phonenumber", userBlank.PhoneNumber!),
+            new("p_currentdatetimeutc", DateTime.UtcNow)
+        };
 
-            command.Parameters.AddWithValue("p_id", userBlank.Id!);
-            command.Parameters.AddWithValue("p_firstname", userBlank.FirstName!);
-            command.Parameters.AddWithValue("p_middlename", userBlank.MiddleName!);
-            command.Parameters.AddWithValue("p_lastname", userBlank.LastName!);
-            command.Parameters.AddWithValue("p_email", userBlank.Email!);
-            command.Parameters.AddWithValue("p_passwordhash", userBlank.PasswordHash!);
-            command.Parameters.AddWithValue("p_phonenumber", userBlank.PhoneNumber!);
-            command.Parameters.AddWithValue("p_currentdatetimeutc", DateTime.UtcNow);
-
-            command.ExecuteNonQuery();
-        });
+        Execute(Sql.Users_Save, parameters);
     }
 
-    public User? GetUser(ID id)
+    public User? GetUser(ID userId)
     {
-        return DatabaseUtils.UseSqlCommand(command =>
+        SqlParameter[] parameters =
         {
-            command.CommandText = Sql.Users_GetById;
+            new("p_id", userId),
+        };
 
-            command.Parameters.AddWithValue("p_id", id);
-
-            using (NpgsqlDataReader reader = command.ExecuteReader())
-                while (reader.Read())
-                    return reader.ToUser();
-
-            return null;
-        });
+        return Get<UserDb?>(Sql.Users_GetById, parameters)?.ToUser();
     }
 
     public User? GetUser(String userName)
     {
-        return DatabaseUtils.UseSqlCommand(command =>
+        SqlParameter[] parameters =
         {
-            command.CommandText = Sql.Users_GetByName;
+            new("p_username", userName),
+        };
 
-            command.Parameters.AddWithValue("p_name", userName);
-
-            using (NpgsqlDataReader reader = command.ExecuteReader())
-                while (reader.Read())
-                    return reader.ToUser();
-
-            return null;
-        });
+        return Get<UserDb?>(Sql.Users_GetById, parameters)?.ToUser();
     }
 
-    public User? DeleteUser(String userName)
+    public void RemoveUser(ID userId)
     {
-        return DatabaseUtils.UseSqlCommand(command =>
+        SqlParameter[] parameters =
         {
-            command.CommandText = Sql.Users_DeleteByName;
+            new("p_id", userId),
+        };
 
-            command.Parameters.AddWithValue("p_name", userName);
-
-            using (NpgsqlDataReader reader = command.ExecuteReader())
-                while (reader.Read())
-                    return reader.ToUser();
-
-            return null;
-        });
+        Execute(Sql.Users_DeleteByName, parameters);
     }
 }
