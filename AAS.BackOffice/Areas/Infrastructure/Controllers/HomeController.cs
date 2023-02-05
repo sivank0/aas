@@ -7,8 +7,7 @@ namespace AAS.BackOffice.Areas.Infrastructure.Controllers;
 
 public class HomeController : BaseController
 {
-    [Route("/")]
-    [IsAuthorized]
+    [Route("/")] 
     public ViewResult Index() => ReactApp();
 
     [Route("/users")]

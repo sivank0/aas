@@ -9,9 +9,6 @@
 	<ItemGroup>
 		<Content Include="..\Configurations\DbConnections\connectionStrings.Development.json" Link="Configurations\DbConnections\connectionStrings.Development.json">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</Content>
-		<Content Include="..\Configurations\DbConnections\connectionStrings.Production.json" Link="Configurations\DbConnections\connectionStrings.Production.json">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content> 
 	</ItemGroup>
 
