@@ -1,4 +1,5 @@
 import React from "react";
+import "../../content/desktopMain.css";
 import { ThemeProvider } from "@emotion/react";
 import { createTheme, CssBaseline } from "@mui/material";
 import { ruRU } from '@mui/material/locale';
