@@ -2,7 +2,7 @@ import React from "react";
 import { ThemeProvider } from "@emotion/react";
 import { createTheme, CssBaseline } from "@mui/material";
 import { ruRU } from '@mui/material/locale';
-import { SnackbarProvider, useSnackbar } from "notistack";
+import { SnackbarProvider } from "notistack";
 import { PropsWithChildren } from "react";
 
 interface LayoutProps { }
@@ -12,7 +12,6 @@ const theme = createTheme(
 );
 
 export const DesktopLayout = (props: PropsWithChildren<LayoutProps>) => {
-    const snackBar = useSnackbar();
     return (
         <ThemeProvider theme={theme}>
             <SnackbarProvider maxSnack={3} >
