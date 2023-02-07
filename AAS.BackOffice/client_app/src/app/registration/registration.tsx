@@ -1,5 +1,5 @@
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { Box, Button, IconButton, InputAdornment, Link, Paper, TextField, Typography } from '@mui/material';
+import { Box, Button, IconButton, InputAdornment, Link, Paper, TextField, Tooltip, Typography } from '@mui/material';
 import { Container } from '@mui/system';
 import React, { useState } from 'react';
 
@@ -52,6 +52,8 @@ export const Registration = () => {
                     display: 'flex',
                     flexDirection: 'column',
                     width: '25%',
+                    minWidth: '450px',
+                    minHeight: '300px',
                     padding: 2,
                     margin: 'auto',
                     gap: 2
@@ -102,24 +104,34 @@ export const Registration = () => {
                     InputProps={{
                         endAdornment: (
                             <InputAdornment position="end">
-                                <IconButton
-                                    aria-label="toggle password visibility"
-                                    onClick={() => setShowPassword(!showPassword)}>
-                                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                                </IconButton>
+                                <Tooltip title='Показать пароль'>
+                                    <IconButton
+                                        aria-label="toggle password visibility"
+                                        onClick={() => setShowPassword(!showPassword)}>
+                                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                                    </IconButton>
+                                </Tooltip>
                             </InputAdornment>
                         )
                     }} />
-                <Button variant="outlined" onClick={() => { }}>
-                    Зарегистрироваться
-                </Button>
-                <Link href=''
-                    sx={{
-                        fontSize: '15px',
-                        textAlign: 'right'
-                    }}>
-                    Авторизация
-                </Link>
+                <Tooltip title='Зарегистрировать аккаунт'>
+                    <Button variant="outlined" onClick={() => { }}>
+                        Зарегистрироваться
+                    </Button>
+                </Tooltip>
+
+                <Box>
+                    <Tooltip title='Перейти на страницу авторизации'>
+                        <Link href=''
+                            sx={{
+                                fontSize: '15px',
+                                width: '30%',
+                                marginLeft: '79%'
+                            }}>
+                            Авторизация
+                        </Link>
+                    </Tooltip>
+                </Box>
             </Paper>
         </Container>
     )
