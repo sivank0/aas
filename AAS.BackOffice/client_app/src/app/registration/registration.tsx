@@ -3,10 +3,14 @@ import { Box, Button, IconButton, InputAdornment, Link, Paper, TextField, Typogr
 import { Container } from '@mui/system';
 import React, { useState } from 'react';
 
-export const Auth = () => {
+export const Registration = () => {
     const [showPassword, setShowPassword] = useState<boolean>(false)
     const [email, setEmail] = useState<string | null>(null)
     const [password, setPassword] = useState<string | null>(null)
+    const [phone, setPhone] = useState<string | null>(null)
+    const [name, setName] = useState<string | null>(null)
+    const [lastName, setLastName] = useState<string | null>(null)
+    const [middleName, setMiddleName] = useState<string | null>(null)
 
     function changeEmail(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
         const email = event.currentTarget.value ?? null;
@@ -16,6 +20,24 @@ export const Auth = () => {
         const password = event.currentTarget.value ?? null;
         setPassword(password)
     }
+    function changePhone(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+        const phone = event.currentTarget.value ?? null;
+        setPhone(phone);
+    }
+    function changeName(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+        const name = event.currentTarget.value ?? null;
+        setName(name);
+    }
+    function changeLastName(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+        const lastName = event.currentTarget.value ?? null;
+        setLastName(lastName);
+    }
+    function changeMiddleName(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+        const middleName = event.currentTarget.value ?? null;
+        setMiddleName(middleName);
+    }
+
+
 
     return (
         <Container maxWidth={false}
@@ -35,13 +57,41 @@ export const Auth = () => {
                     gap: 2
                 }}>
                 <Typography variant='h5'>
-                    Авторизация
+                    Регистрация
                 </Typography>
+
+                <Box>
+                    <TextField
+                        sx={{ marginRight: 2 }}
+                        label='Имя'
+                        variant='standard'
+                        value={name ?? ""}
+                        onChange={changeName} />
+                    <TextField
+                        label='Фамилия'
+                        variant='standard'
+                        value={lastName ?? ""}
+                        onChange={changeLastName} />
+                </Box>
+
+                <TextField // Не обязательное
+                    label='Отчество'
+                    variant='standard'
+                    value={middleName ?? ""}
+                    onChange={changeMiddleName} />
+
                 <TextField
                     label="Email"
                     variant="standard"
                     value={email ?? ""}
                     onChange={changeEmail} />
+
+                <TextField                      // НУЖНА ЛИБА ПОД ЭТО ДЕЛО.
+                    label="Телефон"
+                    variant="standard"
+                    value={phone ?? ""}
+                    onChange={changePhone} />
+
 
                 <TextField
                     label="Пароль"
@@ -61,14 +111,14 @@ export const Auth = () => {
                         )
                     }} />
                 <Button variant="outlined" onClick={() => { }}>
-                    Войти
+                    Зарегистрироваться
                 </Button>
                 <Link href=''
                     sx={{
                         fontSize: '15px',
                         textAlign: 'right'
                     }}>
-                    Регистрация
+                    Авторизация
                 </Link>
             </Paper>
         </Container>
