@@ -16,7 +16,18 @@ public class UsersService : IUsersService
 
     public Result SaveUser(UserBlank userBlank)
     {
-        throw new NotImplementedException();
+        if (String.IsNullOrWhiteSpace(userBlank.Email)) return Result.Fail("Не введен Email");
+
+        if (String.IsNullOrWhiteSpace(userBlank.FirstName)) return Result.Fail("Не введено имя");
+
+        if (String.IsNullOrWhiteSpace(userBlank.LastName)) return Result.Fail("Не введена фамилия");
+
+        if (String.IsNullOrWhiteSpace(userBlank.PhoneNumber)) return Result.Fail("Не введнен номер телефона");
+
+        if (String.IsNullOrWhiteSpace(userBlank.PasswordHash)) return Result.Fail("Не введен пароль");
+
+        _usersRepository.SaveUser(userBlank);
+        return Result.Success();
     }
 
     public User? GetUser(ID id)

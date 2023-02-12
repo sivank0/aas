@@ -2,6 +2,7 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { Box, Button, IconButton, InputAdornment, Link, Paper, TextField, Tooltip, Typography } from '@mui/material';
 import { Container } from '@mui/system';
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export const Registration = () => {
     const [showPassword, setShowPassword] = useState<boolean>(false)
@@ -11,6 +12,8 @@ export const Registration = () => {
     const [name, setName] = useState<string | null>(null)
     const [lastName, setLastName] = useState<string | null>(null)
     const [middleName, setMiddleName] = useState<string | null>(null)
+
+    const navigate = useNavigate()
 
     function changeEmail(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
         const email = event.currentTarget.value ?? null;
@@ -122,7 +125,7 @@ export const Registration = () => {
 
                 <Box>
                     <Tooltip title='Перейти на страницу авторизации'>
-                        <Link href=''
+                        <Link onClick={() => navigate('/authorization')}
                             sx={{
                                 fontSize: '15px',
                                 width: '30%',
