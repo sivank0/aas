@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { DesktopAppBar } from '../sharedComponents/appBar';
 import { DesktopLayout } from '../sharedComponents/layouts/desktopLayout';
 import { Auth } from './auth/auth';
-import { Registration } from './registration/registration';
+import { Registration } from './auth/registration';
 
 const container = document.getElementById('app');
 const root = createRoot(container!);

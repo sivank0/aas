@@ -24,9 +24,26 @@ public class UsersService : IUsersService
 
         if (String.IsNullOrWhiteSpace(userBlank.PhoneNumber)) return Result.Fail("Не введнен номер телефона");
 
-        if (String.IsNullOrWhiteSpace(userBlank.PasswordHash)) return Result.Fail("Не введен пароль");
-
         _usersRepository.SaveUser(userBlank);
+        return Result.Success();
+    }
+
+    public Result RegisterUser(UserRegistrationBlank userRegistrationBlank)
+    {
+        if (String.IsNullOrWhiteSpace(userRegistrationBlank.Email)) return Result.Fail("Не введен Email");
+
+        if (String.IsNullOrWhiteSpace(userRegistrationBlank.FirstName)) return Result.Fail("Не введено имя");
+
+        if (String.IsNullOrWhiteSpace(userRegistrationBlank.LastName)) return Result.Fail("Не введена фамилия");
+
+        if (String.IsNullOrWhiteSpace(userRegistrationBlank.PhoneNumber)) return Result.Fail("Не введнен номер телефона");
+
+        if (String.IsNullOrWhiteSpace(userRegistrationBlank.Password)) return Result.Fail("Не введнен пароль");
+
+        if (String.IsNullOrWhiteSpace(userRegistrationBlank.RePassword)) return Result.Fail("Не введнен повторно пароль");
+
+        userRegistrationBlank.Id ??= ID.New();
+        _usersRepository.RegisterUser(userRegistrationBlank);
         return Result.Success();
     }
 

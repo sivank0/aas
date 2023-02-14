@@ -15,6 +15,12 @@ public class UsersController : BaseController
         _usersService = usersService;
     }
 
+    [HttpPost("users/createUser")]
+    public Result RegisterUser([FromBody]UserRegistrationBlank userRegistrationBlank)
+    {
+        return _usersService.RegisterUser(userRegistrationBlank);
+    }
+
     [HttpGet("users/get_user")]
     public User? GetUser(ID id)
     {
@@ -32,4 +38,6 @@ public class UsersController : BaseController
     {
         return _usersService.RemoveUser(userId);
     }
+
+
 }

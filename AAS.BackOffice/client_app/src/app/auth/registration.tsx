@@ -3,44 +3,49 @@ import { Box, Button, IconButton, InputAdornment, Link, Paper, TextField, Toolti
 import { Container } from '@mui/system';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { UserRegistrationBlank } from '../../domain/users/userRegistrationBlank';
+import { UsersProvider } from '../../domain/users/usersProvider';
 
 export const Registration = () => {
     const [showPassword, setShowPassword] = useState<boolean>(false)
-    const [email, setEmail] = useState<string | null>(null)
-    const [password, setPassword] = useState<string | null>(null)
-    const [phone, setPhone] = useState<string | null>(null)
-    const [name, setName] = useState<string | null>(null)
-    const [lastName, setLastName] = useState<string | null>(null)
-    const [middleName, setMiddleName] = useState<string | null>(null)
+    const [userRegistrationBlank, setUserRegistrationBlank] = useState<UserRegistrationBlank>(UserRegistrationBlank.getDefault())
+
 
     const navigate = useNavigate()
 
     function changeEmail(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
         const email = event.currentTarget.value ?? null;
-        setEmail(email)
+        setUserRegistrationBlank(blank => ({ ...blank, email }))
     }
     function changePassword(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
         const password = event.currentTarget.value ?? null;
-        setPassword(password)
+        setUserRegistrationBlank(blank => ({ ...blank, password }))
+    }
+    function changeRePassword(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+        const rePassword = event.currentTarget.value ?? null;
+        setUserRegistrationBlank(blank => ({ ...blank, rePassword }))
     }
     function changePhone(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
-        const phone = event.currentTarget.value ?? null;
-        setPhone(phone);
+        const phoneNumber = event.currentTarget.value ?? null;
+        setUserRegistrationBlank(blank => ({ ...blank, phoneNumber }))
     }
     function changeName(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
-        const name = event.currentTarget.value ?? null;
-        setName(name);
+        const firstName = event.currentTarget.value ?? null;
+        setUserRegistrationBlank(blank => ({ ...blank, firstName }))
     }
     function changeLastName(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
         const lastName = event.currentTarget.value ?? null;
-        setLastName(lastName);
+        setUserRegistrationBlank(blank => ({ ...blank, lastName }))
     }
     function changeMiddleName(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
         const middleName = event.currentTarget.value ?? null;
-        setMiddleName(middleName);
+        setUserRegistrationBlank(blank => ({ ...blank, middleName }))
     }
 
-
+    async function registerUser() {
+        const result = await UsersProvider.registerUser(userRegistrationBlank)
+        if (!result.isSuccess) return console.log(result.errors[0].message)
+    }
 
     return (
         <Container maxWidth={false}
@@ -70,38 +75,38 @@ export const Registration = () => {
                         sx={{ marginRight: 2 }}
                         label='Имя'
                         variant='standard'
-                        value={name ?? ""}
+                        value={userRegistrationBlank.firstName ?? ""}
                         onChange={changeName} />
                     <TextField
                         label='Фамилия'
                         variant='standard'
-                        value={lastName ?? ""}
+                        value={userRegistrationBlank.lastName ?? ""}
                         onChange={changeLastName} />
                 </Box>
 
                 <TextField // Не обязательное
                     label='Отчество'
                     variant='standard'
-                    value={middleName ?? ""}
+                    value={userRegistrationBlank.middleName ?? ""}
                     onChange={changeMiddleName} />
 
                 <TextField
                     label="Email"
                     variant="standard"
-                    value={email ?? ""}
+                    value={userRegistrationBlank.email ?? ""}
                     onChange={changeEmail} />
 
                 <TextField                      // НУЖНА ЛИБА ПОД ЭТО ДЕЛО.
                     label="Телефон"
                     variant="standard"
-                    value={phone ?? ""}
+                    value={userRegistrationBlank.phoneNumber ?? ""}
                     onChange={changePhone} />
 
 
                 <TextField
                     label="Пароль"
                     variant="standard"
-                    value={password ?? ""}
+                    value={userRegistrationBlank.password ?? ""}
                     onChange={changePassword}
                     type={showPassword ? 'text' : 'password'}
                     InputProps={{
@@ -117,8 +122,27 @@ export const Registration = () => {
                             </InputAdornment>
                         )
                     }} />
+                <TextField
+                    label="Повторите пароль"
+                    variant="standard"
+                    value={userRegistrationBlank.rePassword ?? ""}
+                    onChange={changeRePassword}
+                    type={showPassword ? 'text' : 'password'}
+                    InputProps={{
+                        endAdornment: (
+                            <InputAdornment position="end">
+                                <Tooltip title='Показать пароль'>
+                                    <IconButton
+                                        aria-label="toggle password visibility"
+                                        onClick={() => setShowPassword(!showPassword)}>
+                                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                                    </IconButton>
+                                </Tooltip>
+                            </InputAdornment>
+                        )
+                    }} />
                 <Tooltip title='Зарегистрировать аккаунт'>
-                    <Button variant="outlined" onClick={() => { }}>
+                    <Button variant="outlined" onClick={() => registerUser()}>
                         Зарегистрироваться
                     </Button>
                 </Tooltip>

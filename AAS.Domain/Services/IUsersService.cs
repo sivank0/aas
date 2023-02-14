@@ -6,6 +6,7 @@ namespace AAS.Domain.Services;
 public interface IUsersService
 {
     Result SaveUser(UserBlank userBlank);
+    Result RegisterUser(UserRegistrationBlank userRegistrationBlank);
     User? GetUser(ID id);
     User? GetUser(String userName);
     Result RemoveUser(ID userId);
