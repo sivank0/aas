@@ -59,6 +59,17 @@ public class UsersRepository : NpgSqlRepository, IUsersRepository
         Execute(Sql.Users_Save, parameters);
     }
 
+    public User? AuthorizeUser(UserAuthorizationBlank userAuthorizationBlank)
+    {
+        SqlParameter[] parameters =
+        {
+            new("p_email", userAuthorizationBlank.Email!),
+            new("p_pass", userAuthorizationBlank.Password!),
+        };
+
+        return Get<UserDb?>(Sql.Users_GetByEmailAndPass, parameters)?.ToUser();
+    }
+
     public User? GetUser(ID userId)
     {
         SqlParameter[] parameters =

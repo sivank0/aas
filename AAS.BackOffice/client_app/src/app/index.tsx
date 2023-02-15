@@ -5,10 +5,10 @@ import { DesktopAppBar } from '../sharedComponents/appBar';
 import { DesktopLayout } from '../sharedComponents/layouts/desktopLayout';
 import { Auth } from './auth/auth';
 import { Registration } from './auth/registration';
+import { UserPage } from './users/userPage';
 
 const container = document.getElementById('app');
 const root = createRoot(container!);
-
 root.render(
     <BrowserRouter>
         <DesktopLayout>

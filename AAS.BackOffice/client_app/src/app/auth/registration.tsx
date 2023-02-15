@@ -8,6 +8,8 @@ import { UsersProvider } from '../../domain/users/usersProvider';
 
 export const Registration = () => {
     const [showPassword, setShowPassword] = useState<boolean>(false)
+    const [showRePassword, setShowRePassword] = useState<boolean>(false)
+
     const [userRegistrationBlank, setUserRegistrationBlank] = useState<UserRegistrationBlank>(UserRegistrationBlank.getDefault())
 
 
@@ -45,6 +47,7 @@ export const Registration = () => {
     async function registerUser() {
         const result = await UsersProvider.registerUser(userRegistrationBlank)
         if (!result.isSuccess) return console.log(result.errors[0].message)
+        else alert('Удачно')
     }
 
     return (
@@ -127,15 +130,15 @@ export const Registration = () => {
                     variant="standard"
                     value={userRegistrationBlank.rePassword ?? ""}
                     onChange={changeRePassword}
-                    type={showPassword ? 'text' : 'password'}
+                    type={showRePassword ? 'text' : 'password'}
                     InputProps={{
                         endAdornment: (
                             <InputAdornment position="end">
                                 <Tooltip title='Показать пароль'>
                                     <IconButton
                                         aria-label="toggle password visibility"
-                                        onClick={() => setShowPassword(!showPassword)}>
-                                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                                        onClick={() => setShowRePassword(!showRePassword)}>
+                                        {showRePassword ? <VisibilityOff /> : <Visibility />}
                                     </IconButton>
                                 </Tooltip>
                             </InputAdornment>

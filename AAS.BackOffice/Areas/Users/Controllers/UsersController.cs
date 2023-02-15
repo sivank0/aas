@@ -21,6 +21,12 @@ public class UsersController : BaseController
         return _usersService.RegisterUser(userRegistrationBlank);
     }
 
+    [HttpGet("users/authorization_user")]
+    public UserViewBlank AuthorizationUser([FromBody]UserAuthorizationBlank userAuthorizationBlank)
+    {
+        return _usersService.AuthorizationUser(userAuthorizationBlank);
+    }
+
     [HttpGet("users/get_user")]
     public User? GetUser(ID id)
     {

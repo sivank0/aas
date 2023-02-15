@@ -1,6 +1,7 @@
 import HttpClient from "../../tools/httpClient";
 import { mapToResult, Result } from "../../tools/results/result";
 import { toUser, User } from "./user";
+import { UserAuthorizationBlank } from "./userAuthorizationBlank";
 import { UserBlank } from "./userBlank";
 import { UserRegistrationBlank } from "./userRegistrationBlank";
 
@@ -17,6 +18,11 @@ export class UsersProvider {
 
     public static async getUserById(id: string): Promise<User | null> {
         const user = await HttpClient.getJsonAsync("/users/get_by_id", { id });
+        return toUser(user);
+    }
+
+    public static async authorizationUser(UserAuthorizationBlank: UserAuthorizationBlank): Promise<User | null> {
+        const user = await HttpClient.getJsonAsync("/users/authorization_user", UserAuthorizationBlank);
         return toUser(user);
     }
 }

@@ -3,6 +3,7 @@ using AAS.Domain.Users;
 using AAS.Services.Users.Repositories;
 using AAS.Tools.Types.IDs;
 using AAS.Tools.Types.Results;
+using AAS.Tools.Managers;
 
 namespace AAS.Services.Users;
 public class UsersService : IUsersService
@@ -42,9 +43,28 @@ public class UsersService : IUsersService
 
         if (String.IsNullOrWhiteSpace(userRegistrationBlank.RePassword)) return Result.Fail("Не введнен повторно пароль");
 
+        if (userRegistrationBlank.Password != userRegistrationBlank.RePassword) return Result.Fail("Пароли не совпадают"); 
+
         userRegistrationBlank.Id ??= ID.New();
         _usersRepository.RegisterUser(userRegistrationBlank);
         return Result.Success();
+    }
+
+    public UserViewBlank AuthorizationUser(UserAuthorizationBlank userAuthorizationBlank)
+    {
+        if (String.IsNullOrWhiteSpace(userAuthorizationBlank.Email)) return null;
+        if (String.IsNullOrWhiteSpace(userAuthorizationBlank.Password)) return null;
+
+
+        userAuthorizationBlank.Password = HashManager.Hash(userAuthorizationBlank.Password);        
+        var user = _usersRepository.AuthorizeUser(userAuthorizationBlank);
+        UserViewBlank userView = new UserViewBlank();
+        userView.Email = user.Email;
+        userView.FirstName = user.FirstName;
+        userView.LastName = user.LastName;
+        userView.PhoneNumber = user.PhoneNumber;
+        if (!String.IsNullOrWhiteSpace(user.MiddleName)) userView.MiddleName = user.MiddleName;
+        return userView;
     }
 
     public User? GetUser(ID id)
