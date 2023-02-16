@@ -17,16 +17,10 @@ public class UsersController : BaseController
         _usersService = usersService;
     }
 
-    [HttpPost("users/createUser")]
-    public Result RegisterUser([FromBody]UserRegistrationBlank userRegistrationBlank)
+    [HttpPost("users/register_user")]
+    public Result RegisterUser([FromBody] UserRegistrationBlank userRegistrationBlank)
     {
         return _usersService.RegisterUser(userRegistrationBlank);
-    }
-
-    [HttpGet("users/authorization_user")]
-    public UserViewBlank AuthorizationUser([FromBody]UserAuthorizationBlank userAuthorizationBlank)
-    {
-        return _usersService.AuthorizationUser(userAuthorizationBlank);
     }
 
     [HttpGet("users/get_user")]
@@ -36,17 +30,9 @@ public class UsersController : BaseController
         return _usersService.GetUser(id);
     }
 
-    [HttpGet("users/get_by_name")]
-    public User? GetUser(string userName)
-    {
-        return _usersService.GetUser(userName);
-    }
-
     [HttpGet("users/remove")]
     public Result RemoveUser(ID userId)
     {
         return _usersService.RemoveUser(userId);
     }
-
-
 }

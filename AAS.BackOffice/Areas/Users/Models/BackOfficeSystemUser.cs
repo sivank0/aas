@@ -17,7 +17,6 @@ public class BackOfficeSystemUser
         Id = systemUser.Id;
         Email = systemUser.Email;
         FullName = systemUser.FullName;
-        HasFullAccess = systemUser.Access.HasFullAccess;
         AvailableAccessPolicies = systemUser.Access.AccessPolicies;
     }
 }

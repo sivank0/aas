@@ -53,24 +53,13 @@ public partial class UsersRepository : NpgSqlRepository, IUsersRepository
             new("p_middlename", userRegistrationBlank.MiddleName!),
             new("p_lastname", userRegistrationBlank.LastName!),
             new("p_email", userRegistrationBlank.Email!),
-            new("p_passwordhash", HashManager.Hash(userRegistrationBlank.Password!)),
+            new("p_passwordhash", HashManager.DefinePasswordHash(userRegistrationBlank.Password!)),
             new("p_phonenumber", userRegistrationBlank.PhoneNumber!),
             new("p_systemuserid", userRegistrationBlank.Id!),
             new("p_currentdatetimeutc", DateTime.UtcNow)
         };
 
         Execute(Sql.Users_Save, parameters);
-    }
-
-    public User? AuthorizeUser(UserAuthorizationBlank userAuthorizationBlank)
-    {
-        SqlParameter[] parameters =
-        {
-            new("p_email", userAuthorizationBlank.Email!),
-            new("p_pass", userAuthorizationBlank.Password!),
-        };
-
-        return Get<UserDb?>(Sql.Users_GetByEmailAndPass, parameters)?.ToUser();
     }
 
     public User? GetUser(ID userId)
@@ -88,7 +77,7 @@ public partial class UsersRepository : NpgSqlRepository, IUsersRepository
         SqlParameter[] parameters =
         {
             new("p_email", email),
-            new("p_email", password)
+            new("p_passwordHash", password)
         };
 
         return Get<UserDb?>(Sql.Users_GetByEmailAndPassword, parameters)?.ToUser();

@@ -10,15 +10,6 @@ namespace AAS.Services.Users;
 
 public partial class UsersService : IUsersService // + Authentification
 {
-    public Result Authenticate(String token)
-    {
-        SystemUser? systemUser = GetSystemUser(token);
-
-        if (systemUser is null) return Result.Fail("Пользователь не найден");
-
-        return Result.Success();
-    }
-
     public SystemUser? GetSystemUser(String token)
     {
         UserToken? userToken = GetUserToken(token);
@@ -38,6 +29,15 @@ public partial class UsersService : IUsersService // + Authentification
         return new SystemUser(user, userAccess);
     }
 
+    public Result Authenticate(String token)
+    {
+        SystemUser? systemUser = GetSystemUser(token);
+
+        if (systemUser is null) return Result.Fail("Пользователь не найден");
+
+        return Result.Success();
+    }
+
     public DataResult<UserToken?> LogIn(String? email, String? password)
     {
         if (String.IsNullOrWhiteSpace(email))
@@ -46,7 +46,7 @@ public partial class UsersService : IUsersService // + Authentification
         if (String.IsNullOrWhiteSpace(password))
             return DataResult<UserToken?>.Failed("Не введен пароль");
 
-        User? user = GetUser(email, HashManager.Hash(password));
+        User? user = GetUser(email, HashManager.DefinePasswordHash(password));
 
         if (user is null) return DataResult<UserToken?>.Failed("Пользователь не найден, проверьте правильность введенных данных");
 

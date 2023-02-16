@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserRegistrationBlank } from '../../domain/users/userRegistrationBlank';
 import { UsersProvider } from '../../domain/users/usersProvider';
+import { AuthLinks } from './authLinks';
 
 export const Registration = () => {
     const [showPassword, setShowPassword] = useState<boolean>(false)
@@ -152,7 +153,7 @@ export const Registration = () => {
 
                 <Box>
                     <Tooltip title='Перейти на страницу авторизации'>
-                        <Link onClick={() => navigate('/authorization')}
+                        <Link onClick={() => navigate(AuthLinks.authentification)}
                             sx={{
                                 fontSize: '15px',
                                 width: '30%',

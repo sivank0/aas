@@ -18,9 +18,8 @@ public interface IUsersService
 
     Result SaveUser(UserBlank userBlank);
     Result RegisterUser(UserRegistrationBlank userRegistrationBlank);
-    UserViewBlank AuthorizationUser(UserAuthorizationBlank userAuthorizationBlank);
     User? GetUser(ID id);
-    User? GetUser(String userName);
+    User? GetUser(String email, String password);
     Result RemoveUser(ID userId);
 
     #endregion

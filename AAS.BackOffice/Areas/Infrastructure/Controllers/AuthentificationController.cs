@@ -70,12 +70,12 @@ public class AuthenticationController : BaseController
     //[HttpPost("authentication/log_out")]
     //public Result LogOut()
     //{
-    //	String? token = CookieManager.Read(Request, CookieNames.Token);
+    //    String? token = CookieManager.Read(Request, CookieNames.Token);
 
-    //	if (token is null) return Result.Fail("Токен не найден");
+    //    if (token is null) return Result.Fail("Токен не найден");
 
-    //	_usersService.LogOut(token);
-    //	CookieManager.Delete(Response, CookieNames.Token);
-    //	return Result.Success();
+    //    _usersService.LogOut(token);
+    //    CookieManager.Delete(Response, CookieNames.Token);
+    //    return Result.Success();
     //}
 }

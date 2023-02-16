@@ -1,2 +1,2 @@
 ﻿SELECT * FROM users
-WHERE firstname ILIKE @p_name
+WHERE email = @p_email AND passwordhash = @p_passwordHash
