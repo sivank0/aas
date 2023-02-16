@@ -1,36 +1,41 @@
-import { Margin, Visibility, VisibilityOff } from '@mui/icons-material';
-import { Box, Button, IconButton, InputAdornment, Link, Paper, SvgIcon, TextField, Tooltip, Typography } from '@mui/material';
-import { Container } from '@mui/system';
-import React, { useState } from 'react';
+import * as React from 'react';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
+import { Link } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
-export const AppBar = () => {
-
+export const DesktopAppBar = () => {
+    const navigate = useNavigate()
 
     return (
-        <Box sx={{
-            display: 'flex',
-            backgroundColor: '#1976d2',
-            width: '100%',
-            height: '5%',
-        }}>
-            <Box sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                color: 'white',
-                alignItems: 'center',
-                gap: 2,
-
-            }}>
-                <MenuIcon fontSize='large'
-                    sx={{
-                        marginBottom: '0.25%'
-                    }} />
-                <Typography>Окно окна</Typography>
-                <Typography sx={{}}> // Перенести направо
-                    Имя отчество
-                </Typography>
-            </Box>
+        <Box sx={{ flexGrow: 1 }}>
+            <AppBar position="static">
+                <Toolbar>
+                    <IconButton
+                        size="large"
+                        edge="start"
+                        color="inherit"
+                        aria-label="menu"
+                        sx={{ mr: 2 }}
+                    >
+                        <MenuIcon />
+                    </IconButton>
+                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                        Страница хз чего-то там...
+                    </Typography>
+                    <Link onClick={() => navigate('/authorization')}
+                        sx={{
+                            marginRight: '10px',
+                            cursor: 'pointer',
+                            color: 'white'
+                        }}>Войти в аккаунт</Link>
+                </Toolbar>
+            </AppBar>
         </Box>
     )
 }

@@ -4,6 +4,7 @@ using AAS.Services.Users.Converters;
 using AAS.Services.Users.Models;
 using AAS.Services.Users.Repositories.Queries;
 using AAS.Tools.DB;
+using AAS.Tools.Managers;
 using AAS.Tools.Types.IDs;
 
 namespace AAS.Services.Users.Repositories;
@@ -36,12 +37,40 @@ public partial class UsersRepository : NpgSqlRepository, IUsersRepository
             new("p_middlename", userBlank.MiddleName!),
             new("p_lastname", userBlank.LastName!),
             new("p_email", userBlank.Email!),
-            new("p_passwordhash", userBlank.PasswordHash!),
             new("p_phonenumber", userBlank.PhoneNumber!),
             new("p_currentdatetimeutc", DateTime.UtcNow)
         };
 
         Execute(Sql.Users_Save, parameters);
+    }
+
+    public void RegisterUser(UserRegistrationBlank userRegistrationBlank)
+    {
+        SqlParameter[] parameters =
+        {
+            new("p_id", userRegistrationBlank.Id!),
+            new("p_firstname", userRegistrationBlank.FirstName!),
+            new("p_middlename", userRegistrationBlank.MiddleName!),
+            new("p_lastname", userRegistrationBlank.LastName!),
+            new("p_email", userRegistrationBlank.Email!),
+            new("p_passwordhash", HashManager.Hash(userRegistrationBlank.Password!)),
+            new("p_phonenumber", userRegistrationBlank.PhoneNumber!),
+            new("p_systemuserid", userRegistrationBlank.Id!),
+            new("p_currentdatetimeutc", DateTime.UtcNow)
+        };
+
+        Execute(Sql.Users_Save, parameters);
+    }
+
+    public User? AuthorizeUser(UserAuthorizationBlank userAuthorizationBlank)
+    {
+        SqlParameter[] parameters =
+        {
+            new("p_email", userAuthorizationBlank.Email!),
+            new("p_pass", userAuthorizationBlank.Password!),
+        };
+
+        return Get<UserDb?>(Sql.Users_GetByEmailAndPass, parameters)?.ToUser();
     }
 
     public User? GetUser(ID userId)

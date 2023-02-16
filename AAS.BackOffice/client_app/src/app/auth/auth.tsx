@@ -2,21 +2,35 @@ import { Margin, Visibility, VisibilityOff } from '@mui/icons-material';
 import { Box, Button, IconButton, InputAdornment, Link, Paper, TextField, Tooltip, Typography } from '@mui/material';
 import { Container } from '@mui/system';
 import React, { useState } from 'react';
+import { Route, Routes, useNavigate } from 'react-router-dom';
+import { UserAuthorizationBlank as UserAuthorizationBlank } from '../../domain/users/userAuthorizationBlank';
+import { UsersProvider, UserViewBlank } from '../../domain/users/usersProvider';
+import { UserPage } from '../users/userPage';
 
 export const Auth = () => {
     const [showPassword, setShowPassword] = useState<boolean>(false)
-    const [email, setEmail] = useState<string | null>(null)
-    const [password, setPassword] = useState<string | null>(null)
+    const [userAuthorizationBlank, setUserAuthorizationBlank] = useState<UserAuthorizationBlank>(UserAuthorizationBlank.getDefault())
+    const [user, setUser] = useState<UserViewBlank>(UserViewBlank.getDefault())
+    const navigate = useNavigate()
 
     function changeEmail(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
         const email = event.currentTarget.value ?? null;
-        setEmail(email)
+        setUserAuthorizationBlank(blank => ({ ...blank, email }))
     }
     function changePassword(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
         const password = event.currentTarget.value ?? null;
-        setPassword(password)
+        setUserAuthorizationBlank(blank => ({ ...blank, password }))
     }
 
+    async function authorizeUser() {
+        const user = await UsersProvider.authorizationUser(userAuthorizationBlank)
+        if (user == null) return alert('Ошибка')
+        setUser(user);
+        return navigate('/user')
+    }
+    <Routes>
+        <Route path='/user' element={<UserPage firstName={user.firstName} middleName={user.middleName} lastName={user.lastName} email={user.email} phoneNumber={user.phoneNumber} />} />
+    </Routes>
     return (
         <Container maxWidth={false}
             sx={{
@@ -43,13 +57,13 @@ export const Auth = () => {
                 <TextField
                     label="Email"
                     variant="standard"
-                    value={email ?? ""}
+                    value={userAuthorizationBlank.email ?? ""}
                     onChange={changeEmail} />
 
                 <TextField
                     label="Пароль"
                     variant="standard"
-                    value={password ?? ""}
+                    value={userAuthorizationBlank.password ?? ""}
                     onChange={changePassword}
                     type={showPassword ? 'text' : 'password'}
                     InputProps={{
@@ -72,7 +86,7 @@ export const Auth = () => {
                 </Tooltip>
                 <Box>
                     <Tooltip title='Перейти на страницу регистрации'>
-                        <Link href=''
+                        <Link onClick={() => navigate('/registration')}
                             sx={{
                                 fontSize: '15px',
                                 width: '30%',

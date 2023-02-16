@@ -20,4 +20,10 @@ public class HomeController : BaseController
 
     [Route("/error/403"), Route("error/404")]
     public ViewResult Forbidden() => ReactApp();
+
+    [Route("/registration")]
+    public ViewResult Registration() => ReactApp();
+
+    [Route("/authorization")]
+    public ViewResult Authorization() => ReactApp();
 }

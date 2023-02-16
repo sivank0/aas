@@ -10,6 +10,7 @@ internal static class Sql
     public static String Users_Save => SqlFileProvider.GetQuery(folder: "Users");
     public static String Users_GetById => SqlFileProvider.GetQuery(folder: "Users");
     public static String Users_GetByEmailAndPassword => SqlFileProvider.GetQuery(folder: "Users");
+    public static String Users_GetByEmailAndPass => SqlFileProvider.GetQuery(folder: "Users");
     public static String Users_DeleteByName => SqlFileProvider.GetQuery(folder: "Users");
 
     #endregion
