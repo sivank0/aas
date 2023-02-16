@@ -10,15 +10,13 @@ public class SystemUser
     public String Email { get; }
     public String FullName { get; }
     public UserAccess Access { get; }
-    public Boolean IsEmployee { get; }
 
-    public SystemUser(User user, UserAccess currentAccess, Boolean isEmployee)
+    public SystemUser(User user, UserAccess currentAccess)
     {
         Id = user.Id;
         Email = user.Email;
         FullName = user.FullName;
         Access = currentAccess;
-        IsEmployee = isEmployee;
     }
 
     public Boolean HasAccess(AccessPolicy accessPolicy) => Access.AccessPolicies.Contains(accessPolicy);

@@ -1,14 +1,15 @@
 ﻿using AAS.Domain.AccessPolicies;
+using AAS.Tools.Types.IDs;
 
 namespace AAS.Domain.Users.Roles;
 
 public class UserRole
 {
-    public Guid Id { get; }
-    public string Name { get; }
+    public ID Id { get; }
+    public String Name { get; }
     public AccessPolicy[] AccessPolicies { get; }
 
-    public UserRole(Guid id, string name, AccessPolicy[] accessPolicies)
+    public UserRole(ID id, String name, AccessPolicy[] accessPolicies)
     {
         Id = id;
         Name = name;

@@ -1,92 +1,81 @@
 using AAS.BackOffice.Controllers;
-using AAS.BackOffice.Filters;
 using AAS.BackOffice.Infrastructure;
 using AAS.Domain.Services;
-using AAS.Tools.Types.IDs;
+using AAS.Domain.Users;
 using AAS.Tools.Types.Results;
 using Microsoft.AspNetCore.Mvc;
+using PMS.Tools.Managers;
 using System.Net;
 
 namespace AAS.BackOffice.Areas.Infrastructure.Controllers;
 
 public class AuthenticationController : BaseController
 {
-	private readonly IUsersService _usersService;
+    private readonly IUsersService _usersService;
 
-	public AuthenticationController(IUsersService usersService)
-	{
-		_usersService = usersService;
-	}
+    public AuthenticationController(IUsersService usersService)
+    {
+        _usersService = usersService;
+    }
 
-	//[HttpGet("/authentication")]
-	//public ActionResult Authentication()
-	//{
-	//	String? token = CookieManager.Read(Request, CookieNames.Token);
+    [HttpGet("/authentication")]
+    public ActionResult Authentication()
+    {
+        String? token = CookieManager.Read(Request, CookieNames.Token);
 
-	//	if (String.IsNullOrWhiteSpace(token)) return ReactApp();
+        if (String.IsNullOrWhiteSpace(token)) return ReactApp();
 
-	//	Result authenticationResult = _usersService.Authenticate(token);
+        Result authenticationResult = _usersService.Authenticate(token);
 
-	//	if (!authenticationResult.IsSuccess) return ReactApp();
+        if (!authenticationResult.IsSuccess) return ReactApp();
 
-	//	return Redirect("/");
-	//}
+        return Redirect("/");
+    }
 
-	//[HttpPost("authentication/register_user")]
-	//public async Task<Result> RegisterUser([FromBody] UserRegistrationBlank userRegistrationBlank)
-	//{
-	//	DataResult<UserToken?> registrationResult = await _usersService.RegisterUser(userRegistrationBlank); // REFACTORING в DataResult можно добавить атрибут MemberNotNullWhen, чтобы не делать ! или проверку Data на null
+    //[HttpPost("authentication/register_user")]
+    //public async Task<Result> RegisterUser([FromBody] UserRegistrationBlank userRegistrationBlank)
+    //{
+    //	DataResult<UserToken?> registrationResult = await _usersService.RegisterUser(userRegistrationBlank); // REFACTORING в DataResult можно добавить атрибут MemberNotNullWhen, чтобы не делать ! или проверку Data на null
 
-	//	if (!registrationResult.IsSuccess) return Result.Fail(registrationResult.Errors[0]);
+    //	if (!registrationResult.IsSuccess) return Result.Fail(registrationResult.Errors[0]);
 
-	//	Result authenticationResult = _usersService.Authenticate(registrationResult.Data!.Token);
+    //	Result authenticationResult = _usersService.Authenticate(registrationResult.Data!.Token);
 
-	//	if (!authenticationResult.IsSuccess) return Result.Fail("Регистрация не удалась, попробуйте ещё раз");
+    //	if (!authenticationResult.IsSuccess) return Result.Fail("Регистрация не удалась, попробуйте ещё раз");
 
-	//	CookieManager.Write(Response, new Cookie(CookieNames.Token, registrationResult.Data!.Token), DateTime.MaxValue);
-	//	return Result.Success();
-	//}
+    //	CookieManager.Write(Response, new Cookie(CookieNames.Token, registrationResult.Data!.Token), DateTime.MaxValue);
+    //	return Result.Success();
+    //}
 
-	//public record UserAuthenticationRequest(String? Email, String? Password, String? GoogleToken);
+    public record UserAuthenticationRequest(String? Email, String? Password);
 
-	//[HttpPost("authentication/log_in")]
-	//public async Task<AuthentificationResult> LogIn([FromBody] UserAuthenticationRequest userAuthenticationRequest)
-	//{
-	//	String? oldToken = CookieManager.Read(Request, CookieNames.Token);
+    [HttpPost("authentication/log_in")]
+    public DataResult<String?> LogIn([FromBody] UserAuthenticationRequest userAuthenticationRequest)
+    {
+        String? oldToken = CookieManager.Read(Request, CookieNames.Token);
 
-	//	if (!String.IsNullOrWhiteSpace(oldToken)) return AuthentificationResult.Success(oldToken);
+        if (!String.IsNullOrWhiteSpace(oldToken)) return DataResult<String?>.Success(oldToken);
 
-	//	AuthentificationResult authentificationResult;
+        DataResult<UserToken?> authentificationResult = _usersService.LogIn(userAuthenticationRequest.Email, userAuthenticationRequest.Password);
 
-	//	if (userAuthenticationRequest.GoogleToken is not null) authentificationResult = await _usersService.LogIn(userAuthenticationRequest.GoogleToken);
-	//	else authentificationResult = await _usersService.LogIn(userAuthenticationRequest.Email, userAuthenticationRequest.Password);
+        if (!authentificationResult.IsSuccess) return DataResult<String?>.Failed(authentificationResult.Errors[0].Message);
 
-	//	if (!authentificationResult.IsSuccess) return AuthentificationResult.Failed(authentificationResult.Errors[0].Message);
+        if (String.IsNullOrWhiteSpace(authentificationResult.Data!.Token))
+            return DataResult<String?>.Success(authentificationResult.Data.Token);
 
-	//	if (String.IsNullOrWhiteSpace(authentificationResult.Token))
-	//		return AuthentificationResult.Success(authentificationResult.Token, authentificationResult.Email, authentificationResult.Login,
-	//			authentificationResult.FirstName, authentificationResult.LastName);
+        CookieManager.Write(Response, new Cookie(CookieNames.Token, authentificationResult.Data.Token), DateTime.MaxValue);
+        return DataResult<String?>.Success(authentificationResult.Data.Token);
+    }
 
-	//	CookieManager.Write(Response, new Cookie(CookieNames.Token, authentificationResult.Token), DateTime.MaxValue);
-	//	return AuthentificationResult.Success(authentificationResult.Token);
-	//}
+    //[HttpPost("authentication/log_out")]
+    //public Result LogOut()
+    //{
+    //	String? token = CookieManager.Read(Request, CookieNames.Token);
 
-	//[HttpPost("authentication/change_workspace")]
-	//[IsAuthorized]
-	//public Task<Result> ChangeWorkspace([FromBody] ID workspaceId)
-	//{
-	//	return _usersService.ChangeSelectedWorkspace(workspaceId, SystemUser);
-	//}
+    //	if (token is null) return Result.Fail("Токен не найден");
 
-	//[HttpPost("authentication/log_out")]
-	//public Result LogOut()
-	//{
-	//	String? token = CookieManager.Read(Request, CookieNames.Token);
-
-	//	if (token is null) return Result.Fail("Токен не найден");
-
-	//	_usersService.LogOut(token);
-	//	CookieManager.Delete(Response, CookieNames.Token);
-	//	return Result.Success();
-	//}
+    //	_usersService.LogOut(token);
+    //	CookieManager.Delete(Response, CookieNames.Token);
+    //	return Result.Success();
+    //}
 }

@@ -1,4 +1,6 @@
 ﻿using AAS.BackOffice.Controllers;
+using AAS.BackOffice.Filters;
+using AAS.Domain.AccessPolicies;
 using AAS.Domain.Services;
 using AAS.Domain.Users;
 using AAS.Tools.Types.IDs;
@@ -16,6 +18,7 @@ public class UsersController : BaseController
     }
 
     [HttpGet("users/get_user")]
+    [IsAuthorized(AccessPolicy.UsersRead)]
     public User? GetUser(ID id)
     {
         return _usersService.GetUser(id);

@@ -1,11 +1,12 @@
 ﻿using AAS.Domain.Services;
 using AAS.Domain.Users;
+using AAS.Domain.Users.Roles;
 using AAS.Services.Users.Repositories;
 using AAS.Tools.Types.IDs;
 using AAS.Tools.Types.Results;
 
 namespace AAS.Services.Users;
-public class UsersService : IUsersService
+public partial class UsersService : IUsersService
 {
     private readonly IUsersRepository _usersRepository;
 
@@ -13,6 +14,9 @@ public class UsersService : IUsersService
     {
         _usersRepository = usersRepository;
     }
+
+
+    #region Users
 
     public Result SaveUser(UserBlank userBlank)
     {
@@ -24,9 +28,9 @@ public class UsersService : IUsersService
         return _usersRepository.GetUser(id);
     }
 
-    public User? GetUser(String userName)
+    public User? GetUser(String email, String passwordHash)
     {
-        return _usersRepository.GetUser(userName);
+        return _usersRepository.GetUser(email, passwordHash);
     }
 
     public Result RemoveUser(ID userId)
@@ -36,4 +40,14 @@ public class UsersService : IUsersService
         return Result.Success();
     }
 
+    #endregion
+
+    #region
+
+    public UserRole? GetUserRole(ID userId)
+    {
+        return _usersRepository.GetUserRole(userId);
+    }
+
+    #endregion
 }

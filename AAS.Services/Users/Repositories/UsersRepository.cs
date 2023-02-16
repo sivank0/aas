@@ -1,4 +1,5 @@
 ﻿using AAS.Domain.Users;
+using AAS.Domain.Users.Roles;
 using AAS.Services.Users.Converters;
 using AAS.Services.Users.Models;
 using AAS.Services.Users.Repositories.Queries;
@@ -7,9 +8,11 @@ using AAS.Tools.Types.IDs;
 
 namespace AAS.Services.Users.Repositories;
 
-public class UsersRepository : NpgSqlRepository, IUsersRepository
+public partial class UsersRepository : NpgSqlRepository, IUsersRepository
 {
     public UsersRepository(String connectionString) : base(connectionString) { }
+
+    #region Users
 
     //public void SaveUserAccess(UserAccessBlank userAccessBlank, ID userId)
     //{
@@ -51,14 +54,15 @@ public class UsersRepository : NpgSqlRepository, IUsersRepository
         return Get<UserDb?>(Sql.Users_GetById, parameters)?.ToUser();
     }
 
-    public User? GetUser(String userName)
+    public User? GetUser(String email, String password)
     {
         SqlParameter[] parameters =
         {
-            new("p_username", userName),
+            new("p_email", email),
+            new("p_email", password)
         };
 
-        return Get<UserDb?>(Sql.Users_GetById, parameters)?.ToUser();
+        return Get<UserDb?>(Sql.Users_GetByEmailAndPassword, parameters)?.ToUser();
     }
 
     public void RemoveUser(ID userId)
@@ -70,4 +74,20 @@ public class UsersRepository : NpgSqlRepository, IUsersRepository
 
         Execute(Sql.Users_DeleteByName, parameters);
     }
+
+    #endregion
+
+    #region UserRoles
+
+    public UserRole? GetUserRole(ID userId)
+    {
+        SqlParameter[] parameters =
+        {
+            new("p_userId", userId)
+        };
+
+        return Get<UserRoleDb?>(Sql.UserRoles_GetByUserId, parameters)?.ToUserRole();
+    }
+
+    #endregion
 }

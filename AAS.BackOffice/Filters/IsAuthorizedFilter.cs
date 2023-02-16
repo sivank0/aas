@@ -30,11 +30,11 @@ internal class IsAuthorizedAttribute : ActionFilterAttribute
             string? token = cookies[CookieNames.Token];
             if (token is null) throw new UnauthenticatedException();
 
-            //SystemUser? systemUser = usersService.GetSystemUser(token);
-            //if (systemUser is null) throw new UnauthenticatedException();
-            //if (!IsAuthorized(systemUser)) throw new UnauthorizedException();
+            SystemUser? systemUser = usersService.GetSystemUser(token);
+            if (systemUser is null) throw new UnauthenticatedException();
+            if (!IsAuthorized(systemUser)) throw new UnauthorizedException();
 
-            //context.HttpContext.Items[CookieNames.SystemUser] = systemUser;
+            context.HttpContext.Items[CookieNames.SystemUser] = systemUser;
         }
         catch (Exception exception)
         {
