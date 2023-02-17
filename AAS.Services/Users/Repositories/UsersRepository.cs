@@ -72,16 +72,21 @@ public partial class UsersRepository : NpgSqlRepository, IUsersRepository
         return Get<UserDb?>(Sql.Users_GetById, parameters)?.ToUser();
     }
 
-    public User? GetUser(String email, String password)
+    public User? GetUser(String email, String? passwordHash)
     {
         SqlParameter[] parameters =
         {
             new("p_email", email),
-            new("p_passwordHash", password)
+            new("p_passwordHash", passwordHash)
         };
 
         return Get<UserDb?>(Sql.Users_GetByEmailAndPassword, parameters)?.ToUser();
     }
+
+    public User[] GetUsers()
+    {
+        return GetArray<UserDb>(Sql.Users_GetAll).ToUsers();
+    } 
 
     public void RemoveUser(ID userId)
     {

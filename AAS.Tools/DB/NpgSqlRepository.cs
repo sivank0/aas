@@ -47,9 +47,9 @@ public class NpgSqlRepository
         return Execution(command => command.Get<T>(sql, parameters, commandType));
     }
 
-    protected List<T> GetList<T>(string sql, IList<SqlParameter> parameters = null, CommandType commandType = CommandType.Text)
+    protected T[] GetArray<T>(string sql, IList<SqlParameter> parameters = null, CommandType commandType = CommandType.Text)
     {
-        return Execution(command => command.GetList<T>(sql, parameters, commandType));
+        return Execution(command => command.GetList<T>(sql, parameters, commandType)).ToArray();
     }
 
     protected PagedResult<T> GetPageOver<T>(string sql, IList<SqlParameter> parameters = null, CommandType commandType = CommandType.Text)

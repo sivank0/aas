@@ -11,6 +11,7 @@ internal static class Sql
     public static String Users_GetById => SqlFileProvider.GetQuery(folder: "Users");
     public static String Users_GetByEmailAndPassword => SqlFileProvider.GetQuery(folder: "Users");
     public static String Users_GetByEmailAndPass => SqlFileProvider.GetQuery(folder: "Users");
+    public static String Users_GetAll => SqlFileProvider.GetQuery(folder: "Users");
     [Obsolete("Переделать на Remove")]
     public static String Users_DeleteByName => SqlFileProvider.GetQuery(folder: "Users");
 

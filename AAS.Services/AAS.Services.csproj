@@ -10,6 +10,7 @@
     <None Remove="Users\Repositories\Queries\Roles\UserRoles_GetByUserId.sql" />
     <None Remove="Users\Repositories\Queries\Tokens\UserTokens_GetByToken.sql" />
     <None Remove="Users\Repositories\Queries\Tokens\UserTokens_Save.sql" />
+    <None Remove="Users\Repositories\Queries\Users\Users_GetAll.sql" />
     <None Remove="Users\Repositories\Queries\Users\Users_GetByEmailAndPassword.sql" />
     <None Remove="Users\Repositories\Queries\Users\Users_GetById.sql" />
     <None Remove="Users\Repositories\Queries\Users\Users_Save.sql" />
@@ -20,6 +21,7 @@
     <EmbeddedResource Include="Users\Repositories\Queries\Tokens\UserTokens_GetByToken.sql" />
     <EmbeddedResource Include="Users\Repositories\Queries\Tokens\UserTokens_Save.sql" />
     <EmbeddedResource Include="Users\Repositories\Queries\Users\Users_GetByEmailAndPassword.sql" />
+    <EmbeddedResource Include="Users\Repositories\Queries\Users\Users_GetAll.sql" />
     <EmbeddedResource Include="Users\Repositories\Queries\Users\Users_GetById.sql" />
     <EmbeddedResource Include="Users\Repositories\Queries\Users\Users_Save.sql" />
   </ItemGroup>

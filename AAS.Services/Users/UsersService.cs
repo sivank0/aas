@@ -48,6 +48,10 @@ public partial class UsersService : IUsersService
 
         if (userRegistrationBlank.Password != userRegistrationBlank.RePassword) return Result.Fail("Пароли не совпадают");
 
+        User? existingUser = GetUser(userRegistrationBlank.Email);
+
+        if (existingUser is not null) return Result.Fail("Пользователь с такой почтой существует");
+
         userRegistrationBlank.Id ??= ID.New();
         _usersRepository.RegisterUser(userRegistrationBlank);
         return Result.Success();
@@ -58,9 +62,14 @@ public partial class UsersService : IUsersService
         return _usersRepository.GetUser(id);
     }
 
-    public User? GetUser(String email, String passwordHash)
+    public User? GetUser(String email, String? passwordHash = null)
     {
         return _usersRepository.GetUser(email, passwordHash);
+    }
+
+    public User[] GetUsers()
+    {
+        return _usersRepository.GetUsers();
     }
 
     public Result RemoveUser(ID userId)

@@ -8,9 +8,21 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Link } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import SystemUser from '../domain/systemUser';
+import { useEffect, useState } from 'react';
+import { UserRole } from '../domain/users/roles/userRole';
+import { UsersProvider } from '../domain/users/usersProvider';
 
 export const DesktopAppBar = () => {
-    const navigate = useNavigate()
+    const [userRole, setUserRole] = useState<UserRole | null>(null);
+
+    useEffect(() => {
+        async function init() {
+            const userRole = await UsersProvider.getUserRole(SystemUser.id);
+            setUserRole(userRole);
+        }
+        init();
+    }, [])
 
     return (
         <Box sx={{ flexGrow: 1 }}>
@@ -26,14 +38,23 @@ export const DesktopAppBar = () => {
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        Страница хз чего-то там...
+                        Система приема заявок
                     </Typography>
-                    <Link onClick={() => navigate('/authorization')}
+                    <Box
                         sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: 0.5,
                             marginRight: '10px',
-                            cursor: 'pointer',
                             color: 'white'
-                        }}>Войти в аккаунт</Link>
+                        }}>
+                        <Typography>
+                            {SystemUser.fullName}
+                        </Typography>
+                        <Typography>
+                            {userRole?.name}
+                        </Typography>
+                    </Box>
                 </Toolbar>
             </AppBar>
         </Box>

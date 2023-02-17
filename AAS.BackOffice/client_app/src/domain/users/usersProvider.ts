@@ -1,6 +1,7 @@
 import HttpClient from "../../tools/httpClient";
 import { mapToResult, Result } from "../../tools/results/result";
-import { toUser, User } from "./user";
+import { mapToUserRole, UserRole } from "./roles/userRole";
+import { toUser, toUsers, User } from "./user";
 import { UserBlank } from "./userBlank";
 import { UserRegistrationBlank } from "./userRegistrationBlank";
 
@@ -18,6 +19,21 @@ export class UsersProvider {
     public static async getUserById(id: string): Promise<User | null> {
         const user = await HttpClient.getJsonAsync("/users/get_by_id", { id });
         return toUser(user);
+    }
+
+    public static async getUsers(): Promise<User[]> {
+        const users = await HttpClient.getJsonAsync("users/get_all");
+        return toUsers(users);
+    }
+
+
+    //UserRoles
+    public static async getUserRole(userId: string): Promise<UserRole | null> {
+        const userRole = await HttpClient.getJsonAsync("users/get_role_by_user_id", { userId });
+
+        if (userRole === null) return null;
+
+        return mapToUserRole(userRole);
     }
 }
 

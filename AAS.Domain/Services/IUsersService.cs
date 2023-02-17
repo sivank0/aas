@@ -1,4 +1,5 @@
 ﻿using AAS.Domain.Users;
+using AAS.Domain.Users.Roles;
 using AAS.Domain.Users.SystemUsers;
 using AAS.Tools.Types.IDs;
 using AAS.Tools.Types.Results;
@@ -19,8 +20,13 @@ public interface IUsersService
     Result SaveUser(UserBlank userBlank);
     Result RegisterUser(UserRegistrationBlank userRegistrationBlank);
     User? GetUser(ID id);
-    User? GetUser(String email, String password);
+    User? GetUser(String email, String? password = null);
+    User[] GetUsers();
     Result RemoveUser(ID userId);
 
+    #endregion
+
+    #region Roles
+    UserRole GetUserRole(ID userId);
     #endregion
 }

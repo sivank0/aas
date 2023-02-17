@@ -11,7 +11,8 @@ public interface IUsersRepository
     public void SaveUser(UserBlank userBlank);
     public void RegisterUser(UserRegistrationBlank userRegistrationBlank);
     public User? GetUser(ID id);
-    public User? GetUser(String email, String passwordHash);
+    public User? GetUser(String email, String? passwordHash = null);
+    public User[] GetUsers();
     public void RemoveUser(ID userId);
 
     #endregion
