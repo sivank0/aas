@@ -8,11 +8,14 @@ import AddIcon from '@mui/icons-material/Add';
 import useDialog from '../../hooks/useDialog';
 import { UserEditorModal } from './userEditorModal';
 import { ConfirmDialogModal } from '../../sharedComponents/modals/modal';
+import { Password } from '@mui/icons-material';
+import { UserChangePasswordModal } from './userChangePasswordModal';
 
 export const UsersPage = () => {
     const [users, setUsers] = useState<User[]>([]);
 
     const userEditorModal = useDialog(UserEditorModal);
+    const [changePasswordState, setChangePasswordState] = useState<ModalState>({ isOpen: false, userId: null })
     const confirmationDialog = useDialog(ConfirmDialogModal);
 
     useEffect(() => {
@@ -39,13 +42,17 @@ export const UsersPage = () => {
         if (!result.isSuccess) return;
     }
 
+    function changePassword(isOpen: boolean = false, userId: string | null = null) {
+        setChangePasswordState(state => ({ ...state, isOpen: isOpen, userId: userId }))
+    }
+
     return (
         <Container maxWidth={false}>
             <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 3 }}>
                 <Typography variant="h5">
                     Пользователи
                 </Typography>
-                <Button startIcon={<AddIcon />} variant="outlined" onClick={() => { }}>
+                <Button startIcon={<AddIcon />} variant="outlined" onClick={() => changeModalState(true)}>
                     Добавить
                 </Button>
             </Box>
@@ -80,6 +87,11 @@ export const UsersPage = () => {
                                                     <DeleteIcon />
                                                 </IconButton>
                                             </Tooltip>
+                                            <Tooltip title="Изменить пароль">
+                                                <IconButton onClick={() => changePassword(true, user.id)}>
+                                                    <Password />
+                                                </IconButton>
+                                            </Tooltip>
                                         </Box>
                                     </TableCell>
                                 </TableRow>
@@ -88,6 +100,13 @@ export const UsersPage = () => {
                     </TableBody>
                 </Table>
             </TableContainer>
+            {
+                changePasswordState.isOpen &&
+                <UserChangePasswordModal
+                    userId={changePasswordState.userId}
+                    isOpen={changePasswordState.isOpen}
+                    onClose={changePassword}
+                    }
         </Container>
     )
 }

@@ -6,7 +6,9 @@ export interface UserBlank {
     middleName: string | null,
     lastName: string | null,
     email: string | null,
-    phoneNumber: string | null
+    phoneNumber: string | null,
+    password: string | null,
+    rePassword: string | null
 }
 
 export namespace UserBlank {
@@ -17,7 +19,9 @@ export namespace UserBlank {
             middleName: null,
             lastName: null,
             email: null,
-            phoneNumber: null
+            phoneNumber: null,
+            password: null,
+            rePassword: null
         }
     }
 
@@ -28,7 +32,9 @@ export namespace UserBlank {
             middleName: user.middleName,
             lastName: user.lastName,
             email: user.email,
-            phoneNumber: user.phoneNumber
+            phoneNumber: user.phoneNumber,
+            password: null,
+            rePassword: null
         }
     }
 }

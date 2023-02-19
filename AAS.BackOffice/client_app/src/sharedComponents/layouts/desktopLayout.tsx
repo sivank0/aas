@@ -7,6 +7,7 @@ import { SnackbarProvider } from "notistack";
 import { PropsWithChildren } from "react";
 import { DesktopAppBar } from "../desktopAppBar";
 import DialogProvider from "../modals/async/DialogProvider";
+import SystemUser from "../../domain/systemUser";
 
 interface LayoutProps { }
 
@@ -20,7 +21,9 @@ export const DesktopLayout = (props: PropsWithChildren<LayoutProps>) => {
             <SnackbarProvider maxSnack={3} >
                 <DialogProvider>
                     <CssBaseline />
+                {SystemUser !== null &&
                     <DesktopAppBar />
+                }
                     <Box sx={{ marginTop: 2 }}>
                         {props.children}
                     </Box>
