@@ -13,7 +13,7 @@ public interface IUsersRepository
     public User? GetUser(ID id);
     public User? GetUser(String email, String? passwordHash = null);
     public User[] GetUsers();
-    public void RemoveUser(ID userId);
+    public void RemoveUser(ID userId, ID systemUserId);
 
     #endregion
 

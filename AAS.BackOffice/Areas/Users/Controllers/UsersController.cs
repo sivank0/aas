@@ -20,13 +20,14 @@ public class UsersController : BaseController
     }
 
     #region Users
+
     [HttpPost("users/register_user")]
     public Result RegisterUser([FromBody] UserRegistrationBlank userRegistrationBlank)
     {
         return _usersService.RegisterUser(userRegistrationBlank);
     }
 
-    [HttpGet("users/get_user")]
+    [HttpGet("users/get_by_id")]
     [IsAuthorized(AccessPolicy.UsersRead)]
     public User? GetUser(ID id)
     {
@@ -41,10 +42,12 @@ public class UsersController : BaseController
     }
 
     [HttpGet("users/remove")]
+    [IsAuthorized(AccessPolicy.UsersUpdate)]
     public Result RemoveUser(ID userId)
     {
-        return _usersService.RemoveUser(userId);
+        return _usersService.RemoveUser(userId, SystemUser.Id);
     }
+
     #endregion
 
     [HttpGet("users/get_role_by_user_id")]

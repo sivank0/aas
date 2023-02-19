@@ -26,6 +26,10 @@ export class UsersProvider {
         return toUsers(users);
     }
 
+    public static async removeUser(userId: string): Promise<Result> {
+        const result = await HttpClient.getJsonAsync("users/remove", { userId });
+        return mapToResult(result);
+    }
 
     //UserRoles
     public static async getUserRole(userId: string): Promise<UserRole | null> {

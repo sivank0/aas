@@ -22,7 +22,7 @@ public interface IUsersService
     User? GetUser(ID id);
     User? GetUser(String email, String? password = null);
     User[] GetUsers();
-    Result RemoveUser(ID userId);
+    Result RemoveUser(ID userId, ID systemUserId);
 
     #endregion
 

@@ -3,15 +3,14 @@ import React, { useEffect, useState } from 'react';
 import { UserBlank } from '../../domain/users/userBlank';
 import { UsersProvider } from '../../domain/users/usersProvider';
 import { InputForm } from '../../sharedComponents/inputs/inputForm';
+import { AsyncDialogProps } from '../../sharedComponents/modals/async/types';
 import { Modal, ModalActions, ModalBody, ModalTitle } from '../../sharedComponents/modals/modal';
 
 interface Props {
     userId: string | null;
-    isOpen: boolean;
-    onClose: () => void;
 }
 
-export const UserEditorModal = (props: Props) => {
+export const UserEditorModal: React.FC<AsyncDialogProps<Props, boolean>> = ({ open, handleClose, data: props }) => {
     const [userBlank, setUserBlank] = useState<UserBlank>(UserBlank.getDefault());
 
     useEffect(() => {
@@ -24,11 +23,15 @@ export const UserEditorModal = (props: Props) => {
 
             setUserBlank(UserBlank.fromUser(user));
         }
+
+        if (open) init();
+
+        return () => setUserBlank(UserBlank.getDefault());
     }, [props.userId])
 
     return (
-        <Modal isOpen={props.isOpen} onClose={props.onClose}>
-            <ModalTitle onClose={props.onClose}>
+        <Modal isOpen={open} onClose={handleClose}>
+            <ModalTitle onClose={handleClose}>
                 {props.userId !== null ? "Редактирование" : "Добавление"} пользователя
             </ModalTitle>
             <ModalBody sx={{ width: 500 }}>

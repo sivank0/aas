@@ -1,6 +1,8 @@
-import { Box, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, SxProps, Theme, Tooltip } from "@mui/material";
+import { Box, Dialog, DialogActions, DialogContent, DialogTitle, SxProps, Theme } from "@mui/material";
 import React, { PropsWithChildren } from "react";
-import CloseIcon from '@mui/icons-material/Close';
+import { BrowserType } from "../../tools/browserType/browserType";
+import { AsyncDialogProps } from "./async/types";
+import { CancelButton, CloseIconButton, SuccessButton } from "../buttons/button";
 
 interface ModalProps {
     isOpen: boolean;
@@ -9,7 +11,11 @@ interface ModalProps {
 
 export const Modal = (props: PropsWithChildren<ModalProps>) => {
     return (
-        <Dialog open={props.isOpen}
+        <Dialog
+            fullScreen={window.browserType === BrowserType.Mobile}
+            sx={{ overflow: "hidden" }}
+            maxWidth={false}
+            open={props.isOpen}
             onClose={props.onClose}>
             {props.children}
         </Dialog>
@@ -24,11 +30,10 @@ export const ModalTitle = (props: PropsWithChildren<ModalTitleProps>) => {
     return (
         <DialogTitle sx={{ position: "relative" }}>
             {props.children}
-            <Tooltip title="Закрыть">
-                <IconButton sx={{ position: "absolute", right: 4, top: 4 }} onClick={() => props.onClose()}>
-                    <CloseIcon />
-                </IconButton>
-            </Tooltip>
+            <CloseIconButton
+                title="Закрыть"
+                sx={{ position: "absolute", right: 4, top: 4 }}
+                onClick={() => props.onClose()} />
         </DialogTitle>
     )
 }
@@ -52,3 +57,33 @@ export const ModalActions = (props: PropsWithChildren) => {
         </DialogActions>
     )
 }
+
+interface ConfirmDialogProps {
+    title: string;
+    body?: React.ReactNode;
+}
+
+export const ConfirmDialogModal: React.FC<AsyncDialogProps<ConfirmDialogProps, boolean>> = ({ open, handleClose, data }) => {
+    return (
+        <Modal isOpen={open} onClose={() => handleClose(false)}>
+            <Box sx={window.browserType === BrowserType.Mobile ? {} : { width: 600 }}>
+                {
+                    data.title !== undefined &&
+                    <ModalTitle onClose={() => handleClose(false)}>
+                        {data.title}
+                    </ModalTitle>
+                }
+                {
+                    data.body !== undefined &&
+                    <ModalBody>
+                        {data.body}
+                    </ModalBody>
+                }
+                <ModalActions>
+                    <SuccessButton onClick={() => handleClose(true)}>Да</SuccessButton>
+                    <CancelButton onClick={() => handleClose(false)}>Нет</CancelButton>
+                </ModalActions>
+            </Box>
+        </Modal>
+    )
+} 

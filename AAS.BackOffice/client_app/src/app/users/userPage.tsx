@@ -5,16 +5,15 @@ import { UsersProvider } from '../../domain/users/usersProvider';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
+import useDialog from '../../hooks/useDialog';
 import { UserEditorModal } from './userEditorModal';
-
-type ModalState = {
-    isOpen: boolean;
-    userId: string | null;
-}
+import { ConfirmDialogModal } from '../../sharedComponents/modals/modal';
 
 export const UsersPage = () => {
     const [users, setUsers] = useState<User[]>([]);
-    const [modalState, setModalState] = useState<ModalState>({ isOpen: false, userId: null });
+
+    const userEditorModal = useDialog(UserEditorModal);
+    const confirmationDialog = useDialog(ConfirmDialogModal);
 
     useEffect(() => {
         async function init() {
@@ -24,8 +23,20 @@ export const UsersPage = () => {
         init();
     }, [])
 
-    function changeModalState(isOpen: boolean = false, userId: string | null = null) {
-        setModalState(state => ({ ...state, isOpen: isOpen, userId: userId }))
+    async function openUserEditorModal(userId: string | null = null) {
+        await userEditorModal.show({ userId });
+    }
+
+    async function removeUser(userId: string) {
+        const removingUser = users.find(user => user.id === userId) ?? null;
+
+        const isConfirmed = await confirmationDialog.show({ title: `Вы действительно хотите удалить пользователя: ${removingUser?.fullName}` })
+
+        if (!isConfirmed) return;
+
+        const result = await UsersProvider.removeUser(userId);
+
+        if (!result.isSuccess) return;
     }
 
     return (
@@ -60,12 +71,12 @@ export const UsersPage = () => {
                                     <TableCell>
                                         <Box display="flex">
                                             <Tooltip title="Редактировать">
-                                                <IconButton onClick={() => changeModalState(true, user.id)}>
+                                                <IconButton onClick={() => openUserEditorModal(user.id)}>
                                                     <EditIcon />
                                                 </IconButton>
                                             </Tooltip>
                                             <Tooltip title="Удалить">
-                                                <IconButton onClick={() => { }}>
+                                                <IconButton onClick={() => removeUser(user.id)}>
                                                     <DeleteIcon />
                                                 </IconButton>
                                             </Tooltip>
@@ -77,14 +88,6 @@ export const UsersPage = () => {
                     </TableBody>
                 </Table>
             </TableContainer>
-            {
-                modalState.isOpen &&
-                <UserEditorModal
-                    userId={modalState.userId}
-                    isOpen={modalState.isOpen}
-                    onClose={changeModalState}
-                />
-            }
         </Container>
     )
 }

@@ -88,14 +88,16 @@ public partial class UsersRepository : NpgSqlRepository, IUsersRepository
         return GetArray<UserDb>(Sql.Users_GetAll).ToUsers();
     } 
 
-    public void RemoveUser(ID userId)
+    public void RemoveUser(ID userId, ID systemUserId)
     {
         SqlParameter[] parameters =
         {
             new("p_id", userId),
+            new("p_systemuserid", systemUserId),
+            new("p_currentdatetimeutc", DateTime.UtcNow),
         };
 
-        Execute(Sql.Users_DeleteByName, parameters);
+        Execute(Sql.Users_Remove, parameters);
     }
 
     #endregion

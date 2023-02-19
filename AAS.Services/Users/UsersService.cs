@@ -72,9 +72,9 @@ public partial class UsersService : IUsersService
         return _usersRepository.GetUsers();
     }
 
-    public Result RemoveUser(ID userId)
+    public Result RemoveUser(ID userId, ID systemUserId)
     {
-        _usersRepository.RemoveUser(userId);
+        _usersRepository.RemoveUser(userId, systemUserId);
 
         return Result.Success();
     }
