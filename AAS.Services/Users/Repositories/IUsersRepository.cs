@@ -1,6 +1,7 @@
 ﻿using AAS.Domain.Users;
 using AAS.Domain.Users.Roles;
 using AAS.Tools.Types.IDs;
+using AAS.Tools.Types.Results;
 
 namespace AAS.Services.Users.Repositories;
 
@@ -13,6 +14,7 @@ public interface IUsersRepository
     public User? GetUser(ID id);
     public User? GetUser(String email, String? passwordHash = null);
     public User[] GetUsers();
+    public void ChangeUserPassword(ID userId, String passwordHash, ID systemUserId);
     public void RemoveUser(ID userId, ID systemUserId);
 
     #endregion

@@ -26,6 +26,11 @@ export class UsersProvider {
         return toUsers(users);
     }
 
+    public static async changeUserPassword(userId: string, password: string | null, rePassword: string | null): Promise<Result> {
+        const result = await HttpClient.getJsonAsync("users/change_password", { userId, password, rePassword });
+        return mapToResult(result);
+    }
+
     public static async removeUser(userId: string): Promise<Result> {
         const result = await HttpClient.getJsonAsync("users/remove", { userId });
         return mapToResult(result);

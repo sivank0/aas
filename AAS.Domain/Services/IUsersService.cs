@@ -22,6 +22,7 @@ public interface IUsersService
     User? GetUser(ID id);
     User? GetUser(String email, String? password = null);
     User[] GetUsers();
+    Result ChangeUserPassword(ID userId, String? password, String? rePassword, ID systemUserId);
     Result RemoveUser(ID userId, ID systemUserId);
 
     #endregion

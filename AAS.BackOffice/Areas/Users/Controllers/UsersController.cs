@@ -6,7 +6,6 @@ using AAS.Domain.Users;
 using AAS.Domain.Users.Roles;
 using AAS.Tools.Types.IDs;
 using AAS.Tools.Types.Results;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AAS.BackOffice.Areas.Users.Controllers;
@@ -45,6 +44,20 @@ public class UsersController : BaseController
     public User[] GetAllUsers()
     {
         return _usersService.GetUsers();
+    }
+
+    public record ChangeUserPasswordRequest(ID UserId, String? Password, String? RePassword);
+
+    [HttpGet("users/change_password")]
+    [IsAuthorized(AccessPolicy.UsersUpdate)]
+    public Result ChangeUserPassword(ChangeUserPasswordRequest changeUserPasswordRequest)
+    {
+        return _usersService.ChangeUserPassword(
+            changeUserPasswordRequest.UserId,
+            changeUserPasswordRequest.Password,
+            changeUserPasswordRequest.RePassword,
+            SystemUser.Id
+        );
     }
 
     [HttpGet("users/remove")]

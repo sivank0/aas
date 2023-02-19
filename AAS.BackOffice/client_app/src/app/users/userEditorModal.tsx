@@ -2,6 +2,7 @@ import { Box, Button } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { UserBlank } from '../../domain/users/userBlank';
 import { UsersProvider } from '../../domain/users/usersProvider';
+import { SaveButton } from '../../sharedComponents/buttons/button';
 import { InputForm } from '../../sharedComponents/inputs/inputForm';
 import { AsyncDialogProps } from '../../sharedComponents/modals/async/types';
 import { Modal, ModalActions, ModalBody, ModalTitle } from '../../sharedComponents/modals/modal';
@@ -27,12 +28,15 @@ export const UserEditorModal: React.FC<AsyncDialogProps<Props, boolean>> = ({ op
         if (open) init();
 
         return () => setUserBlank(UserBlank.getDefault());
-    }, [props.userId])
+    }, [props.userId, open])
 
-    async function saveChangedUser() {
+    async function saveUserBlank() {
         const result = await UsersProvider.saveUser(userBlank)
+
         if (!result.isSuccess) return alert(result.errors[0].message)
-        else alert('Изменения сохранены')
+
+        alert('Изменения сохранены');
+        handleClose();
     }
 
     return (
@@ -102,9 +106,9 @@ export const UserEditorModal: React.FC<AsyncDialogProps<Props, boolean>> = ({ op
                 </Box>
             </ModalBody>
             <ModalActions>
-                <Button variant='contained' onClick={() => saveChangedUser()}>
-                    Сохранить
-                </Button>
+                <SaveButton
+                    variant="contained"
+                    onClick={() => saveUserBlank()} />
             </ModalActions>
         </Modal>
     )

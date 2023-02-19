@@ -74,6 +74,27 @@ public partial class UsersService : IUsersService
         return _usersRepository.GetUsers();
     }
 
+    public Result ChangeUserPassword(ID userId, String? password, String? rePassword, ID systemUserId)
+    {
+        User? user = GetUser(userId);
+
+        if (user is null) return Result.Fail("Пользователь, которому меняется пароль не найден");
+
+        if (String.IsNullOrWhiteSpace(password)) return Result.Fail("Не введен пароль");
+
+        if (String.IsNullOrWhiteSpace(rePassword)) return Result.Fail("Не введен повтор пароля");
+
+        if (password != rePassword) return Result.Fail("Пароли должны совпадать");
+
+        String? passwordHash = HashManager.DefinePasswordHash(password);
+
+        if (String.IsNullOrWhiteSpace(passwordHash)) return Result.Fail("Не удалось изменить пароль, повторите попытку ещё раз");
+
+        _usersRepository.ChangeUserPassword(userId, passwordHash, systemUserId);
+
+        return Result.Success();
+    }
+
     public Result RemoveUser(ID userId, ID systemUserId)
     {
         _usersRepository.RemoveUser(userId, systemUserId);

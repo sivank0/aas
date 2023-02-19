@@ -1,11 +1,13 @@
 ﻿using AAS.Domain.Users;
 using AAS.Domain.Users.Roles;
+using AAS.Domain.Users.SystemUsers;
 using AAS.Services.Users.Converters;
 using AAS.Services.Users.Models;
 using AAS.Services.Users.Repositories.Queries;
 using AAS.Tools.DB;
 using AAS.Tools.Managers;
 using AAS.Tools.Types.IDs;
+using AAS.Tools.Types.Results;
 
 namespace AAS.Services.Users.Repositories;
 
@@ -89,7 +91,20 @@ public partial class UsersRepository : NpgSqlRepository, IUsersRepository
     public User[] GetUsers()
     {
         return GetArray<UserDb>(Sql.Users_GetAll).ToUsers();
-    } 
+    }
+
+    public void ChangeUserPassword(ID userId, String passwordHash, ID systemUserId)
+    {
+        SqlParameter[] parameters =
+        {
+            new("p_userid", userId),
+            new("p_passwordhash", passwordHash),
+            new("p_systemuserid", systemUserId),
+            new("p_currentdatetimeutc", DateTime.UtcNow),
+        };
+
+        Execute(Sql.Users_ChangePassword, parameters);
+    }
 
     public void RemoveUser(ID userId, ID systemUserId)
     {
