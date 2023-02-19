@@ -1,4 +1,4 @@
-import { Button } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { UserBlank } from '../../domain/users/userBlank';
 import { UsersProvider } from '../../domain/users/usersProvider';
@@ -26,33 +26,80 @@ export const UserEditorModal = (props: Props) => {
         }
     }, [props.userId])
 
+    async function saveChangedUser() {
+        const result = await UsersProvider.saveUser(userBlank)
+        if (!result.isSuccess) return alert(result.errors[0].message)
+        else alert('Изменения сохранены')
+    }
+
     return (
         <Modal isOpen={props.isOpen} onClose={props.onClose}>
             <ModalTitle onClose={props.onClose}>
                 {props.userId !== null ? "Редактирование" : "Добавление"} пользователя
             </ModalTitle>
             <ModalBody sx={{ width: 500 }}>
-                <InputForm
-                    type="text"
-                    label='Имя'
-                    placeholder='Введите имя'
-                    value={userBlank.firstName}
-                    onChange={(firstName) => setUserBlank(blank => ({ ...blank, firstName }))} />
-                <InputForm
-                    type="text"
-                    label='Фамилия'
-                    placeholder='Введите фамилию'
-                    value={userBlank.lastName}
-                    onChange={(lastName) => setUserBlank(blank => ({ ...blank, lastName }))} />
-                <InputForm
-                    type="text"
-                    label='Отчество'
-                    placeholder='Введите отчество'
-                    value={userBlank.middleName}
-                    onChange={(middleName) => setUserBlank(blank => ({ ...blank, middleName }))} />
+                <Box sx={{
+                    display: 'flex',
+                    gap: 1.5,
+                    flexDirection: 'column'
+                }}>
+                    <Box sx={{
+                        display: 'flex',
+                        flexDirection: 'row'
+                    }}>
+                        <InputForm
+                            sx={{ marginRight: 2 }}
+                            type="text"
+                            label='Имя'
+                            placeholder='Введите имя'
+                            value={userBlank.firstName}
+                            onChange={(firstName) => setUserBlank(blank => ({ ...blank, firstName }))} />
+                        <InputForm
+                            type="text"
+                            label='Фамилия'
+                            placeholder='Введите фамилию'
+                            value={userBlank.lastName}
+                            onChange={(lastName) => setUserBlank(blank => ({ ...blank, lastName }))} />
+                    </Box>
+                    <InputForm
+                        type="text"
+                        label='Отчество'
+                        placeholder='Введите отчество'
+                        value={userBlank.middleName}
+                        onChange={(middleName) => setUserBlank(blank => ({ ...blank, middleName }))} />
+                    <InputForm
+                        type="text"
+                        label='Телефон'
+                        placeholder='Введите телефон'
+                        value={userBlank.phoneNumber}
+                        onChange={(phoneNumber) => setUserBlank(blank => ({ ...blank, phoneNumber }))} />
+                    <InputForm
+                        type="text"
+                        label='Email'
+                        placeholder='Введите email'
+                        value={userBlank.email}
+                        onChange={(email) => setUserBlank(blank => ({ ...blank, email }))} />
+                    {
+                        props.userId === null &&
+                        <>
+                            <InputForm
+                                type="text"
+                                label='Пароль'
+                                placeholder='Введите пароль'
+                                value={userBlank.password}
+                                onChange={(password) => setUserBlank(blank => ({ ...blank, password }))} />
+                            <InputForm
+                                type="text"
+                                label='Повтор пароля'
+                                placeholder='Повторите пароль'
+                                value={userBlank.rePassword}
+                                onChange={(rePassword) => setUserBlank(blank => ({ ...blank, rePassword }))} />
+                        </>
+                    }
+                </Box>
             </ModalBody>
             <ModalActions>
-                <Button variant='contained'>
+                <Button variant='contained' onClick={() => saveChangedUser()}>
                     Сохранить
                 </Button>
             </ModalActions>

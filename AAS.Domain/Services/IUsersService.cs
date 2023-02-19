@@ -17,7 +17,7 @@ public interface IUsersService
 
     #region Users
 
-    Result SaveUser(UserBlank userBlank);
+    Result SaveUser(UserBlank userBlank, ID systenUserId);
     Result RegisterUser(UserRegistrationBlank userRegistrationBlank);
     User? GetUser(ID id);
     User? GetUser(String email, String? password = null);

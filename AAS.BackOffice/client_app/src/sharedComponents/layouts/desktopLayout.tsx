@@ -6,6 +6,7 @@ import { ruRU } from '@mui/material/locale';
 import { SnackbarProvider } from "notistack";
 import { PropsWithChildren } from "react";
 import { DesktopAppBar } from "../desktopAppBar";
+import SystemUser from "../../domain/systemUser";
 
 interface LayoutProps { }
 
@@ -18,7 +19,9 @@ export const DesktopLayout = (props: PropsWithChildren<LayoutProps>) => {
         <ThemeProvider theme={theme}>
             <SnackbarProvider maxSnack={3} >
                 <CssBaseline />
-                <DesktopAppBar />
+                {SystemUser !== null &&
+                    <DesktopAppBar />
+                }
                 <Box sx={{ marginTop: 2 }}>
                     {props.children}
                 </Box>

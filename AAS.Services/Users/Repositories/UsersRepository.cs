@@ -28,7 +28,7 @@ public partial class UsersRepository : NpgSqlRepository, IUsersRepository
 
     //    });
     //}
-    public void SaveUser(UserBlank userBlank)
+    public void SaveUser(UserBlank userBlank, ID systemUserId)
     {
         SqlParameter[] parameters =
         {
@@ -38,7 +38,10 @@ public partial class UsersRepository : NpgSqlRepository, IUsersRepository
             new("p_lastname", userBlank.LastName!),
             new("p_email", userBlank.Email!),
             new("p_phonenumber", userBlank.PhoneNumber!),
+            new("p_passwordhash", userBlank.Passwordhash ?? ""),
+            new("p_systemuserid", systemUserId),
             new("p_currentdatetimeutc", DateTime.UtcNow)
+
         };
 
         Execute(Sql.Users_Save, parameters);

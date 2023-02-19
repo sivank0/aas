@@ -18,7 +18,7 @@ public partial class UsersService : IUsersService
      
     #region Users
 
-    public Result SaveUser(UserBlank userBlank)
+    public Result SaveUser(UserBlank userBlank, ID systemUserId)
     {
         if (String.IsNullOrWhiteSpace(userBlank.Email)) return Result.Fail("Не введен Email");
 
@@ -28,7 +28,9 @@ public partial class UsersService : IUsersService
 
         if (String.IsNullOrWhiteSpace(userBlank.PhoneNumber)) return Result.Fail("Не введнен номер телефона");
 
-        _usersRepository.SaveUser(userBlank);
+
+        userBlank.Id ??= ID.New();
+        _usersRepository.SaveUser(userBlank, systemUserId);
         return Result.Success();
     }
 

@@ -20,6 +20,13 @@ public class UsersController : BaseController
     }
 
     #region Users
+    [HttpPost("users/save")]
+    [IsAuthorized(AccessPolicy.UsersRead)]
+    public Result SaveUser([FromBody] UserBlank userBlank)
+    {
+        return _usersService.SaveUser(userBlank, SystemUser.Id);
+    }
+
     [HttpPost("users/register_user")]
     public Result RegisterUser([FromBody] UserRegistrationBlank userRegistrationBlank)
     {

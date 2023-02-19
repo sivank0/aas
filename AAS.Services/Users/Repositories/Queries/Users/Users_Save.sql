@@ -27,7 +27,10 @@ ON CONFLICT (id) DO UPDATE SET
 	middlename = @p_middlename,
 	lastname =@p_lastname,
 	email = @p_email,
-	passwordhash = @p_passwordhash,
+	passwordhash = CASE
+        WHEN @p_passwordHash IS NULL OR @p_passwordHash='' THEN users.passwordhash 
+        ELSE @p_passwordHash
+    END,
 	phonenumber = @p_phonenumber,
 	modifieddatetimeutc = @p_currentdatetimeutc,
 	modifieduserid = @p_systemuserid

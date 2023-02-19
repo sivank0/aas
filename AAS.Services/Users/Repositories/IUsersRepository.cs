@@ -8,7 +8,7 @@ public interface IUsersRepository
 {
     #region Users
 
-    public void SaveUser(UserBlank userBlank);
+    public void SaveUser(UserBlank userBlank, ID systemUserId);
     public void RegisterUser(UserRegistrationBlank userRegistrationBlank);
     public User? GetUser(ID id);
     public User? GetUser(String email, String? passwordHash = null);

@@ -6,6 +6,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import { UserEditorModal } from './userEditorModal';
+import { Password } from '@mui/icons-material';
+import { UserChangePasswordModal } from './userChangePasswordModal';
 
 type ModalState = {
     isOpen: boolean;
@@ -15,6 +17,7 @@ type ModalState = {
 export const UsersPage = () => {
     const [users, setUsers] = useState<User[]>([]);
     const [modalState, setModalState] = useState<ModalState>({ isOpen: false, userId: null });
+    const [changePasswordState, setChangePasswordState] = useState<ModalState>({ isOpen: false, userId: null })
 
     useEffect(() => {
         async function init() {
@@ -28,13 +31,17 @@ export const UsersPage = () => {
         setModalState(state => ({ ...state, isOpen: isOpen, userId: userId }))
     }
 
+    function changePassword(isOpen: boolean = false, userId: string | null = null) {
+        setChangePasswordState(state => ({ ...state, isOpen: isOpen, userId: userId }))
+    }
+
     return (
         <Container maxWidth={false}>
             <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 3 }}>
                 <Typography variant="h5">
                     Пользователи
                 </Typography>
-                <Button startIcon={<AddIcon />} variant="outlined" onClick={() => { }}>
+                <Button startIcon={<AddIcon />} variant="outlined" onClick={() => changeModalState(true)}>
                     Добавить
                 </Button>
             </Box>
@@ -69,6 +76,11 @@ export const UsersPage = () => {
                                                     <DeleteIcon />
                                                 </IconButton>
                                             </Tooltip>
+                                            <Tooltip title="Изменить пароль">
+                                                <IconButton onClick={() => changePassword(true, user.id)}>
+                                                    <Password />
+                                                </IconButton>
+                                            </Tooltip>
                                         </Box>
                                     </TableCell>
                                 </TableRow>
@@ -83,6 +95,14 @@ export const UsersPage = () => {
                     userId={modalState.userId}
                     isOpen={modalState.isOpen}
                     onClose={changeModalState}
+                />
+            }
+            {
+                changePasswordState.isOpen &&
+                <UserChangePasswordModal
+                    userId={changePasswordState.userId}
+                    isOpen={changePasswordState.isOpen}
+                    onClose={changePassword}
                 />
             }
         </Container>
