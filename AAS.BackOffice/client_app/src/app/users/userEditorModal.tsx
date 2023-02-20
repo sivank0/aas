@@ -90,13 +90,13 @@ export const UserEditorModal: React.FC<AsyncDialogProps<Props, boolean>> = ({ op
                         props.userId === null &&
                         <>
                             <InputForm
-                                type="text"
+                                type="password"
                                 label='Пароль'
                                 placeholder='Введите пароль'
                                 value={userBlank.password}
                                 onChange={(password) => setUserBlank(blank => ({ ...blank, password }))} />
                             <InputForm
-                                type="text"
+                                type="password"
                                 label='Повтор пароля'
                                 placeholder='Повторите пароль'
                                 value={userBlank.rePassword}

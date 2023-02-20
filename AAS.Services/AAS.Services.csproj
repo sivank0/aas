@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Bids\Repositories\Queries\Bids\Bids_GetAll.sql" />
+    <None Remove="Bids\Repositories\Queries\Bids\Bids_Save.sql" />
     <None Remove="Users\Repositories\Queries\Roles\UserRoles_GetByUserId.sql" />
     <None Remove="Users\Repositories\Queries\Tokens\UserTokens_GetByToken.sql" />
     <None Remove="Users\Repositories\Queries\Tokens\UserTokens_Save.sql" />
@@ -19,6 +21,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Bids\Repositories\Queries\Bids\Bids_GetAll.sql" />
+    <EmbeddedResource Include="Bids\Repositories\Queries\Bids\Bids_Save.sql" />
     <EmbeddedResource Include="Users\Repositories\Queries\Roles\UserRoles_GetByUserId.sql" />
     <EmbeddedResource Include="Users\Repositories\Queries\Tokens\UserTokens_GetByToken.sql" />
     <EmbeddedResource Include="Users\Repositories\Queries\Tokens\UserTokens_Save.sql" />

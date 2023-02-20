@@ -82,14 +82,14 @@ export const UsersPage = () => {
                                                     <EditIcon />
                                                 </IconButton>
                                             </Tooltip>
-                                            <Tooltip title="Удалить">
-                                                <IconButton onClick={() => removeUser(user.id)}>
-                                                    <DeleteIcon />
-                                                </IconButton>
-                                            </Tooltip>
                                             <Tooltip title="Изменить пароль">
                                                 <IconButton onClick={() => openChangePasswordModal(user.id)}>
                                                     <Password />
+                                                </IconButton>
+                                            </Tooltip>
+                                            <Tooltip title="Удалить">
+                                                <IconButton onClick={() => removeUser(user.id)}>
+                                                    <DeleteIcon />
                                                 </IconButton>
                                             </Tooltip>
                                         </Box>

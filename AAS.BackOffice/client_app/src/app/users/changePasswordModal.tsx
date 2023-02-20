@@ -64,13 +64,13 @@ export const ChangePasswordModal: React.FC<AsyncDialogProps<Props, boolean>> = (
                     flexDirection: 'column'
                 }}>
                     <InputForm
-                        type="text"
+                        type="password"
                         label='Пароль'
                         placeholder='Введите пароль'
                         value={password}
                         onChange={(password) => setPassword(password)} />
                     <InputForm
-                        type="text"
+                        type="password"
                         label='Повтор пароля'
                         placeholder='Повторите пароль'
                         value={rePassword}

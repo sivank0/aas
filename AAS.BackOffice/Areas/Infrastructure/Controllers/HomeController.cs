@@ -24,4 +24,8 @@ public class HomeController : BaseController
 
     [Route("/registration")]
     public ViewResult Registration() => ReactApp();
+
+    [Route("/bids")]
+    [IsAuthorized(AccessPolicy.UserProfile)]
+    public ViewResult Bids() => ReactApp();
 }

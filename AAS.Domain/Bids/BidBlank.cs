@@ -1,10 +1,11 @@
 ﻿using AAS.Domain.Bids.Enums;
+using AAS.Tools.Types.IDs;
 
 namespace AAS.Domain.Bids;
 
 public class BidBlank
 {
-    public Guid? Id { get; set; }
+    public ID? Id { get; set; }
     public string? Title { get; set; }
     public string? Description { get; set; }
     public string? DenyDescription { get; set; }

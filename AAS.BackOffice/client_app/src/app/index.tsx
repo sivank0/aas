@@ -6,8 +6,10 @@ import { Auth } from './auth/auth';
 import { AuthLinks } from './auth/authLinks';
 import { Registration } from './auth/registration';
 import { UserLinks } from './users/userLinks';
-import { UsersPage } from './users/userPage';
+import { UsersPage } from './users/usersPage';
 import "../tools/string/globalStringConstructorUtils";
+import { BidLinks } from './bids/bidLinks';
+import { BidsPage } from './bids/bidsPage';
 
 const container = document.getElementById('app');
 const root = createRoot(container!);
@@ -19,6 +21,7 @@ root.render(
                 <Route path={AuthLinks.authentification} element={<Auth />} />
                 <Route path={AuthLinks.registration} element={<Registration />} />
                 <Route path={UserLinks.usersPage} element={<UsersPage />} />
+                <Route path={BidLinks.bidsPage} element={<BidsPage />} />
             </Routes>
         </DesktopLayout>
     </BrowserRouter>
