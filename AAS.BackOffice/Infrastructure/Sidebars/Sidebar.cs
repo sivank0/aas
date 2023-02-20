@@ -9,7 +9,7 @@ public static class Sidebar
 {
     private static readonly SidebarItem[] LinkItems =
     {
-        //ListItem(text: "Пользователи", url: "/users", iconType: SideBarIconType.Users, policy: AccessPolicy),
+        ListItem(text: "Пользователи", url: "/users", iconType: SideBarIconType.Users, policy: AccessPolicy.UsersRead),
     };
 
     public static SidebarItem[] GetLinksTree(SystemUser? systemUser)

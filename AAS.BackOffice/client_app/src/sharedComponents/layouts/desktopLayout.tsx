@@ -21,10 +21,16 @@ export const DesktopLayout = (props: PropsWithChildren<LayoutProps>) => {
             <SnackbarProvider maxSnack={3} >
                 <DialogProvider>
                     <CssBaseline />
-                {SystemUser !== null &&
-                    <DesktopAppBar />
-                }
-                    <Box sx={{ marginTop: 2 }}>
+                    {
+                        SystemUser !== null &&
+                        <DesktopAppBar />
+                    }
+                    <Box sx={{
+                        width: SystemUser === null ? "100%" : "calc(100% - 65px)",
+                        height: SystemUser === null ? "100%" : "calc(100% - 65px)",
+                        marginTop: SystemUser === null ? 0 : "89px",
+                        marginLeft: SystemUser === null ? 0 : "65px"
+                    }}>
                         {props.children}
                     </Box>
                 </DialogProvider>
