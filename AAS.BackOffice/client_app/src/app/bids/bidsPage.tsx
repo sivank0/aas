@@ -29,7 +29,7 @@ export const BidsPage = () => {
     }, [])
 
     function openBidEditorModal(bidId: string | null = null) {
-        bidEditorModal.show({ userId: bidId });
+        bidEditorModal.show({ bidId: bidId });
     }
 
     async function removeBid(bidId: string) {
@@ -59,6 +59,12 @@ export const BidsPage = () => {
                         <IconButton onClick={() => removeBid(bid.id!)}>
                             <DeleteIcon />
                         </IconButton>
+                        <Typography>
+                            {bid.description}
+                        </Typography>
+                        <Typography>
+                            {bid.status}
+                        </Typography>
                     </CardContent>
                 </Card>
             )}

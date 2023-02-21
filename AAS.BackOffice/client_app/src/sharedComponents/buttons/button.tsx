@@ -25,7 +25,7 @@ export const SaveButton = (props: PropsWithChildren<ButtonProps>) => {
             startIcon={
                 <SaveIcon
                     fontSize={props.size}
-                    color={props.color ?? "primary"} />
+                    color={props.color ?? "inherit"} />
             }
             onClick={props.onClick}>
             {props.children ?? "Сохранить"}

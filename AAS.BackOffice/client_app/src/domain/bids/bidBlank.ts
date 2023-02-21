@@ -5,7 +5,7 @@ export interface BidBlank {
     title: string | null,
     description: string | null,
     denyDescription: string | null,
-    status: string | null,
+    status: number | null,
     acceptanceDate: Date | null,
     approximateDate: Date | null,
 }
@@ -17,7 +17,7 @@ export namespace BidBlank {
             title: null,
             description: null,
             denyDescription: null,
-            status: null,
+            status: 1,
             acceptanceDate: null,
             approximateDate: null,
         }
@@ -28,7 +28,7 @@ export namespace BidBlank {
             id: bid.id,
             title: bid.title,
             description: bid.description,
-            denyDescription: bid.deynDescription,
+            denyDescription: bid.denyDescription,
             status: bid.status,
             acceptanceDate: bid.acceptanceDate,
             approximateDate: bid.approxmateDate,

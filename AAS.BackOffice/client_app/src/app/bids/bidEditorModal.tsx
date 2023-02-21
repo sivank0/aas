@@ -1,4 +1,4 @@
-import { Box, Button, TextField } from '@mui/material';
+import { Box, Button, ButtonGroup, TextField, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { BidBlank } from '../../domain/bids/bidBlank';
 import { BidsProvider } from '../../domain/bids/bidProvider';
@@ -10,29 +10,27 @@ import { AsyncDialogProps } from '../../sharedComponents/modals/async/types';
 import { Modal, ModalActions, ModalBody, ModalTitle } from '../../sharedComponents/modals/modal';
 
 interface Props {
-    userId: string | null;
+    bidId: string | null;
 }
 
 export const BidEditorModal: React.FC<AsyncDialogProps<Props, boolean>> = ({ open, handleClose, data: props }) => {
     const [bidBlank, setBidBlank] = useState<BidBlank>(BidBlank.getDefault());
-    const [userBlank, setUserBlank] = useState<UserBlank>(UserBlank.getDefault());
-
 
     useEffect(() => {
         async function init() {
-            if (props.userId === null) return setUserBlank(UserBlank.getDefault());
+            if (props.bidId === null) return setBidBlank(BidBlank.getDefault());
 
-            const user = await UsersProvider.getUserById(props.userId);
+            const bid = await BidsProvider.getBidById(props.bidId);
 
-            if (user === null) return;
+            if (bid === null) return;
 
-            setUserBlank(UserBlank.fromUser(user));
+            setBidBlank(BidBlank.fromBid(bid));
         }
 
         if (open) init();
 
-        return () => setUserBlank(UserBlank.getDefault());
-    }, [props.userId, open])
+        return () => setBidBlank(BidBlank.getDefault());
+    }, [props.bidId, open])
 
 
     async function saveBidBlank() {
@@ -44,10 +42,15 @@ export const BidEditorModal: React.FC<AsyncDialogProps<Props, boolean>> = ({ ope
         handleClose();
     }
 
+    function onChange(value: number) {
+        if (!value) return
+        bidBlank.status = value
+    }
+
     return (
         <Modal isOpen={open} onClose={handleClose}>
             <ModalTitle onClose={handleClose}>
-                {props.userId !== null ? "Редактирование" : "Создание"} заявки
+                {props.bidId !== null ? "Редактирование" : "Создание"} заявки
             </ModalTitle>
             <ModalBody sx={{ width: 500 }}>
                 <Box sx={{
@@ -58,16 +61,34 @@ export const BidEditorModal: React.FC<AsyncDialogProps<Props, boolean>> = ({ ope
                     <InputForm
                         sx={{ marginRight: 2 }}
                         type="text"
-                        label='Имя'
-                        placeholder='Введите имя'
-                        value={userBlank.firstName}
-                        onChange={(firstName) => setUserBlank(blank => ({ ...blank, firstName }))} />
+                        label='Тема'
+                        placeholder='Введите тему'
+                        value={bidBlank.title}
+                        onChange={(title) => setBidBlank(blank => ({ ...blank, title }))} />
                     <InputForm
                         type="text"
-                        label='Фамилия'
-                        placeholder='Введите фамилию'
-                        value={userBlank.lastName}
-                        onChange={(lastName) => setUserBlank(blank => ({ ...blank, lastName }))} />
+                        label='Описание'
+                        placeholder='Введите описание'
+                        value={bidBlank.description}
+                        onChange={(description) => setBidBlank(blank => ({ ...blank, description }))} />
+                    <ToggleButtonGroup sx={{ paddingX: 0 }}
+                        value={bidBlank.status}
+                        onClick={() => console.log(bidBlank.status)}
+                        onChange={(_, value: number) => onChange(value)} // Не воркает анимейшн
+                        exclusive>
+                        <ToggleButton value={1} color='warning' sx={{ paddingX: 1 }}>
+                            Ожидает подтверждения
+                        </ToggleButton>
+                        <ToggleButton value={2} sx={{ paddingX: 1 }}>
+                            Отменено
+                        </ToggleButton>
+                        <ToggleButton value={3} sx={{ paddingX: 1 }}>
+                            В работе
+                        </ToggleButton>
+                        <ToggleButton value={4} color='success' sx={{ paddingX: 1 }}>
+                            Завершено
+                        </ToggleButton>
+                    </ToggleButtonGroup>
                 </Box>
             </ModalBody>
             <ModalActions>

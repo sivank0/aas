@@ -3,8 +3,8 @@ export class Bid {
         public readonly id: string,
         public readonly title: string,
         public readonly description: string,
-        public readonly deynDescription: string | null,
-        public readonly status: string,
+        public readonly denyDescription: string | null,
+        public readonly status: number,
         public readonly acceptanceDate: Date | null,
         public readonly approxmateDate: Date | null
     ) { }

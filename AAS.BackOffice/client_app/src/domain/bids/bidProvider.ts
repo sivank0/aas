@@ -1,6 +1,7 @@
+import { TimesOneMobiledataSharp } from "@mui/icons-material";
 import HttpClient from "../../tools/httpClient";
 import { mapToResult, Result } from "../../tools/results/result";
-import { Bid, toBids } from "./bid";
+import { Bid, toBid, toBids } from "./bid";
 import { BidBlank } from "./bidBlank";
 
 export class BidsProvider {
@@ -19,4 +20,8 @@ export class BidsProvider {
         return mapToResult(result);
     }
 
+    public static async getBidById(bidId: string): Promise<Bid> {
+        const bid = await HttpClient.getJsonAsync("bids/get_by_id");
+        return toBid(bid);
+    }
 }
