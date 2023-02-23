@@ -1,11 +1,12 @@
 import { Bid } from "./bid"
+import { BidStatus } from "./bidStatus"
 
 export interface BidBlank {
     id: string | null,
     title: string | null,
     description: string | null,
     denyDescription: string | null,
-    status: number | null,
+    status: BidStatus,
     acceptanceDate: Date | null,
     approximateDate: Date | null,
 }
@@ -17,7 +18,7 @@ export namespace BidBlank {
             title: null,
             description: null,
             denyDescription: null,
-            status: 1,
+            status: BidStatus.AwaitingVerification,
             acceptanceDate: null,
             approximateDate: null,
         }

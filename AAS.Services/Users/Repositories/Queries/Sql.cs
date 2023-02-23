@@ -27,6 +27,7 @@ internal static class Sql
 
     public static String UserTokens_Save => SqlFileProvider.GetQuery(folder: "Tokens");
     public static String UserTokens_GetByToken => SqlFileProvider.GetQuery(folder: "Tokens");
+    public static String UserTokens_Remove => SqlFileProvider.GetQuery(folder: "Tokens");
 
     #endregion
 }

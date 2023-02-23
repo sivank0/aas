@@ -54,7 +54,6 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 export const Sidebar = (props: Props) => {
     const navigate = useNavigate();
 
-    console.log(SidebarModel.items)
     function navigateTo(url: string) {
         navigate(url);
         props.changeIsNavigationOpen(false);

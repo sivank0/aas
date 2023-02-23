@@ -13,6 +13,7 @@ import { ChangePasswordModal } from './changePasswordModal';
 
 export const UsersPage = () => {
     const [users, setUsers] = useState<User[]>([]);
+    const [isInit, setIsInit] = useState<boolean>(false);
 
     const userEditorModal = useDialog(UserEditorModal);
     const changePasswordModal = useDialog(ChangePasswordModal);
@@ -22,6 +23,7 @@ export const UsersPage = () => {
         async function init() {
             const users = await UsersProvider.getUsers();
             setUsers(users);
+            setIsInit(true);
         }
         init();
     }, [])
@@ -56,50 +58,53 @@ export const UsersPage = () => {
                     Добавить
                 </Button>
             </Box>
-            <TableContainer component={Paper}>
-                <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Фамилия, имя, отчество</TableCell>
-                            <TableCell>Email</TableCell>
-                            <TableCell>Действия</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {
-                            users.map(user =>
-                                <TableRow
-                                    key={user.id}
-                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }} >
-                                    <TableCell component="th" scope="row">
-                                        {user.fullName}
-                                    </TableCell>
-                                    <TableCell>{user.email}</TableCell>
-                                    <TableCell>
-                                        <Box display="flex">
-                                            <Tooltip title="Редактировать">
-                                                <IconButton onClick={() => openUserEditorModal(user.id)}>
-                                                    <EditIcon />
-                                                </IconButton>
-                                            </Tooltip>
-                                            <Tooltip title="Изменить пароль">
-                                                <IconButton onClick={() => openChangePasswordModal(user.id)}>
-                                                    <Password />
-                                                </IconButton>
-                                            </Tooltip>
-                                            <Tooltip title="Удалить">
-                                                <IconButton onClick={() => removeUser(user.id)}>
-                                                    <DeleteIcon />
-                                                </IconButton>
-                                            </Tooltip>
-                                        </Box>
-                                    </TableCell>
-                                </TableRow>
-                            )
-                        }
-                    </TableBody>
-                </Table>
-            </TableContainer>
+            {
+                isInit &&
+                <TableContainer component={Paper} elevation={3}>
+                    <Table sx={{ minWidth: 650 }}>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>Фамилия, имя, отчество</TableCell>
+                                <TableCell>Email</TableCell>
+                                <TableCell>Действия</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {
+                                users.map(user =>
+                                    <TableRow
+                                        key={user.id}
+                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }} >
+                                        <TableCell component="th" scope="row">
+                                            {user.fullName}
+                                        </TableCell>
+                                        <TableCell>{user.email}</TableCell>
+                                        <TableCell>
+                                            <Box display="flex">
+                                                <Tooltip title="Редактировать">
+                                                    <IconButton onClick={() => openUserEditorModal(user.id)}>
+                                                        <EditIcon />
+                                                    </IconButton>
+                                                </Tooltip>
+                                                <Tooltip title="Изменить пароль">
+                                                    <IconButton onClick={() => openChangePasswordModal(user.id)}>
+                                                        <Password />
+                                                    </IconButton>
+                                                </Tooltip>
+                                                <Tooltip title="Удалить">
+                                                    <IconButton onClick={() => removeUser(user.id)}>
+                                                        <DeleteIcon />
+                                                    </IconButton>
+                                                </Tooltip>
+                                            </Box>
+                                        </TableCell>
+                                    </TableRow>
+                                )
+                            }
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            }
         </Container>
     )
 }

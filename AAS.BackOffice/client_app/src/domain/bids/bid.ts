@@ -1,6 +1,7 @@
 export class Bid {
     constructor(
         public readonly id: string,
+        public readonly number: number,
         public readonly title: string,
         public readonly description: string,
         public readonly denyDescription: string | null,
@@ -13,6 +14,7 @@ export class Bid {
 export function toBid(value: any): Bid {
     return new Bid(
         value.id,
+        value.number,
         value.title,
         value.description,
         value.denyDescription,

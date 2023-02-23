@@ -1,4 +1,6 @@
 using AAS.Domain.Services;
+using AAS.Services.Bids;
+using AAS.Services.Bids.Repositories;
 using AAS.Services.Users;
 using AAS.Services.Users.Repositories;
 using AAS.Tools.Converters;
@@ -22,12 +24,14 @@ public static class ServicesConfigurator
         #region Repositories
 
         services.AddSingleton<IUsersRepository>(new UsersRepository(connectionString));
+        services.AddSingleton<IBidsRepository>(new BidsRepository(connectionString));
 
         #endregion Repositories
 
         #region Services  
 
         services.AddSingleton<IUsersService, UsersService>();
+        services.AddSingleton<IBidsService, BidsService>();
 
         #endregion Services 
 

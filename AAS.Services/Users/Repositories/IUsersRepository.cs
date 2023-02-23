@@ -29,6 +29,7 @@ public interface IUsersRepository
 
     public void SaveUserToken(UserToken userToken);
     public UserToken? GetUserToken(String token);
+    public void RemoveToken(String token);
 
     #endregion
 }

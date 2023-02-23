@@ -1,13 +1,14 @@
-import { Box, Button, ButtonGroup, TextField, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { Box, } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { BidBlank } from '../../domain/bids/bidBlank';
 import { BidsProvider } from '../../domain/bids/bidProvider';
-import { UserBlank } from '../../domain/users/userBlank';
-import { UsersProvider } from '../../domain/users/usersProvider';
+import { BidStatus } from '../../domain/bids/bidStatus';
 import { SaveButton } from '../../sharedComponents/buttons/button';
+import { ToggleButtons } from '../../sharedComponents/buttons/toggleButtons';
 import { InputForm } from '../../sharedComponents/inputs/inputForm';
 import { AsyncDialogProps } from '../../sharedComponents/modals/async/types';
 import { Modal, ModalActions, ModalBody, ModalTitle } from '../../sharedComponents/modals/modal';
+import { Enum } from '../../tools/enum';
 
 interface Props {
     bidId: string | null;
@@ -39,17 +40,12 @@ export const BidEditorModal: React.FC<AsyncDialogProps<Props, boolean>> = ({ ope
         if (!result.isSuccess) return alert(result.errors[0].message)
 
         alert('Изменения сохранены');
-        handleClose();
-    }
-
-    function onChange(value: number) {
-        if (!value) return
-        bidBlank.status = value
+        handleClose(true);
     }
 
     return (
-        <Modal isOpen={open} onClose={handleClose}>
-            <ModalTitle onClose={handleClose}>
+        <Modal isOpen={open} onClose={() => handleClose(false)}>
+            <ModalTitle onClose={() => handleClose(false)}>
                 {props.bidId !== null ? "Редактирование" : "Создание"} заявки
             </ModalTitle>
             <ModalBody sx={{ width: 500 }}>
@@ -66,29 +62,30 @@ export const BidEditorModal: React.FC<AsyncDialogProps<Props, boolean>> = ({ ope
                         value={bidBlank.title}
                         onChange={(title) => setBidBlank(blank => ({ ...blank, title }))} />
                     <InputForm
-                        type="text"
+                        type="text-area"
                         label='Описание'
                         placeholder='Введите описание'
+                        minRows={3}
                         value={bidBlank.description}
                         onChange={(description) => setBidBlank(blank => ({ ...blank, description }))} />
-                    <ToggleButtonGroup sx={{ paddingX: 0 }}
-                        value={bidBlank.status}
-                        onClick={() => console.log(bidBlank.status)}
-                        onChange={(_, value: number) => onChange(value)} // Не воркает анимейшн
-                        exclusive>
-                        <ToggleButton value={1} color='warning' sx={{ paddingX: 1 }}>
-                            Ожидает подтверждения
-                        </ToggleButton>
-                        <ToggleButton value={2} sx={{ paddingX: 1 }}>
-                            Отменено
-                        </ToggleButton>
-                        <ToggleButton value={3} sx={{ paddingX: 1 }}>
-                            В работе
-                        </ToggleButton>
-                        <ToggleButton value={4} color='success' sx={{ paddingX: 1 }}>
-                            Завершено
-                        </ToggleButton>
-                    </ToggleButtonGroup>
+                    {
+                        (props.bidId !== null && bidBlank.status === BidStatus.Denied) &&
+                        <InputForm
+                            type="text-area"
+                            label='Причина отклонения'
+                            placeholder='Введите причину отклонения'
+                            minRows={3}
+                            value={bidBlank.denyDescription}
+                            onChange={(denyDescription) => setBidBlank(blank => ({ ...blank, denyDescription }))} />
+                    }
+                    {
+                        props.bidId !== null &&
+                        <ToggleButtons
+                            value={bidBlank.status}
+                            options={Enum.getNumberValues<BidStatus>(BidStatus)}
+                            getOptionLabel={(option) => BidStatus.getDisplayName(option)}
+                            onChange={(status) => setBidBlank(blank => ({ ...blank, status }))} />
+                    }
                 </Box>
             </ModalBody>
             <ModalActions>

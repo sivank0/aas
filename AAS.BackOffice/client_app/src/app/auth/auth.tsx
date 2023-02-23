@@ -14,7 +14,11 @@ export const Auth = () => {
 
     async function logIn() {
         const result = await AuthenticationProvider.logIn(email, password);
-        alert(result);
+
+        if (!result.isSuccess) return alert(result.errors[0].message);
+
+        alert("Вход выполнен успешно");
+        window.location.href = "/";
     }
 
     return (

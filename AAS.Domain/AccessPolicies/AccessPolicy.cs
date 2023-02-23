@@ -6,7 +6,14 @@ public enum AccessPolicy
 
     UserProfile = 1,
     UsersRead = 2,
-    UsersUpdate = 3
+    UsersUpdate = 3,
+
+    #endregion
+
+    #region Bids
+
+    BidsRead = 4,
+    BidsUpdate = 5,
 
     #endregion
 }

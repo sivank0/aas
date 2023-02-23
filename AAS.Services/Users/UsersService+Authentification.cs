@@ -62,4 +62,6 @@ public partial class UsersService : IUsersService // + Authentification
 
         return DataResult<UserToken?>.Success(userToken);
     }
+
+    public void LogOut(String token) => _usersRepository.RemoveToken(token);
 }

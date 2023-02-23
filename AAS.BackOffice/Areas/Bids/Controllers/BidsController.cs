@@ -1,15 +1,11 @@
-﻿using AAS.BackOffice.Filters;
+﻿using AAS.BackOffice.Controllers;
+using AAS.BackOffice.Filters;
 using AAS.Domain.AccessPolicies;
+using AAS.Domain.Bids;
 using AAS.Domain.Services;
 using AAS.Domain.Users.SystemUsers;
-using AAS.Domain.Users;
-using AAS.Services.Users;
-using AAS.Tools.Types.IDs;
 using AAS.Tools.Types.Results;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using AAS.Domain.Bids;
-using AAS.BackOffice.Controllers;
 
 namespace AAS.BackOffice.Areas.Bids.Controllers;
 
@@ -23,23 +19,16 @@ public class BidsController : BaseController
     }
 
     [HttpPost("bids/save")]
-    [IsAuthorized(AccessPolicy.UsersRead)]
+    [IsAuthorized(AccessPolicy.BidsUpdate)]
     public Result SaveBid([FromBody] BidBlank bidBlank)
     {
         return _bidsService.SaveBid(bidBlank, SystemUser.Id);
     }
 
-    //[HttpGet("users/get_by_id")]
-    //[IsAuthorized(AccessPolicy.UsersRead)]
-    //public User? GetUser(ID id)
-    //{
-    //    return _bidsService.GetUser(id);
-    //}
-
-    [HttpGet("bids/get_all")]
-    [IsAuthorized(AccessPolicy.UsersRead)]
-    public Bid[] GetAllBids()
+    [HttpGet("bids/get_page")]
+    [IsAuthorized(AccessPolicy.BidsRead)]
+    public PagedResult<Bid> GetBidsPage(Int32 page, Int32 countInPage)
     {
-        return _bidsService.GetBids();
+        return _bidsService.GetPagedBids(page, countInPage);
     }
 }

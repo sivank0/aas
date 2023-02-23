@@ -1,5 +1,6 @@
-﻿INSERT INTO users(
+﻿INSERT INTO bids(
 	id,
+	number,
 	title,
 	description,
 	denydescription,
@@ -12,6 +13,7 @@
 )
 VALUES(
 	@p_id,
+	@p_number,
 	@p_title,
 	@p_description,
 	@p_denydescription,
@@ -25,7 +27,7 @@ VALUES(
 ON CONFLICT (id) DO UPDATE SET
 	title = @p_title,
 	description = @p_description,
-	denydescription = @p_deydescription,
+	denydescription = @p_denydescription,
 	status = @p_status,
 	acceptancedate = @p_acceptancedate,
 	approximatedate = @p_approximatedate,

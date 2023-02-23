@@ -29,4 +29,14 @@ public partial class UsersRepository : NpgSqlRepository, IUsersRepository // + T
 
         return Get<UserTokenDb?>(Sql.UserTokens_GetByToken, parameters)?.ToUserToken();
     }
+
+    public void RemoveToken(String token)
+    {
+        SqlParameter[] parameters =
+        {
+            new("p_token", token)
+        };
+
+        Execute(Sql.UserTokens_Remove, parameters);
+    }
 }

@@ -67,15 +67,15 @@ public class AuthenticationController : BaseController
         return DataResult<String?>.Success(authentificationResult.Data.Token);
     }
 
-    //[HttpPost("authentication/log_out")]
-    //public Result LogOut()
-    //{
-    //    String? token = CookieManager.Read(Request, CookieNames.Token);
+    [HttpPost("authentication/log_out")]
+    public Result LogOut()
+    {
+        String? token = CookieManager.Read(Request, CookieNames.Token);
 
-    //    if (token is null) return Result.Fail("Токен не найден");
+        if (token is null) return Result.Fail("Токен не найден");
 
-    //    _usersService.LogOut(token);
-    //    CookieManager.Delete(Response, CookieNames.Token);
-    //    return Result.Success();
-    //}
+        _usersService.LogOut(token);
+        CookieManager.Delete(Response, CookieNames.Token);
+        return Result.Success();
+    }
 }

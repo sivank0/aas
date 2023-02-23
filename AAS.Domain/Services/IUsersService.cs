@@ -12,6 +12,7 @@ public interface IUsersService
     Result Authenticate(String token);
     SystemUser? GetSystemUser(String token);
     DataResult<UserToken?> LogIn(String? email, String? password);
+    void LogOut(String token);
 
     #endregion
 
@@ -29,5 +30,6 @@ public interface IUsersService
 
     #region Roles
     UserRole GetUserRole(ID userId);
+
     #endregion
 }

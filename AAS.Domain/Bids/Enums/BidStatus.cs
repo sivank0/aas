@@ -2,8 +2,9 @@
 
 public enum BidStatus
 {
-    AwaitingVerification = 1,
-    Denied = 2,
-    InWork = 3,
-    Completed = 4
+    Created = 1,
+    AwaitingVerification = 2,
+    Denied = 3,
+    InWork = 4,
+    Completed = 5
 }

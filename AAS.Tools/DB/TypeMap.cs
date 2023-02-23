@@ -1,5 +1,6 @@
 ﻿using AAS.Tools.Types;
 using AAS.Tools.Types.IDs;
+using Microsoft.VisualBasic;
 using System.Data;
 
 namespace AAS.Tools.DB;
@@ -18,6 +19,8 @@ internal static class TypeMap
         {typeof(decimal), DbType.Decimal},
         {typeof(decimal[]), DbType.Object},
         {typeof(DateTime), DbType.DateTime},
+        {typeof(DateOnly), DbType.Date},
+        {typeof(DateOnly[]), DbType.Object},
         {typeof(DateTime[]), DbType.Object},
         {typeof(Guid), DbType.Guid},
         {typeof(Guid[]), DbType.Object},
