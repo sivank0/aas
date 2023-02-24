@@ -19,7 +19,9 @@ internal static class Sql
 
     #region UserRoles
 
+    public static String UserRoles_Save => SqlFileProvider.GetQuery(folder: "Roles");
     public static String UserRoles_GetByUserId => SqlFileProvider.GetQuery(folder: "Roles");
+    public static String UserRoles_GetAll => SqlFileProvider.GetQuery(folder: "Roles");
 
     #endregion
 

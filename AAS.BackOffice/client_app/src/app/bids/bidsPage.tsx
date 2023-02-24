@@ -78,6 +78,7 @@ export const BidsPage = () => {
             <PaginationButtons
                 page={paginationState.page}
                 countInPage={paginationState.countInPage}
+                countInPageOptions={[50, 100, 150]}
                 onChangePage={(page) => setPaginationState(state => ({ ...state, page }))}
                 onChangeCountInPage={(countInPage) => setPaginationState(state => ({ ...state, countInPage }))} />
         </Container>

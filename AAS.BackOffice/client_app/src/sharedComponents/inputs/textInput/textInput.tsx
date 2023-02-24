@@ -14,7 +14,7 @@ export interface IProps {
     placeholder?: string;
     hiddenLabel?: boolean;
     value: string | null;
-    size?: "small" | "medium" | undefined;
+    size?: "small" | "medium";
     variant?: "standard" | "filled" | "outlined" | undefined;
     sx?: SxProps<Theme>;
     className?: string;

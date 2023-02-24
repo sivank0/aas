@@ -21,7 +21,9 @@ public interface IUsersRepository
 
     #region UserRoles
 
+    public void SaveUserRole(UserRoleBlank userRoleBlank, ID systemUserId);
     public UserRole? GetUserRole(ID userId);
+    public UserRole[] GetUserRoles();
 
     #endregion
 

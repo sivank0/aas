@@ -11,11 +11,6 @@ export class UsersProvider {
         return mapToResult(result);
     }
 
-    public static async registerUser(UserRegistrationBlank: UserRegistrationBlank): Promise<Result> {
-        const result = await HttpClient.postJsonAsync("/users/register_user", UserRegistrationBlank);
-        return mapToResult(result);
-    }
-
     public static async getUserById(id: string): Promise<User | null> {
         const user = await HttpClient.getJsonAsync("/users/get_by_id", { id });
         return toUser(user);

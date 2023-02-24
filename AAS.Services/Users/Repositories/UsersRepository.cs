@@ -1,4 +1,5 @@
-﻿using AAS.Domain.Users;
+﻿using AAS.Domain.AccessPolicies.Extensions;
+using AAS.Domain.Users;
 using AAS.Domain.Users.Roles;
 using AAS.Domain.Users.SystemUsers;
 using AAS.Services.Users.Converters;
@@ -8,6 +9,7 @@ using AAS.Tools.DB;
 using AAS.Tools.Managers;
 using AAS.Tools.Types.IDs;
 using AAS.Tools.Types.Results;
+using System.Dynamic;
 
 namespace AAS.Services.Users.Repositories;
 
@@ -53,7 +55,7 @@ public partial class UsersRepository : NpgSqlRepository, IUsersRepository
     {
         SqlParameter[] parameters =
         {
-            new("p_id", userRegistrationBlank.Id!),
+            new("p_id", userRegistrationBlank.Id!.Value),
             new("p_firstname", userRegistrationBlank.FirstName!),
             new("p_middlename", userRegistrationBlank.MiddleName!),
             new("p_lastname", userRegistrationBlank.LastName!),
@@ -122,6 +124,20 @@ public partial class UsersRepository : NpgSqlRepository, IUsersRepository
 
     #region UserRoles
 
+    public void SaveUserRole(UserRoleBlank userRoleBlank, ID systemUserId)
+    {
+        SqlParameter[] parameters =
+        {
+            new("p_id", userRoleBlank.Id!.Value),
+            new("p_name", userRoleBlank.Name!),
+            new("p_accesspolicies", userRoleBlank.AccessPolicies.Keys()),
+            new("p_systemuserid", systemUserId),
+            new("p_currentdatetimeutc", DateTime.UtcNow),
+        };
+
+        Execute(Sql.UserRoles_Save, parameters);
+    }
+
     public UserRole? GetUserRole(ID userId)
     {
         SqlParameter[] parameters =
@@ -130,6 +146,11 @@ public partial class UsersRepository : NpgSqlRepository, IUsersRepository
         };
 
         return Get<UserRoleDb?>(Sql.UserRoles_GetByUserId, parameters)?.ToUserRole();
+    }
+
+    public UserRole[] GetUserRoles()
+    {
+        return GetArray<UserRoleDb>(Sql.UserRoles_GetAll).ToUserRoles();
     }
 
     #endregion

@@ -1,10 +1,9 @@
-import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { Box, Button, IconButton, InputAdornment, Link, Paper, TextField, Tooltip, Typography } from '@mui/material';
+import { Box, Button, Link, Paper, Tooltip, Typography } from '@mui/material';
 import { Container } from '@mui/system';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserRegistrationBlank } from '../../domain/users/userRegistrationBlank';
-import { UsersProvider } from '../../domain/users/usersProvider';
+import { AuthenticationProvider } from '../../domain/users/usersProvider';
 import { InputForm } from '../../sharedComponents/inputs/inputForm';
 import { AuthLinks } from './authLinks';
 
@@ -14,13 +13,11 @@ export const Registration = () => {
     const navigate = useNavigate()
 
     async function registerUser() {
-        const result = await UsersProvider.registerUser(userRegistrationBlank)
+        const result = await AuthenticationProvider.registerUser(userRegistrationBlank)
 
         if (!result.isSuccess) return alert(result.errors[0].message)
 
         alert('Удачно')
-
-        window.location.href = AuthLinks.authentification;
     }
 
     return (

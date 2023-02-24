@@ -10,7 +10,7 @@ public static class EnumExtensions
         return (T)Enum.Parse(typeof(T), value, true);
     }
 
-    public static string GetDisplayFullName(this Enum source)
+    public static string GetDisplayName(this Enum source)
     {
         FieldInfo field = source.GetType().GetField(source.ToString());
         if (field == null) return source.ToString();

@@ -33,32 +33,7 @@ public partial class UsersService : IUsersService
         _usersRepository.SaveUser(userBlank, systemUserId);
         return Result.Success();
     }
-
-    public Result RegisterUser(UserRegistrationBlank userRegistrationBlank)
-    {
-        if (String.IsNullOrWhiteSpace(userRegistrationBlank.Email)) return Result.Fail("Не введен Email");
-
-        if (String.IsNullOrWhiteSpace(userRegistrationBlank.FirstName)) return Result.Fail("Не введено имя");
-
-        if (String.IsNullOrWhiteSpace(userRegistrationBlank.LastName)) return Result.Fail("Не введена фамилия");
-
-        if (String.IsNullOrWhiteSpace(userRegistrationBlank.PhoneNumber)) return Result.Fail("Не введнен номер телефона");
-
-        if (String.IsNullOrWhiteSpace(userRegistrationBlank.Password)) return Result.Fail("Не введнен пароль");
-
-        if (String.IsNullOrWhiteSpace(userRegistrationBlank.RePassword)) return Result.Fail("Не введнен повторно пароль");
-
-        if (userRegistrationBlank.Password != userRegistrationBlank.RePassword) return Result.Fail("Пароли не совпадают");
-
-        User? existingUser = GetUser(userRegistrationBlank.Email);
-
-        if (existingUser is not null) return Result.Fail("Пользователь с такой почтой существует");
-
-        userRegistrationBlank.Id ??= ID.New();
-        _usersRepository.RegisterUser(userRegistrationBlank);
-        return Result.Success();
-    }
-
+     
     public User? GetUser(ID id)
     {
         return _usersRepository.GetUser(id);
@@ -104,11 +79,31 @@ public partial class UsersService : IUsersService
 
     #endregion
 
-    #region
+    #region UserRoles
+
+    public Result SaveUserRole(UserRoleBlank userRoleBlank, ID systemUserId)
+    {
+        if (String.IsNullOrWhiteSpace(userRoleBlank.Name))
+            return Result.Fail("Не введено название роли");
+
+        if (userRoleBlank.AccessPolicies.Length == 0)
+            return Result.Fail("Не выбраны политики доступа");
+
+        userRoleBlank.Id ??= ID.New();
+
+        _usersRepository.SaveUserRole(userRoleBlank, systemUserId);
+
+        return Result.Success();
+    }
 
     public UserRole? GetUserRole(ID userId)
     {
         return _usersRepository.GetUserRole(userId);
+    }
+
+    public UserRole[] GetUserRoles()
+    {
+        return _usersRepository.GetUserRoles();
     }
 
     #endregion

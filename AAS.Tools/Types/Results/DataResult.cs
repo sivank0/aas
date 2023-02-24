@@ -17,12 +17,12 @@ public readonly struct DataResult<T>
 		return new(data);
 	}
 
-	public static DataResult<T?> Failed(IEnumerable<Error> errors)
+	public static DataResult<T?> Fail(IEnumerable<Error> errors)
 	{
 		return new(default, errors);
 	}
 
-	public static DataResult<T?> Failed(string error)
+	public static DataResult<T?> Fail(string error)
 	{
 		return new(default, new[] { new Error(error) });
 	}

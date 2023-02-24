@@ -32,20 +32,21 @@ public class AuthenticationController : BaseController
         return Redirect("/");
     }
 
-    //[HttpPost("authentication/register_user")]
-    //public async Task<Result> RegisterUser([FromBody] UserRegistrationBlank userRegistrationBlank)
-    //{
-    //	DataResult<UserToken?> registrationResult = await _usersService.RegisterUser(userRegistrationBlank); // REFACTORING в DataResult можно добавить атрибут MemberNotNullWhen, чтобы не делать ! или проверку Data на null
+    [HttpPost("authentication/register_user")]
+    public Result RegisterUser([FromBody] UserRegistrationBlank userRegistrationBlank)
+    {
+        DataResult<UserToken?> registrationResult = _usersService.RegisterUser(userRegistrationBlank); // REFACTORING в DataResult можно добавить атрибут MemberNotNullWhen, чтобы не делать ! или проверку Data на null
 
-    //	if (!registrationResult.IsSuccess) return Result.Fail(registrationResult.Errors[0]);
+        if (!registrationResult.IsSuccess) return Result.Fail(registrationResult.Errors[0].Message);
 
-    //	Result authenticationResult = _usersService.Authenticate(registrationResult.Data!.Token);
+        Result authenticationResult = _usersService.Authenticate(registrationResult.Data!.Token);
 
-    //	if (!authenticationResult.IsSuccess) return Result.Fail("Регистрация не удалась, попробуйте ещё раз");
+        if (registrationResult.IsSuccess && !authenticationResult.IsSuccess)
+            return Result.Fail("Обратитесь к администратору для того, чтобы начать пользоваться сервисом");
 
-    //	CookieManager.Write(Response, new Cookie(CookieNames.Token, registrationResult.Data!.Token), DateTime.MaxValue);
-    //	return Result.Success();
-    //}
+        CookieManager.Write(Response, new Cookie(CookieNames.Token, registrationResult.Data!.Token), DateTime.MaxValue);
+        return Result.Success();
+    }
 
     public record UserAuthenticationRequest(String? Email, String? Password);
 
@@ -58,7 +59,7 @@ public class AuthenticationController : BaseController
 
         DataResult<UserToken?> authentificationResult = _usersService.LogIn(userAuthenticationRequest.Email, userAuthenticationRequest.Password);
 
-        if (!authentificationResult.IsSuccess) return DataResult<String?>.Failed(authentificationResult.Errors[0].Message);
+        if (!authentificationResult.IsSuccess) return DataResult<String?>.Fail(authentificationResult.Errors[0].Message);
 
         if (String.IsNullOrWhiteSpace(authentificationResult.Data!.Token))
             return DataResult<String?>.Success(authentificationResult.Data.Token);

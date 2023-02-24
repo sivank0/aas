@@ -26,12 +26,6 @@ public class UsersController : BaseController
         return _usersService.SaveUser(userBlank, SystemUser.Id);
     }
 
-    [HttpPost("users/register_user")]
-    public Result RegisterUser([FromBody] UserRegistrationBlank userRegistrationBlank)
-    {
-        return _usersService.RegisterUser(userRegistrationBlank);
-    }
-
     [HttpGet("users/get_by_id")]
     [IsAuthorized(AccessPolicy.UsersRead)]
     public User? GetUser(ID id)
