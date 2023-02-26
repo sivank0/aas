@@ -16,13 +16,21 @@ import { BrowserType } from '../tools/browserType/browserType';
 import PersonIcon from '@mui/icons-material/Person';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useNavigate } from 'react-router-dom';
+import { UserLinks } from '../app/users/userLinks';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
+import { ThemeMode } from './themeMode';
+
+interface Props {
+    themeMode: ThemeMode,
+    changeThemeMode: (mode: ThemeMode) => void
+}
 
 type MenuState = {
     isOpen: boolean;
     achorEl: HTMLElement | null;
 }
 
-export const DesktopAppBar = () => {
+export const DesktopAppBar = (props: Props) => {
     const [userRole, setUserRole] = useState<UserRole | null>(null);
     const [isSidebarUncollapsed, setIsSidebarUncollapsed] = useState<boolean>(false);
     const [menuState, setMenuState] = useState<MenuState>({ isOpen: false, achorEl: null });
@@ -46,7 +54,14 @@ export const DesktopAppBar = () => {
     }
 
     function navigateToProfile() {
-        navigate("/");
+        navigate(UserLinks.userProfile);
+    }
+
+    function changeThemeMode(mode: ThemeMode) {
+        switch (mode) {
+            case ThemeMode.Dark: return props.changeThemeMode(ThemeMode.Light)
+            case ThemeMode.Light: return props.changeThemeMode(ThemeMode.Dark)
+        }
     }
 
     async function logOut() {
@@ -74,23 +89,33 @@ export const DesktopAppBar = () => {
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         Система приема заявок
                     </Typography>
-                    <Button variant="text" onClick={(event) => changeMenuState(true, event)}>
-                        <Box
-                            sx={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                gap: 0.5,
-                                marginRight: '10px',
-                                color: 'white'
-                            }}>
-                            <Typography sx={{ textTransform: "none" }}>
-                                {SystemUser.fullName}
-                            </Typography>
-                            <Typography sx={{ textTransform: "none" }}>
-                                {userRole?.name}
-                            </Typography>
-                        </Box>
-                    </Button>
+                    <Box sx={{
+                        display: 'flex',
+                        gap: 1
+                    }}>
+                        <Button variant="text" onClick={(event) => changeMenuState(true, event)}>
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    gap: 0.5,
+                                    marginRight: '10px',
+                                    color: 'white'
+                                }}>
+                                <Typography sx={{ textTransform: "none" }}>
+                                    {SystemUser.fullName}
+                                </Typography>
+                                <Typography sx={{ textTransform: "none" }}>
+                                    {userRole?.name}
+                                </Typography>
+                            </Box>
+                        </Button>
+                        <IconButton size='small' onClick={() => changeThemeMode(props.themeMode)}>
+                            {
+                                ThemeMode.getIcon(props.themeMode, 'small')
+                            }
+                        </IconButton>
+                    </Box>
                 </Toolbar>
             </AppBar>
             {
@@ -120,7 +145,7 @@ export const DesktopAppBar = () => {
                 }}>
                 <Link onClick={navigateToProfile} sx={{
                     textDecoration: "none",
-                    color: "#000"
+                    color: "inherit"
                 }}>
                     <MenuItem sx={{ gap: 1 }}>
                         <PersonIcon />

@@ -3,6 +3,7 @@ using AAS.Domain.Bids.Enums;
 using AAS.Services.Bids.Models;
 using AAS.Services.Bids.Repositories.Converters;
 using AAS.Services.Bids.Repositories.Queries;
+using AAS.Services.Users.Models;
 using AAS.Tools.DB;
 using AAS.Tools.Types.IDs;
 using AAS.Tools.Types.Results;
@@ -15,7 +16,7 @@ public class BidsRepository : NpgSqlRepository, IBidsRepository
 
     public void SaveBid(BidBlank bidBlank, ID systemUserId)
     {
-        DateOnly? acceptanceDate = bidBlank.Status != BidStatus.Created ? DateOnly.FromDateTime(DateTime.UtcNow) : null;
+        DateOnly? acceptanceDate = bidBlank.Status != BidStatus.AwaitingVerification ? DateOnly.FromDateTime(DateTime.UtcNow) : null;
 
         SqlParameter[] parameters =
         {
@@ -33,6 +34,15 @@ public class BidsRepository : NpgSqlRepository, IBidsRepository
         };
 
         Execute(Sql.Bids_Save, parameters);
+    }
+
+    public Bid? GetBid(ID id)
+    {
+        SqlParameter[] parameters =
+        {
+            new("p_id", id),
+        };
+        return Get<BidDb?>(Sql.Bids_GetById, parameters).ToBid();
     }
 
     public PagedResult<Bid> GetPagedBids(Int32 page, Int32 count)

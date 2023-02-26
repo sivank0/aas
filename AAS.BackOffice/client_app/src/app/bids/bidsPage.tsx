@@ -75,11 +75,18 @@ export const BidsPage = () => {
                     )
                 }
             </Grid>
-            <PaginationButtons
-                page={paginationState.page}
-                countInPage={paginationState.countInPage}
-                onChangePage={(page) => setPaginationState(state => ({ ...state, page }))}
-                onChangeCountInPage={(countInPage) => setPaginationState(state => ({ ...state, countInPage }))} />
-        </Container>
+            <Box sx={{
+                marginTop: '15px',
+                display: 'flex',
+                width: '100%',
+                justifyContent: 'right'
+            }}>
+                <PaginationButtons
+                    page={paginationState.page}
+                    countInPage={paginationState.countInPage}
+                    onChangePage={(page) => setPaginationState(state => ({ ...state, page }))}
+                    onChangeCountInPage={(countInPage) => setPaginationState(state => ({ ...state, countInPage }))} />
+            </Box>
+        </Container >
     )
 }

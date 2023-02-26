@@ -31,6 +31,11 @@ public class BidsService : IBidsService
         return Result.Success();
     }
 
+    public Bid? GetBid(ID id)
+    {
+        return _bidsRepository.GetBid(id);
+    }
+
     public PagedResult<Bid> GetPagedBids(Int32 page, Int32 count)
     {
         return _bidsRepository.GetPagedBids(page, count);

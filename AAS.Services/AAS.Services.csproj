@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Bids\Repositories\Queries\Bids\Bids_GetById.sql" />
     <None Remove="Bids\Repositories\Queries\Bids\Bids_GetMaxNumber.sql" />
     <None Remove="Bids\Repositories\Queries\Bids\Bids_GetPaged.sql" />
     <None Remove="Bids\Repositories\Queries\Bids\Bids_Save.sql" />
@@ -23,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Bids\Repositories\Queries\Bids\Bids_GetById.sql" />
     <EmbeddedResource Include="Bids\Repositories\Queries\Bids\Bids_GetPaged.sql" />
     <EmbeddedResource Include="Bids\Repositories\Queries\Bids\Bids_GetMaxNumber.sql" />
     <EmbeddedResource Include="Bids\Repositories\Queries\Bids\Bids_Save.sql" />

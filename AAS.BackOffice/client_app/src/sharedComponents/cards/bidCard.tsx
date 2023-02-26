@@ -1,5 +1,5 @@
 import { Box, Card, CardActions, CardContent, CardHeader, Divider, Tooltip, Typography } from '@mui/material';
-import React from 'react';
+import React, { useState } from 'react';
 import { Bid } from '../../domain/bids/bid';
 import { BidStatus } from '../../domain/bids/bidStatus';
 import FiberNewIcon from '@mui/icons-material/FiberNew';
@@ -17,7 +17,6 @@ export const BidCard = (props: Props) => {
 
     function getBidStatusIcon(status: BidStatus) {
         switch (status) {
-            case BidStatus.Created: return <FiberNewIcon fontSize='small' />
             case BidStatus.AwaitingVerification: return <HourglassBottomIcon fontSize='small' />
             case BidStatus.Denied: return <DoNotDisturbIcon fontSize='small' />
             case BidStatus.InWork: return <EngineeringIcon fontSize='small' />
@@ -50,9 +49,22 @@ export const BidCard = (props: Props) => {
                 }
             </CardContent>
             <CardActions sx={{ display: "flex", paddingTop: 0, paddingBottom: 1, paddingX: 2 }}>
-                <Tooltip title={BidStatus.getDisplayName(props.bid.status)}>
-                    {getBidStatusIcon(props.bid.status)}
-                </Tooltip>
+                {getBidStatusIcon(props.bid.status)}
+                {
+                    (props.bid.status === BidStatus.Denied) &&
+                    <Typography sx={{ display: "flex", marginLeft: '15px', fontSize: 14 }}>
+                        {props.bid.denyDescription}
+                    </Typography>
+                }
+                <Box sx={{
+                    display: 'flex',
+                    width: '100%',
+                    justifyContent: 'right'
+                }}>
+                    <Typography >
+                        {BidStatus.getDisplayName(props.bid.status)}
+                    </Typography>
+                </Box>
             </CardActions>
         </Card >
     )

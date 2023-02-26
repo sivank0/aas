@@ -7,6 +7,7 @@ namespace AAS.Services.Bids.Repositories;
 public interface IBidsRepository
 {
     public void SaveBid(BidBlank bidBlank, ID systemUserId);
+    public Bid? GetBid(ID id);
     public PagedResult<Bid> GetPagedBids(Int32 page, Int32 countInPage);
     public Int32 GetBidsMaxNumber();
 }
