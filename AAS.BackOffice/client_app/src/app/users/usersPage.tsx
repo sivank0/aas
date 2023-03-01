@@ -20,16 +20,21 @@ export const UsersPage = () => {
     const confirmationDialog = useDialog(ConfirmDialogModal);
 
     useEffect(() => {
-        async function init() {
-            const users = await UsersProvider.getUsers();
-            setUsers(users);
-            setIsInit(true);
-        }
         init();
     }, [])
 
-    function openUserEditorModal(userId: string | null = null) {
-        userEditorModal.show({ userId });
+    async function init() {
+        const users = await UsersProvider.getUsers();
+        setUsers(users);
+        setIsInit(true);
+    }
+
+    async function openUserEditorModal(userId: string | null = null) {
+        const isEdited = await userEditorModal.show({ userId });
+
+        if (!isEdited) return;
+
+        init();
     }
 
     function openChangePasswordModal(userId: string) {
@@ -45,7 +50,9 @@ export const UsersPage = () => {
 
         const result = await UsersProvider.removeUser(userId);
 
-        if (!result.isSuccess) return;
+        if (!result.isSuccess) return alert(result.errors[0].message);
+
+        init();
     }
 
     return (

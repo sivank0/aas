@@ -10,4 +10,5 @@ public interface IBidsRepository
     public Bid? GetBid(ID id);
     public PagedResult<Bid> GetPagedBids(Int32 page, Int32 countInPage);
     public Int32 GetBidsMaxNumber();
+    public void RemoveBid(ID bidId, ID systemUserId);
 }

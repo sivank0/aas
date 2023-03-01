@@ -3,7 +3,6 @@ using AAS.Domain.Bids.Enums;
 using AAS.Services.Bids.Models;
 using AAS.Services.Bids.Repositories.Converters;
 using AAS.Services.Bids.Repositories.Queries;
-using AAS.Services.Users.Models;
 using AAS.Tools.DB;
 using AAS.Tools.Types.IDs;
 using AAS.Tools.Types.Results;
@@ -42,7 +41,7 @@ public class BidsRepository : NpgSqlRepository, IBidsRepository
         {
             new("p_id", id),
         };
-        return Get<BidDb?>(Sql.Bids_GetById, parameters).ToBid();
+        return Get<BidDb?>(Sql.Bids_GetById, parameters)?.ToBid();
     }
 
     public PagedResult<Bid> GetPagedBids(Int32 page, Int32 count)
@@ -61,5 +60,17 @@ public class BidsRepository : NpgSqlRepository, IBidsRepository
     public Int32 GetBidsMaxNumber()
     {
         return Get<Int32>(Sql.Bids_GetMaxNumber);
+    }
+
+    public void RemoveBid(ID bidId, ID systemUserId)
+    {
+        SqlParameter[] parameters =
+        {
+            new("p_bidid", bidId),
+            new("p_systemuserid", systemUserId),
+            new("p_currentdatetimeutc", DateTime.UtcNow)
+        };
+
+        Execute(Sql.Bids_Remove, parameters);
     }
 }

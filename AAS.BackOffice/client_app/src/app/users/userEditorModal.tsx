@@ -36,12 +36,12 @@ export const UserEditorModal: React.FC<AsyncDialogProps<Props, boolean>> = ({ op
         if (!result.isSuccess) return alert(result.errors[0].message)
 
         alert('Изменения сохранены');
-        handleClose();
+        handleClose(true);
     }
 
     return (
-        <Modal isOpen={open} onClose={handleClose}>
-            <ModalTitle onClose={handleClose}>
+        <Modal isOpen={open} onClose={() => handleClose(false)}>
+            <ModalTitle onClose={() => handleClose(false)}>
                 {props.userId !== null ? "Редактирование" : "Добавление"} пользователя
             </ModalTitle>
             <ModalBody sx={{ width: 500 }}>

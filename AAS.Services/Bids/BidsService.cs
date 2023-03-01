@@ -45,4 +45,10 @@ public class BidsService : IBidsService
     {
         return _bidsRepository.GetBidsMaxNumber();
     }
+
+    public Result RemoveBid(ID bidId, ID systemUserId)
+    {
+        _bidsRepository.RemoveBid(bidId, systemUserId);
+        return Result.Success();
+    }
 }

@@ -1,14 +1,16 @@
-import { Box, } from '@mui/material';
+import { Box, IconButton, Tooltip, } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { BidBlank } from '../../domain/bids/bidBlank';
 import { BidsProvider } from '../../domain/bids/bidProvider';
 import { BidStatus } from '../../domain/bids/bidStatus';
+import useDialog from '../../hooks/useDialog';
 import { SaveButton } from '../../sharedComponents/buttons/button';
 import { ToggleButtons } from '../../sharedComponents/buttons/toggleButtons';
 import { InputForm } from '../../sharedComponents/inputs/inputForm';
 import { AsyncDialogProps } from '../../sharedComponents/modals/async/types';
-import { Modal, ModalActions, ModalBody, ModalTitle } from '../../sharedComponents/modals/modal';
+import { ConfirmDialogModal, Modal, ModalActions, ModalBody, ModalTitle } from '../../sharedComponents/modals/modal';
 import { Enum } from '../../tools/enum';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 interface Props {
     bidId: string | null;
@@ -16,6 +18,8 @@ interface Props {
 
 export const BidEditorModal: React.FC<AsyncDialogProps<Props, boolean>> = ({ open, handleClose, data: props }) => {
     const [bidBlank, setBidBlank] = useState<BidBlank>(BidBlank.getDefault());
+
+    const confirmationDialog = useDialog(ConfirmDialogModal)
 
     useEffect(() => {
         async function init() {
@@ -40,6 +44,20 @@ export const BidEditorModal: React.FC<AsyncDialogProps<Props, boolean>> = ({ ope
         if (!result.isSuccess) return alert(result.errors[0].message)
 
         alert('Изменения сохранены');
+        handleClose(true);
+    }
+
+    async function removeBid(bidId: string | null) {
+        if (bidId === null) return;
+
+        const isConfirmed = await confirmationDialog.show({ title: `Вы действительно хотите удалить эту заявку?` })
+
+        if (!isConfirmed) return;
+
+        const result = await BidsProvider.removeBid(bidId);
+
+        if (!result.isSuccess) return alert(result.errors[0].message);
+
         handleClose(true);
     }
 
@@ -89,6 +107,14 @@ export const BidEditorModal: React.FC<AsyncDialogProps<Props, boolean>> = ({ ope
                 </Box>
             </ModalBody>
             <ModalActions>
+                {
+                    props.bidId !== null &&
+                    <Tooltip title="Удалить">
+                        <IconButton onClick={() => removeBid(props.bidId)}>
+                            <DeleteIcon />
+                        </IconButton>
+                    </Tooltip>
+                }
                 <SaveButton
                     variant="contained"
                     onClick={() => saveBidBlank()} />
