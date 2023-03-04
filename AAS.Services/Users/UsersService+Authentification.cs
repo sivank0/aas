@@ -21,7 +21,7 @@ public partial class UsersService : IUsersService // + Authentification
 
         if (user is null) return null;
 
-        UserRole? userRole = GetUserRole(user.Id);
+        UserRole? userRole = GetUserRoleByUserId(user.Id);
 
         if (userRole is null) return null;
 

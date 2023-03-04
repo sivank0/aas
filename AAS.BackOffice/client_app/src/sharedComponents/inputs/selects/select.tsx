@@ -1,6 +1,6 @@
 import { Autocomplete as MaterialAutocomplete, AutocompleteOwnerState, AutocompleteRenderGetTagProps, AutocompleteRenderOptionState, SxProps, TextField } from '@mui/material';
 import React, { useMemo } from 'react';
-import { newId } from '../../../tools/id';
+import { newId } from '../../../tools/types/id';
 
 export interface IProps<TValue> {
     label?: string;

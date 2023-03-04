@@ -10,8 +10,8 @@ VALUES(
 	@p_id,
 	@p_name,
 	@p_accesspolicies,
-	@p_systemuserid,
 	@p_currentdatetimeutc,
+	@p_systemuserid,
 	false
 )
 ON CONFLICT (id) DO UPDATE SET

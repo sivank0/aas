@@ -7,7 +7,7 @@ import { BidEditorModal } from './bidEditorModal';
 import { Bid } from '../../domain/bids/bid';
 import { BidCard } from '../../sharedComponents/cards/bidCard';
 import { AddButton } from '../../sharedComponents/buttons/button';
-import { BrowserType } from '../../tools/browserType/browserType';
+import { BrowserType } from '../../tools/browserType';
 import { PaginationButtons } from '../../sharedComponents/buttons/paginationButtons';
 
 type PaginationState = {

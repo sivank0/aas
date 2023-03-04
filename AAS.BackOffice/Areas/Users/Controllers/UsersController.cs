@@ -3,6 +3,7 @@ using AAS.BackOffice.Filters;
 using AAS.Domain.AccessPolicies;
 using AAS.Domain.Services;
 using AAS.Domain.Users;
+using AAS.Domain.Users.Permissions;
 using AAS.Domain.Users.Roles;
 using AAS.Tools.Types.IDs;
 using AAS.Tools.Types.Results;
@@ -31,6 +32,27 @@ public class UsersController : BaseController
     public User? GetUser(ID id)
     {
         return _usersService.GetUser(id);
+    }
+
+    [HttpGet("users/get_details_for_editor")]
+    [IsAuthorized(AccessPolicy.UsersUpdate)]
+    public Object? GetUserDetailsForEditor(ID userId)
+    {
+        User? user = _usersService.GetUser(userId);
+
+        if (user is null) return null;
+
+        Boolean hasUserRolesReadAccess = SystemUser.HasAccess(AccessPolicy.UserRolesRead);
+
+        UserRole[] userRoles = hasUserRolesReadAccess
+            ? _usersService.GetUserRoles()
+            : Array.Empty<UserRole>();
+
+        UserPermission? userPermission = hasUserRolesReadAccess
+            ? _usersService.GetUserPermission(userId)
+            : null;
+
+        return new { user, userRoles, userPermission };
     }
 
     [HttpGet("users/get_all")]
@@ -67,6 +89,6 @@ public class UsersController : BaseController
     [IsAuthorized(AccessPolicy.UsersRead)]
     public UserRole GetRole(ID userId)
     {
-        return _usersService.GetUserRole(userId);
+        return _usersService.GetUserRoleByUserId(userId);
     }
 }

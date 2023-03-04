@@ -1,4 +1,4 @@
-import { BrowserType } from "../tools/browserType/browserType"
+import { BrowserType } from "../tools/browserType"
 
 export { }
 

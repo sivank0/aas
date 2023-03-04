@@ -1,4 +1,4 @@
-import { isNumber } from '../numbers/numberUtils';
+import { isNumber } from './numberUtils';
 
 export { };
 

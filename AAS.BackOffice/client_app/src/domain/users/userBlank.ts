@@ -7,6 +7,7 @@ export interface UserBlank {
     lastName: string | null,
     email: string | null,
     phoneNumber: string | null,
+    roleId: string | null,
     password: string | null,
     rePassword: string | null
 }
@@ -20,12 +21,13 @@ export namespace UserBlank {
             lastName: null,
             email: null,
             phoneNumber: null,
+            roleId: null,
             password: null,
             rePassword: null
         }
     }
 
-    export function fromUser(user: User): UserBlank {
+    export function fromUser(user: User, roleId: string | null = null): UserBlank {
         return {
             id: user.id,
             firstName: user.firstName,
@@ -33,6 +35,7 @@ export namespace UserBlank {
             lastName: user.lastName,
             email: user.email,
             phoneNumber: user.phoneNumber,
+            roleId: roleId,
             password: null,
             rePassword: null
         }

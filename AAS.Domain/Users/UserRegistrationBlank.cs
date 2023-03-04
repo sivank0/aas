@@ -1,15 +1,18 @@
-﻿using AAS.Tools.Types.IDs;
+﻿using AAS.Tools.Managers;
+using AAS.Tools.Types.IDs;
 
 namespace AAS.Domain.Users;
 
 public class UserRegistrationBlank
 {
     public ID? Id { get; set; }
-    public string? FirstName { get; set; }
-    public string? MiddleName { get; set; }
-    public string? LastName { get; set; }
-    public string? Email { get; set; }
-    public string? Password { get; set; }
-    public string? RePassword { get; set; }
-    public string? PhoneNumber { get; set; }
+    public String? FirstName { get; set; }
+    public String? MiddleName { get; set; }
+    public String? LastName { get; set; }
+    public String? Email { get; set; }
+    public String? PhoneNumber { get; set; }
+    public String? Password { get; set; }
+    public String? RePassword { get; set; }
+
+    public String? PasswordHash => HashManager.DefinePasswordHash(Password);
 }

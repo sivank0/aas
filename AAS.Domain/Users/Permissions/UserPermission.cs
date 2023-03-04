@@ -1,11 +1,13 @@
-﻿namespace AAS.Domain.Users.Permissions;
+﻿using AAS.Tools.Types.IDs;
+
+namespace AAS.Domain.Users.Permissions;
 
 public class UserPermission
 {
-    public Guid UserId { get; }
-    public Guid RoleId { get; }
+    public ID UserId { get; }
+    public ID RoleId { get; }
 
-    public UserPermission(Guid userId, Guid roleId)
+    public UserPermission(ID userId, ID roleId)
     {
         UserId = userId;
         RoleId = roleId;

@@ -1,5 +1,5 @@
 import HttpClient from "../../../tools/httpClient";
-import { mapToResult, Result } from "../../../tools/results/result";
+import { mapToResult, Result } from "../../../tools/types/results/result";
 import { AccessPolicyDetails, mapToAccessPoliciesDetails } from "../../accessPolicies/accessPolicyDetails";
 import { mapToUserRoles, UserRole } from "./userRole";
 import { UserRoleBlank } from "./userRoleBlank";
@@ -10,12 +10,18 @@ export class UserRolesProvider {
         return mapToResult(result);
     }
 
-    public static async getUserRoleDetails(): Promise<{ userRoles: UserRole[], accessPoliciesDetails: AccessPolicyDetails[] }> {
-        const details = await HttpClient.getJsonAsync("/user_roles/get_details");
+    public static async getUserRoles(): Promise<UserRole[]> {
+        const userRoles = await HttpClient.getJsonAsync("/user_roles/get_all");
+        return mapToUserRoles(userRoles);
+    }
 
-        return {
-            userRoles: mapToUserRoles(details.userRoles),
-            accessPoliciesDetails: mapToAccessPoliciesDetails(details.accessPoliciesDetails)
-        };
+    public static async getAccessPolicies(): Promise<AccessPolicyDetails[]> {
+        const accessPoliciesDetails = await HttpClient.getJsonAsync("/user_roles/get_access_policies_details");
+        return mapToAccessPoliciesDetails(accessPoliciesDetails);
+    }
+
+    public static async removeRole(userRoleId: string): Promise<Result> {
+        const result = await HttpClient.getJsonAsync("/user_roles/remove", { userRoleId });
+        return mapToResult(result);
     }
 }

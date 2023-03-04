@@ -1,6 +1,6 @@
 import HttpClient from "../../tools/httpClient";
-import { mapToPage, Page } from "../../tools/results/page";
-import { mapToResult, Result } from "../../tools/results/result";
+import { mapToPage, Page } from "../../tools/types/results/page";
+import { mapToResult, Result } from "../../tools/types/results/result";
 import { Bid, toBid, toBids } from "./bid";
 import { BidBlank } from "./bidBlank";
 

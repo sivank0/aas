@@ -1,7 +1,7 @@
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import { ListItem, ListItemButton, ListItemIcon, ListItemText, Collapse, List, Link } from '@mui/material';
 import React, { useState } from 'react';
-import { SidebarItem } from '../../tools/sidebar/sidebarItem';
+import { SidebarItem } from '../../tools/types/sidebar/sidebarItem';
 import { SideBarIcon } from '../icons/sideBarIcon';
 
 interface Props {

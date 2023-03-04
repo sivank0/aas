@@ -6,6 +6,7 @@ using AAS.Domain.AccessPolicies.Utils;
 using AAS.Domain.Services;
 using AAS.Domain.Users.Roles;
 using AAS.Tools.Extensions;
+using AAS.Tools.Types.IDs;
 using AAS.Tools.Types.Results;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,19 +23,29 @@ public class UserRolesController : BaseController
 
     [HttpPost("user_roles/save")]
     [IsAuthorized(AccessPolicy.UserRolesUpdate)]
-    public Result SaveUserRole(UserRoleBlank userRoleBlank)
+    public Result SaveUserRole([FromBody] UserRoleBlank userRoleBlank)
     {
         return _usersService.SaveUserRole(userRoleBlank, SystemUser.Id);
     }
 
-    [HttpGet("user_roles/get_details")]
+    [HttpGet("user_roles/get_all")]
     [IsAuthorized(AccessPolicy.UserRolesRead)]
-    public Object GetUserRoleDetails()
+    public UserRole[] GetUserRoleDetails()
     {
-        UserRole[] userRoles = _usersService.GetUserRoles();
+        return _usersService.GetUserRoles();
+    }
 
-        AccessPolicyDetails[] accessPoliciesDetails = Enum<AccessPolicy>.GetArray().ToDetails();
+    [HttpGet("user_roles/get_access_policies_details")]
+    [IsAuthorized(AccessPolicy.UserRolesRead)]
+    public AccessPolicyDetails[] GetAccessPoliciesDetails()
+    {
+        return Enum<AccessPolicy>.GetArray().ToDetails();
+    }
 
-        return new { userRoles, accessPoliciesDetails };
+    [HttpGet("user_roles/remove")]
+    [IsAuthorized(AccessPolicy.UserRolesUpdate)]
+    public Result RemoveUserRole(ID userRoleId)
+    {
+        return _usersService.RemoveUserRole(userRoleId, SystemUser.Id);
     }
 }

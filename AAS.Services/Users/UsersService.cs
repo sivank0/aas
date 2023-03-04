@@ -5,6 +5,7 @@ using AAS.Services.Users.Repositories;
 using AAS.Tools.Types.IDs;
 using AAS.Tools.Types.Results;
 using AAS.Tools.Managers;
+using AAS.Domain.Users.Permissions;
 
 namespace AAS.Services.Users;
 public partial class UsersService : IUsersService
@@ -15,7 +16,7 @@ public partial class UsersService : IUsersService
     {
         _usersRepository = usersRepository;
     }
-     
+
     #region Users
 
     public Result SaveUser(UserBlank userBlank, ID systemUserId)
@@ -28,12 +29,32 @@ public partial class UsersService : IUsersService
 
         if (String.IsNullOrWhiteSpace(userBlank.PhoneNumber)) return Result.Fail("Не введнен номер телефона");
 
+        if (userBlank.Id is null)
+        {
+            if (String.IsNullOrWhiteSpace(userBlank.Password))
+                return Result.Fail("Не введен пароль");
+
+            if (String.IsNullOrWhiteSpace(userBlank.RePassword))
+                return Result.Fail("Не введен повтор пароля");
+
+            if (userBlank.Password != userBlank.RePassword)
+                return Result.Fail("Пароли не совпадают");
+        }
+
+        if (userBlank.RoleId is null)
+            return Result.Fail("Не выбрана роль пользователя");
+
+        UserRole? userRole = GetUserRole(userBlank.RoleId.Value);
+
+        if (userRole is null)
+            return Result.Fail("Выбранная роль не существует");
 
         userBlank.Id ??= ID.New();
+
         _usersRepository.SaveUser(userBlank, systemUserId);
         return Result.Success();
     }
-     
+
     public User? GetUser(ID id)
     {
         return _usersRepository.GetUser(id);
@@ -96,14 +117,34 @@ public partial class UsersService : IUsersService
         return Result.Success();
     }
 
-    public UserRole? GetUserRole(ID userId)
+    public UserRole? GetUserRole(ID userRoleId)
     {
-        return _usersRepository.GetUserRole(userId);
+        return _usersRepository.GetUserRole(userRoleId);
+    }
+
+    public UserRole? GetUserRoleByUserId(ID userId)
+    {
+        return _usersRepository.GetUserRoleByUserId(userId);
     }
 
     public UserRole[] GetUserRoles()
     {
         return _usersRepository.GetUserRoles();
+    }
+
+    public Result RemoveUserRole(ID userRoleId, ID systemUserId)
+    {
+        _usersRepository.RemoveUserRole(userRoleId, systemUserId);
+        return Result.Success();
+    }
+
+    #endregion
+
+    #region Permissions
+
+    public UserPermission? GetUserPermission(ID userId)
+    {
+        return _usersRepository.GetUserPermission(userId);
     }
 
     #endregion

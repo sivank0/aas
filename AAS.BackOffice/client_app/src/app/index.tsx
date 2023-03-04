@@ -7,7 +7,7 @@ import { AuthLinks } from './auth/authLinks';
 import { Registration } from './auth/registration';
 import { UserLinks } from './users/userLinks';
 import { UsersPage } from './users/usersPage';
-import "../tools/string/globalStringConstructorUtils";
+import "../tools/utils/globalStringConstructorUtils";
 import { BidLinks } from './bids/bidLinks';
 import { BidsPage } from './bids/bidsPage';
 import { UserRolesPage } from './users/roles/userRolesPage';

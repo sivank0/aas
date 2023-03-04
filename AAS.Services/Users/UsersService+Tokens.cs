@@ -5,8 +5,7 @@ using AAS.Tools.Types.Results;
 namespace AAS.Services.Users;
 
 public partial class UsersService : IUsersService // + Tokens
-{
-
+{ 
     public Result SaveUserToken(UserToken userToken)
     {
         _usersRepository.SaveUserToken(userToken);
