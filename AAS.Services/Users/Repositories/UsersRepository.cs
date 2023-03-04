@@ -1,13 +1,12 @@
-﻿using AAS.Domain.Users;
+﻿using AAS.Domain.AccessPolicies.Extensions;
+using AAS.Domain.Users;
+using AAS.Domain.Users.Permissions;
 using AAS.Domain.Users.Roles;
-using AAS.Domain.Users.SystemUsers;
 using AAS.Services.Users.Converters;
 using AAS.Services.Users.Models;
 using AAS.Services.Users.Repositories.Queries;
 using AAS.Tools.DB;
-using AAS.Tools.Managers;
 using AAS.Tools.Types.IDs;
-using AAS.Tools.Types.Results;
 
 namespace AAS.Services.Users.Repositories;
 
@@ -15,26 +14,13 @@ public partial class UsersRepository : NpgSqlRepository, IUsersRepository
 {
     public UsersRepository(String connectionString) : base(connectionString) { }
 
-    #region Users
+    #region Users 
 
-    //public void SaveUserAccess(UserAccessBlank userAccessBlank, ID userId)
-    //{
-    //    ExecutionInTransaction(command =>
-    //    {
-
-    //        UserAccessDb accessDb = userAccessBlank.ToUserAccessDb(userId);
-    //        accessDb.ModifiedDateTimeUtc = accessDb.CreatedDateTimeUtc = DateTime.UtcNow;
-    //        accessDb.ModifiedUserId = accessDb.CreatedUserId = userId;
-
-    //        command.Execute(Sql.UserAccesses_Save, accessDb);
-
-    //    });
-    //}
     public void SaveUser(UserBlank userBlank, ID systemUserId)
     {
-        SqlParameter[] parameters =
+        SqlParameter[] saveUserParameters =
         {
-            new("p_id", userBlank.Id!),
+            new("p_id", userBlank.Id!.Value),
             new("p_firstname", userBlank.FirstName!),
             new("p_middlename", userBlank.MiddleName!),
             new("p_lastname", userBlank.LastName!),
@@ -43,22 +29,31 @@ public partial class UsersRepository : NpgSqlRepository, IUsersRepository
             new("p_passwordhash", userBlank.Passwordhash ?? ""),
             new("p_systemuserid", systemUserId),
             new("p_currentdatetimeutc", DateTime.UtcNow)
-
         };
 
-        Execute(Sql.Users_Save, parameters);
+        SqlParameter[] saveUserPermissionParameters =
+        {
+            new("p_userid", userBlank.Id!.Value),
+            new("p_userroleid", userBlank.RoleId!.Value)
+        };
+
+        ExecutionInTransaction(command =>
+        {
+            command.Execute(Sql.Users_Save, saveUserParameters);
+            command.Execute(Sql.UserPermissions_Save, saveUserPermissionParameters);
+        });
     }
 
     public void RegisterUser(UserRegistrationBlank userRegistrationBlank)
     {
         SqlParameter[] parameters =
         {
-            new("p_id", userRegistrationBlank.Id!),
+            new("p_id", userRegistrationBlank.Id!.Value),
             new("p_firstname", userRegistrationBlank.FirstName!),
             new("p_middlename", userRegistrationBlank.MiddleName!),
             new("p_lastname", userRegistrationBlank.LastName!),
             new("p_email", userRegistrationBlank.Email!),
-            new("p_passwordhash", HashManager.DefinePasswordHash(userRegistrationBlank.Password!)),
+            new("p_passwordhash", userRegistrationBlank.PasswordHash),
             new("p_phonenumber", userRegistrationBlank.PhoneNumber!),
             new("p_systemuserid", userRegistrationBlank.Id!),
             new("p_currentdatetimeutc", DateTime.UtcNow)
@@ -122,7 +117,31 @@ public partial class UsersRepository : NpgSqlRepository, IUsersRepository
 
     #region UserRoles
 
-    public UserRole? GetUserRole(ID userId)
+    public void SaveUserRole(UserRoleBlank userRoleBlank, ID systemUserId)
+    {
+        SqlParameter[] parameters =
+        {
+            new("p_id", userRoleBlank.Id!.Value),
+            new("p_name", userRoleBlank.Name!),
+            new("p_accesspolicies", userRoleBlank.AccessPolicies.Keys()),
+            new("p_systemuserid", systemUserId),
+            new("p_currentdatetimeutc", DateTime.UtcNow),
+        };
+
+        Execute(Sql.UserRoles_Save, parameters);
+    }
+
+    public UserRole? GetUserRole(ID userRoleId)
+    {
+        SqlParameter[] parameters =
+        {
+            new("p_userRoleId", userRoleId)
+        };
+
+        return Get<UserRoleDb?>(Sql.UserRoles_GetByRoleId, parameters)?.ToUserRole();
+    }
+
+    public UserRole? GetUserRoleByUserId(ID userId)
     {
         SqlParameter[] parameters =
         {
@@ -130,6 +149,37 @@ public partial class UsersRepository : NpgSqlRepository, IUsersRepository
         };
 
         return Get<UserRoleDb?>(Sql.UserRoles_GetByUserId, parameters)?.ToUserRole();
+    }
+
+    public UserRole[] GetUserRoles()
+    {
+        return GetArray<UserRoleDb>(Sql.UserRoles_GetAll).ToUserRoles();
+    }
+
+    public void RemoveUserRole(ID userRoleId, ID systemUserId)
+    {
+        SqlParameter[] parameters =
+        {
+            new("p_userroleid", userRoleId),
+            new("p_systemuserid", systemUserId),
+            new("p_currentdatetimeutc", DateTime.UtcNow)
+        };
+
+        Execute(Sql.UserRoles_Remove, parameters);
+    }
+
+    #endregion
+
+    #region Permissions
+
+    public UserPermission? GetUserPermission(ID userId)
+    {
+        SqlParameter[] parameters =
+        {
+            new("p_userId", userId)
+        };
+
+        return Get<UserPermissionDb?>(Sql.UserPermissions_GetByUserId, parameters)?.ToUserPermission();
     }
 
     #endregion

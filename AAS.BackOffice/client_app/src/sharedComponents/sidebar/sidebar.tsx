@@ -1,6 +1,6 @@
 import React from "react";
 import { CSSObject, List, styled, Theme } from "@mui/material";
-import { default as SidebarModel } from '../../tools/sidebar/sidebar';
+import { default as SidebarModel } from '../../tools/types/sidebar/sidebar';
 import MuiDrawer from '@mui/material/Drawer';
 import { useNavigate } from "react-router-dom";
 import { SingleSidebarItem } from "./singleSidebarItem";

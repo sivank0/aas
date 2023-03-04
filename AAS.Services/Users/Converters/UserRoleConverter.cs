@@ -5,8 +5,13 @@ namespace AAS.Services.Users.Converters;
 
 internal static class UserRoleConverter
 {
-    public static UserRole ToUserRole(this UserRoleDb db)
+    internal static UserRole ToUserRole(this UserRoleDb db)
     {
         return new UserRole(db.Id, db.Name, db.AccessPolicies);
+    }
+
+    internal static UserRole[] ToUserRoles(this UserRoleDb[] dbs)
+    {
+        return dbs.Select(ToUserRole).ToArray();
     }
 }

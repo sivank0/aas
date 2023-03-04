@@ -1,4 +1,5 @@
 ﻿using AAS.Domain.Users;
+using AAS.Domain.Users.Permissions;
 using AAS.Domain.Users.Roles;
 using AAS.Domain.Users.SystemUsers;
 using AAS.Tools.Types.IDs;
@@ -12,6 +13,7 @@ public interface IUsersService
     Result Authenticate(String token);
     SystemUser? GetSystemUser(String token);
     DataResult<UserToken?> LogIn(String? email, String? password);
+    DataResult<UserToken?> RegisterUser(UserRegistrationBlank userRegistrationBlank);
     void LogOut(String token);
 
     #endregion
@@ -19,7 +21,6 @@ public interface IUsersService
     #region Users
 
     Result SaveUser(UserBlank userBlank, ID systenUserId);
-    Result RegisterUser(UserRegistrationBlank userRegistrationBlank);
     User? GetUser(ID id);
     User? GetUser(String email, String? password = null);
     User[] GetUsers();
@@ -29,7 +30,18 @@ public interface IUsersService
     #endregion
 
     #region Roles
-    UserRole GetUserRole(ID userId);
+
+    Result SaveUserRole(UserRoleBlank userRoleBlank, ID systemUserId);
+    UserRole? GetUserRole(ID userRoleId);
+    UserRole? GetUserRoleByUserId(ID userId);
+    UserRole[] GetUserRoles();
+    Result RemoveUserRole(ID userRoleId, ID systemUserId);
+
+    #endregion
+
+    #region Permissions
+
+    UserPermission? GetUserPermission(ID userId);
 
     #endregion
 }

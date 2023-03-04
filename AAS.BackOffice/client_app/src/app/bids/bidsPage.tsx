@@ -7,7 +7,7 @@ import { BidEditorModal } from './bidEditorModal';
 import { Bid } from '../../domain/bids/bid';
 import { BidCard } from '../../sharedComponents/cards/bidCard';
 import { AddButton } from '../../sharedComponents/buttons/button';
-import { BrowserType } from '../../tools/browserType/browserType';
+import { BrowserType } from '../../tools/browserType';
 import { PaginationButtons } from '../../sharedComponents/buttons/paginationButtons';
 
 type PaginationState = {
@@ -71,6 +71,7 @@ export const BidsPage = () => {
                 <PaginationButtons
                     page={paginationState.page}
                     countInPage={paginationState.countInPage}
+                countInPageOptions={[50, 100, 150]}
                     onChangePage={(page) => setPaginationState(state => ({ ...state, page }))}
                     onChangeCountInPage={(countInPage) => setPaginationState(state => ({ ...state, countInPage }))} />
             </Box>

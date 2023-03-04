@@ -1,6 +1,6 @@
 import { Link, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import React from 'react';
-import { SidebarItem } from '../../tools/sidebar/sidebarItem';
+import { SidebarItem } from '../../tools/types/sidebar/sidebarItem';
 import { SideBarIcon } from '../icons/sideBarIcon';
 
 interface Props {

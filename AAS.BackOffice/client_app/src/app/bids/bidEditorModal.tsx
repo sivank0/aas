@@ -9,7 +9,7 @@ import { ToggleButtons } from '../../sharedComponents/buttons/toggleButtons';
 import { InputForm } from '../../sharedComponents/inputs/inputForm';
 import { AsyncDialogProps } from '../../sharedComponents/modals/async/types';
 import { ConfirmDialogModal, Modal, ModalActions, ModalBody, ModalTitle } from '../../sharedComponents/modals/modal';
-import { Enum } from '../../tools/enum';
+import { Enum } from '../../tools/types/enum';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 interface Props {

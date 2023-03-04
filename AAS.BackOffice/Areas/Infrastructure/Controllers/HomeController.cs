@@ -11,6 +11,12 @@ public class HomeController : BaseController
     [IsAuthorized]
     public ViewResult Index() => ReactApp();
 
+    [Route("/error/403"), Route("error/404")]
+    public ViewResult Forbidden() => ReactApp();
+
+    [Route("/registration")]
+    public ViewResult Registration() => ReactApp();
+
     [Route("/users")]
     [IsAuthorized(AccessPolicy.UsersRead)]
     public ViewResult Users() => ReactApp();
@@ -19,11 +25,9 @@ public class HomeController : BaseController
     [IsAuthorized(AccessPolicy.UserProfile)]
     public ViewResult UserProfile() => ReactApp();
 
-    [Route("/error/403"), Route("error/404")]
-    public ViewResult Forbidden() => ReactApp();
-
-    [Route("/registration")]
-    public ViewResult Registration() => ReactApp();
+    [Route("/user_roles")]
+    [IsAuthorized(AccessPolicy.UsersRead)]
+    public ViewResult UserRoles() => ReactApp();
 
     [Route("/bids")]
     [IsAuthorized(AccessPolicy.BidsRead)]

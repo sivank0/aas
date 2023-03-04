@@ -1,4 +1,5 @@
 ﻿using AAS.Domain.Users;
+using AAS.Domain.Users.Permissions;
 using AAS.Domain.Users.Roles;
 using AAS.Tools.Types.IDs;
 using AAS.Tools.Types.Results;
@@ -21,7 +22,17 @@ public interface IUsersRepository
 
     #region UserRoles
 
-    public UserRole? GetUserRole(ID userId);
+    public void SaveUserRole(UserRoleBlank userRoleBlank, ID systemUserId);
+    public UserRole? GetUserRole(ID userRoleId);
+    public UserRole? GetUserRoleByUserId(ID userId);
+    public UserRole[] GetUserRoles();
+    public void RemoveUserRole(ID userRoleId, ID systemUserId);
+
+    #endregion
+
+    #region UserPermissions
+
+    public UserPermission? GetUserPermission(ID userId);
 
     #endregion
 

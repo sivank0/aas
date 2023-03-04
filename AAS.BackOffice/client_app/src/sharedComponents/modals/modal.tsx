@@ -1,6 +1,6 @@
 import { Box, Dialog, DialogActions, DialogContent, DialogTitle, SxProps, Theme } from "@mui/material";
 import React, { PropsWithChildren } from "react";
-import { BrowserType } from "../../tools/browserType/browserType";
+import { BrowserType } from "../../tools/browserType";
 import { AsyncDialogProps } from "./async/types";
 import { CancelButton, CloseIconButton, SuccessButton } from "../buttons/button";
 

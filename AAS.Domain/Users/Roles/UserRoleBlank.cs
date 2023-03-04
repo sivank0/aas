@@ -1,10 +1,19 @@
 ﻿using AAS.Domain.AccessPolicies;
+using AAS.Tools.Types.IDs;
+using System.Text.Json.Serialization;
 
 namespace AAS.Domain.Users.Roles;
 
 public class UserRoleBlank
 {
-    public Guid? Id { get; set; }
+    public ID? Id { get; set; }
     public string? Name { get; set; }
-    public AccessPolicy[] AccessPolicies { get; set; } = Array.Empty<AccessPolicy>();
+    public AccessPolicy[] AccessPolicies { get; set; }
+     
+    public UserRoleBlank(ID? id, string? name, AccessPolicy[] accessPolicies)
+    {
+        Id = id;
+        Name = name;
+        AccessPolicies = accessPolicies;
+    }
 }

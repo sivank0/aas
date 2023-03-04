@@ -1,7 +1,7 @@
 import { InputProps, SxProps, TextField } from "@mui/material";
 import { Theme } from "@mui/system";
 import React, { ChangeEvent, useMemo } from "react";
-import { newId } from "../../../tools/id";
+import { newId } from "../../../tools/types/id";
 
 export interface IProps {
     label: string;
@@ -14,7 +14,7 @@ export interface IProps {
     placeholder?: string;
     hiddenLabel?: boolean;
     value: string | null;
-    size?: "small" | "medium" | undefined;
+    size?: "small" | "medium";
     variant?: "standard" | "filled" | "outlined" | undefined;
     sx?: SxProps<Theme>;
     className?: string;

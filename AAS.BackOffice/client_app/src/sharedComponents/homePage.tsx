@@ -3,9 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { AuthLinks } from '../app/auth/authLinks';
 import { BidLinks } from '../app/bids/bidLinks';
 import { InfrastructureLinks } from '../app/infrastructure/components/infrastructureLinks';
-import { UserLinks } from '../app/users/userLinks';
-import { getCookie } from '../tools/cookie';
-import Sidebar from '../tools/sidebar/sidebar';
+import { getCookie } from '../tools/types/cookie';
+import Sidebar from '../tools/types/sidebar/sidebar';
 
 export const HomePage = () => {
     const navigate = useNavigate();

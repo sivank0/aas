@@ -11,6 +11,7 @@ public static class Sidebar
     {
         ListItem(text: "Пользователи", url: "/users", iconType: SideBarIconType.Users, policy: AccessPolicy.UsersRead),
         ListItem(text: "Заявки", url: "/bids", iconType: SideBarIconType.Bids, policy: AccessPolicy.BidsRead),
+        ListItem(text: "Роли пользователей", url: "/user_roles", iconType: SideBarIconType.UserRoles, policy: AccessPolicy.UserRolesUpdate),
     };
 
     public static SidebarItem[] GetLinksTree(SystemUser? systemUser)

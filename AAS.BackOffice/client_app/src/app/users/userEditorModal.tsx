@@ -1,5 +1,8 @@
-import { Box, Button } from '@mui/material';
+import { Box } from '@mui/material';
 import React, { useEffect, useState } from 'react';
+import { AccessPolicy } from '../../domain/accessPolicies/accessPolicy';
+import SystemUser from '../../domain/systemUser';
+import { UserRole } from '../../domain/users/roles/userRole';
 import { UserBlank } from '../../domain/users/userBlank';
 import { UsersProvider } from '../../domain/users/usersProvider';
 import { SaveButton } from '../../sharedComponents/buttons/button';
@@ -13,16 +16,20 @@ interface Props {
 
 export const UserEditorModal: React.FC<AsyncDialogProps<Props, boolean>> = ({ open, handleClose, data: props }) => {
     const [userBlank, setUserBlank] = useState<UserBlank>(UserBlank.getDefault());
+    const [userRoles, setUserRoles] = useState<UserRole[]>([]);
 
     useEffect(() => {
         async function init() {
             if (props.userId === null) return setUserBlank(UserBlank.getDefault());
 
-            const user = await UsersProvider.getUserById(props.userId);
+            const details = await UsersProvider.getUserDetailsForEditor(props.userId);
 
-            if (user === null) return;
+            if (details === null) return;
 
-            setUserBlank(UserBlank.fromUser(user));
+            setUserBlank(UserBlank.fromUser(details.user, details.userPermission?.roleId));
+
+            if (SystemUser.hasAccess(AccessPolicy.UserRolesRead))
+                setUserRoles(details.userRoles);
         }
 
         if (open) init();
@@ -102,6 +109,18 @@ export const UserEditorModal: React.FC<AsyncDialogProps<Props, boolean>> = ({ op
                                 value={userBlank.rePassword}
                                 onChange={(rePassword) => setUserBlank(blank => ({ ...blank, rePassword }))} />
                         </>
+                    }
+                    {
+                        (SystemUser.hasAccess(AccessPolicy.UserRolesRead) && userRoles.length !== 0) &&
+                        <InputForm
+                            type="select"
+                            label='Выберите роль'
+                            options={userRoles}
+                            disableClearable
+                            value={userRoles.find(role => role.id === userBlank.roleId) ?? null}
+                            getOptionLabel={(option) => option.name}
+                            isOptionEqualToValue={(first, second) => first.id === second.id}
+                            onChange={(userRole) => setUserBlank(userBlank => ({ ...userBlank, roleId: userRole?.id ?? null }))} />
                     }
                 </Box>
             </ModalBody>
