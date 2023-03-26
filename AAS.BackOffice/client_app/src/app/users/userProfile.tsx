@@ -88,7 +88,7 @@ export const UserProfile = () => {
                             justifyContent: 'space-between'
                         }}>
                             <Typography>
-                                Фамлиия:
+                                Фамилия:
                             </Typography>
                             <Typography>
                                 {user?.lastName}

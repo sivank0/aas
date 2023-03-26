@@ -12,6 +12,7 @@ import { BidLinks } from './bids/bidLinks';
 import { BidsPage } from './bids/bidsPage';
 import { UserRolesPage } from './users/roles/userRolesPage';
 import { HomePage } from '../sharedComponents/homePage';
+import { UserProfile } from './users/userProfile';
 
 const container = document.getElementById('app');
 const root = createRoot(container!);
