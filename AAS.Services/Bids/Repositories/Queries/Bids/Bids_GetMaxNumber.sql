@@ -1,1 +1,2 @@
-﻿SELECT COUNT(number) as number FROM bids;
+﻿SELECT COUNT(number) as number
+FROM bids;

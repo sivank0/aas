@@ -1,12 +1,16 @@
-﻿using System.Buffers;
+﻿#region
+
+using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
+
+#endregion
 
 namespace AAS.Tools.Converters;
 
 public class TextJsonSerializer : IJsonSerializer
 {
-    public static JsonSerializerOptions DefaultOptions { get; set; } = Configure(new());
+    public static JsonSerializerOptions DefaultOptions { get; set; } = Configure(new JsonSerializerOptions());
     public JsonSerializerOptions Options => DefaultOptions;
 
     public static JsonSerializerOptions Configure(JsonSerializerOptions options)
@@ -17,17 +21,29 @@ public class TextJsonSerializer : IJsonSerializer
         return options;
     }
 
-    public object? Deserialize(ReadOnlySpan<byte> utf8Json, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.PublicProperties)] Type returnType, JsonSerializerOptions? options = null)
+    public object? Deserialize(ReadOnlySpan<byte> utf8Json,
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors |
+                                    DynamicallyAccessedMemberTypes.PublicFields |
+                                    DynamicallyAccessedMemberTypes.PublicProperties)]
+        Type returnType, JsonSerializerOptions? options = null)
     {
         return JsonSerializer.Deserialize(utf8Json, returnType, options ?? DefaultOptions);
     }
 
-    public object? Deserialize(string json, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.PublicProperties)] Type returnType, JsonSerializerOptions? options = null)
+    public object? Deserialize(string json,
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors |
+                                    DynamicallyAccessedMemberTypes.PublicFields |
+                                    DynamicallyAccessedMemberTypes.PublicProperties)]
+        Type returnType, JsonSerializerOptions? options = null)
     {
         return JsonSerializer.Deserialize(json, returnType, options ?? DefaultOptions);
     }
 
-    public object? Deserialize(ref Utf8JsonReader reader, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.PublicProperties)] Type returnType, JsonSerializerOptions? options = null)
+    public object? Deserialize(ref Utf8JsonReader reader,
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors |
+                                    DynamicallyAccessedMemberTypes.PublicFields |
+                                    DynamicallyAccessedMemberTypes.PublicProperties)]
+        Type returnType, JsonSerializerOptions? options = null)
     {
         return JsonSerializer.Deserialize(ref reader, returnType, options ?? DefaultOptions);
     }
@@ -58,22 +74,33 @@ public class TextJsonSerializer : IJsonSerializer
         return JsonSerializer.Deserialize<TValue>(ref reader, options ?? DefaultOptions);
     }
 
-    public ValueTask<object?> DeserializeAsync(Stream utf8Json, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.PublicProperties)] Type returnType, JsonSerializerOptions? options = null, CancellationToken cancellationToken = default)
+    public ValueTask<object?> DeserializeAsync(Stream utf8Json,
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors |
+                                    DynamicallyAccessedMemberTypes.PublicFields |
+                                    DynamicallyAccessedMemberTypes.PublicProperties)]
+        Type returnType, JsonSerializerOptions? options = null, CancellationToken cancellationToken = default)
     {
         return JsonSerializer.DeserializeAsync(utf8Json, returnType, options ?? DefaultOptions, cancellationToken);
     }
 
-    public ValueTask<TValue?> DeserializeAsync<TValue>(Stream utf8Json, JsonSerializerOptions? options = null, CancellationToken cancellationToken = default)
+    public ValueTask<TValue?> DeserializeAsync<TValue>(Stream utf8Json, JsonSerializerOptions? options = null,
+        CancellationToken cancellationToken = default)
     {
         return JsonSerializer.DeserializeAsync<TValue>(utf8Json, options ?? DefaultOptions, cancellationToken);
     }
 
-    public string Serialize(object? value, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.PublicProperties)] Type inputType, JsonSerializerOptions? options = null)
+    public string Serialize(object? value,
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicFields |
+                                    DynamicallyAccessedMemberTypes.PublicProperties)]
+        Type inputType, JsonSerializerOptions? options = null)
     {
         return JsonSerializer.Serialize(value, inputType, options ?? DefaultOptions);
     }
 
-    public void Serialize(Utf8JsonWriter writer, object? value, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.PublicProperties)] Type inputType, JsonSerializerOptions? options = null)
+    public void Serialize(Utf8JsonWriter writer, object? value,
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicFields |
+                                    DynamicallyAccessedMemberTypes.PublicProperties)]
+        Type inputType, JsonSerializerOptions? options = null)
     {
         JsonSerializer.Serialize(writer, value, inputType, options ?? DefaultOptions);
     }
@@ -88,17 +115,24 @@ public class TextJsonSerializer : IJsonSerializer
         return JsonSerializer.Serialize(value, options ?? DefaultOptions);
     }
 
-    public Task SerializeAsync(Stream utf8Json, object? value, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.PublicProperties)] Type inputType, JsonSerializerOptions? options = null, CancellationToken cancellationToken = default)
+    public Task SerializeAsync(Stream utf8Json, object? value,
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicFields |
+                                    DynamicallyAccessedMemberTypes.PublicProperties)]
+        Type inputType, JsonSerializerOptions? options = null, CancellationToken cancellationToken = default)
     {
         return JsonSerializer.SerializeAsync(utf8Json, value, inputType, options ?? DefaultOptions, cancellationToken);
     }
 
-    public Task SerializeAsync<TValue>(Stream utf8Json, TValue value, JsonSerializerOptions? options = null, CancellationToken cancellationToken = default)
+    public Task SerializeAsync<TValue>(Stream utf8Json, TValue value, JsonSerializerOptions? options = null,
+        CancellationToken cancellationToken = default)
     {
         return JsonSerializer.SerializeAsync(utf8Json, value, options ?? DefaultOptions, cancellationToken);
     }
 
-    public byte[] SerializeToUtf8Bytes(object? value, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.PublicProperties)] Type inputType, JsonSerializerOptions? options = null)
+    public byte[] SerializeToUtf8Bytes(object? value,
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicFields |
+                                    DynamicallyAccessedMemberTypes.PublicProperties)]
+        Type inputType, JsonSerializerOptions? options = null)
     {
         return JsonSerializer.SerializeToUtf8Bytes(value, inputType, options ?? DefaultOptions);
     }

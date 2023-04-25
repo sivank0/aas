@@ -1,5 +1,5 @@
-import React, { PropsWithChildren } from 'react';
-import { Button, IconButton, SxProps, Theme, Tooltip } from '@mui/material';
+import React, {PropsWithChildren} from 'react';
+import {Button, IconButton, SxProps, Theme, Tooltip} from '@mui/material';
 import DoneIcon from '@mui/icons-material/Done';
 import CloseIcon from '@mui/icons-material/Close';
 import SaveIcon from '@mui/icons-material/Save';
@@ -26,7 +26,7 @@ export const SaveButton = (props: PropsWithChildren<ButtonProps>) => {
             startIcon={
                 <SaveIcon
                     fontSize={props.size}
-                    color={props.color ?? "inherit"} />
+                    color={props.color ?? "inherit"}/>
             }
             onClick={props.onClick}>
             {props.children ?? "Сохранить"}
@@ -45,7 +45,7 @@ export const SuccessButton = (props: PropsWithChildren<ButtonProps>) => {
             startIcon={
                 <DoneIcon
                     fontSize={props.size}
-                    color={props.color ?? "primary"} />
+                    color={props.color ?? "primary"}/>
             }
             onClick={props.onClick}>
             {props.children ?? "Подтвердить"}
@@ -64,7 +64,7 @@ export const CancelButton = (props: PropsWithChildren<ButtonProps>) => {
             startIcon={
                 <CancelIcon
                     fontSize={props.size}
-                    color={props.color ?? "error"} />
+                    color={props.color ?? "error"}/>
             }
             onClick={props.onClick}>
             {props.children ?? "Отменить"}
@@ -83,7 +83,7 @@ export const AddButton = (props: PropsWithChildren<ButtonProps>) => {
             startIcon={
                 <AddIcon
                     fontSize={props.size}
-                    color={props.color ?? "inherit"} />
+                    color={props.color ?? "inherit"}/>
             }
             onClick={props.onClick}>
             {props.children ?? "Сохранить"}
@@ -106,7 +106,7 @@ export const CloseIconButton = (props: IconButtonProps) => {
                 onClick={props.onClick}>
                 <CloseIcon
                     fontSize={props.size}
-                    color={props.color ?? "primary"} />
+                    color={props.color ?? "primary"}/>
             </IconButton>
         </Tooltip>
     )

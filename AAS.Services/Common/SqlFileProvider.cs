@@ -1,13 +1,19 @@
-﻿using Microsoft.Extensions.FileProviders;
+﻿#region
+
 using System.Runtime.CompilerServices;
+using Microsoft.Extensions.FileProviders;
+
+#endregion
 
 namespace AAS.Services.Common;
+
 public class SqlFileProvider : EmbeddedFileProvider
 {
     private static readonly SqlFileProvider Default = new();
     private readonly string _basePath;
 
-    public static string GetQuery([CallerMemberName] string queryName = "", [CallerFilePath] string path = "", string folder = "")
+    public static string GetQuery([CallerMemberName] string queryName = "", [CallerFilePath] string path = "",
+        string folder = "")
     {
         return Default.Get(queryName, path, folder);
     }
@@ -19,7 +25,8 @@ public class SqlFileProvider : EmbeddedFileProvider
 
     public string Get([CallerMemberName] string queryName = "", [CallerFilePath] string path = "", string folder = "")
     {
-        string fileDirectory = (Path.GetDirectoryName(path) ?? string.Empty) + (!string.IsNullOrWhiteSpace(folder) ? $"\\{folder}" : "");
+        string fileDirectory = (Path.GetDirectoryName(path) ?? string.Empty) +
+                               (!string.IsNullOrWhiteSpace(folder) ? $"\\{folder}" : "");
         string prefix = MakeRelativePath(_basePath, fileDirectory).Replace('\\', '.');
         string fileName = $"{prefix}.{queryName}.sql";
 
@@ -37,15 +44,13 @@ public class SqlFileProvider : EmbeddedFileProvider
         Uri fromUri = new Uri(fromPath);
         Uri toUri = new Uri(toPath);
 
-        if (fromUri.Scheme != toUri.Scheme) { return toPath; } // path can't be made relative.
+        if (fromUri.Scheme != toUri.Scheme) return toPath; // path can't be made relative.
 
         Uri relativeUri = fromUri.MakeRelativeUri(toUri);
         string relativePath = Uri.UnescapeDataString(relativeUri.ToString());
 
         if (toUri.Scheme.Equals("file", StringComparison.InvariantCultureIgnoreCase))
-        {
             relativePath = relativePath.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
-        }
 
         return relativePath;
     }

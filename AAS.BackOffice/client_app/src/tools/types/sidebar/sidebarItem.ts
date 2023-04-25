@@ -1,4 +1,4 @@
-import { SideBarIconType } from "./sideBarIconType";
+import {SideBarIconType} from "./sideBarIconType";
 
 export class SidebarItem {
     public id: string;

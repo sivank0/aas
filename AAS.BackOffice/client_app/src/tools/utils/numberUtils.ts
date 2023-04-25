@@ -36,14 +36,14 @@ export const mathSum = (array: number[]): number => {
 }
 
 /**
-   * Возвращает слово в нужном падеже в зависимости от числа
-   *
-   * @param value - число
-   * @param nominative - Именительный падеж. Например "День"
-   * @param genitive - Родительный падеж. Например "Дня"
-   * @param plural - Множественное число. Например "Дней"
-   *
-   */
+ * Возвращает слово в нужном падеже в зависимости от числа
+ *
+ * @param value - число
+ * @param nominative - Именительный падеж. Например "День"
+ * @param genitive - Родительный падеж. Например "Дня"
+ * @param plural - Множественное число. Например "Дней"
+ *
+ */
 export const decline = (value: number, nominative: string, genitive: string, plural: string): string => {
     value = value % 100;
 
@@ -52,13 +52,16 @@ export const decline = (value: number, nominative: string, genitive: string, plu
 
     value = value % 10;
     switch (value) {
-        case 1: return nominative;
+        case 1:
+            return nominative;
 
         case 2:
         case 3:
-        case 4: return genitive;
+        case 4:
+            return genitive;
 
-        default: return plural;
+        default:
+            return plural;
     }
 }
 

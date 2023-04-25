@@ -1,13 +1,17 @@
-﻿using AAS.Tools.Types.IDs;
+﻿#region
+
+using AAS.Tools.Types.IDs;
+
+#endregion
 
 namespace AAS.Domain.Users;
 
 public class UserToken
 {
     public ID UserId { get; }
-    public String Token { get; }
+    public string Token { get; }
 
-    public UserToken(ID userId, String token)
+    public UserToken(ID userId, string token)
     {
         UserId = userId;
         Token = token;
@@ -18,5 +22,8 @@ public class UserToken
         return new UserToken(userId, NewKey());
     }
 
-    public static String NewKey() => Guid.NewGuid().ToString() + Guid.NewGuid().ToString();
+    public static string NewKey()
+    {
+        return Guid.NewGuid().ToString() + Guid.NewGuid().ToString();
+    }
 }

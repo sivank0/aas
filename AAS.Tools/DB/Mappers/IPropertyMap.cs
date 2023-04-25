@@ -1,15 +1,19 @@
-﻿using AAS.Tools.DB.Enums;
+﻿#region
+
 using System.Reflection;
+using AAS.Tools.DB.Enums;
+
+#endregion
 
 namespace AAS.Tools.DB.Mappers;
 
 internal interface IPropertyMap
 {
-    String Name { get; }
-    String ColumnName { get; }
-    Boolean IsReadOnly { get; }
-    Boolean IgnoreOnUpdate { get; }
-    Boolean UpdateOnRemove { get; }
+    string Name { get; }
+    string ColumnName { get; }
+    bool IsReadOnly { get; }
+    bool IgnoreOnUpdate { get; }
+    bool UpdateOnRemove { get; }
     KeyType KeyType { get; }
     PropertyInfo PropertyInfo { get; }
 }

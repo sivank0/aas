@@ -1,6 +1,10 @@
-﻿using AAS.Tools.Types.Results;
+﻿#region
+
 using System.Data;
 using System.Dynamic;
+using AAS.Tools.Types.Results;
+
+#endregion
 
 namespace AAS.Tools.DB;
 
@@ -12,6 +16,10 @@ public interface IDataAccess : IDisposable
     T Get<T>(string sql, IList<SqlParameter> parameters = null, CommandType commandType = CommandType.Text);
 
     List<T> GetList<T>(string sql, IList<SqlParameter> parameters = null, CommandType commandType = CommandType.Text);
-    PagedResult<T> GetPageOver<T>(string sql, IList<SqlParameter> parameters = null, CommandType commandType = CommandType.Text);
-    Dictionary<TKey, TValue> GetDictionary<TKey, TValue>(string sql, IList<SqlParameter> parameters = null, CommandType commandType = CommandType.Text);
+
+    PagedResult<T> GetPageOver<T>(string sql, IList<SqlParameter> parameters = null,
+        CommandType commandType = CommandType.Text);
+
+    Dictionary<TKey, TValue> GetDictionary<TKey, TValue>(string sql, IList<SqlParameter> parameters = null,
+        CommandType commandType = CommandType.Text);
 }

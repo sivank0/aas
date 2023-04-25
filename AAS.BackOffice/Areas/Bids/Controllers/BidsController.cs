@@ -1,14 +1,15 @@
-﻿using AAS.BackOffice.Controllers;
+﻿#region
+
+using AAS.BackOffice.Controllers;
 using AAS.BackOffice.Filters;
 using AAS.Domain.AccessPolicies;
 using AAS.Domain.Bids;
 using AAS.Domain.Services;
-using AAS.Domain.Users;
-using AAS.Domain.Users.SystemUsers;
-using AAS.Services.Users;
 using AAS.Tools.Types.IDs;
 using AAS.Tools.Types.Results;
 using Microsoft.AspNetCore.Mvc;
+
+#endregion
 
 namespace AAS.BackOffice.Areas.Bids.Controllers;
 
@@ -37,7 +38,7 @@ public class BidsController : BaseController
 
     [HttpGet("bids/get_page")]
     [IsAuthorized(AccessPolicy.BidsRead)]
-    public PagedResult<Bid> GetBidsPage(Int32 page, Int32 countInPage)
+    public PagedResult<Bid> GetBidsPage(int page, int countInPage)
     {
         return _bidsService.GetPagedBids(page, countInPage);
     }

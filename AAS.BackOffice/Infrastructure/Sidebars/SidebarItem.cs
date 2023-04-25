@@ -1,8 +1,12 @@
-using AAS.Domain.AccessPolicies;
-using Microsoft.AspNetCore.Mvc;
+#region
+
 using AAS.BackOffice.Areas.Infrastructure.Models;
+using AAS.Domain.AccessPolicies;
 using AAS.Domain.Users.UserAccesses;
 using AAS.Tools.Types.IDs;
+using Microsoft.AspNetCore.Mvc;
+
+#endregion
 
 namespace AAS.BackOffice.Infrastructure.Sidebars;
 
@@ -19,10 +23,14 @@ public class SidebarItem
     public AccessPolicy[] AvailableForAccessPolicies { get; }
 
     public static SidebarItem ListItem(string text, string url, SideBarIconType iconType, AccessPolicy policy)
-        => new(text, url, iconType, new[] { policy });
+    {
+        return new SidebarItem(text, url, iconType, new[] { policy });
+    }
 
     public static SidebarItem ListItem(string text, string url, SideBarIconType iconType, AccessPolicy[] policies)
-        => new(text, url, iconType, policies);
+    {
+        return new SidebarItem(text, url, iconType, policies);
+    }
 
     private SidebarItem(string text, string url, SideBarIconType iconType, AccessPolicy[] availableForAccessPolicies)
     {
@@ -35,7 +43,9 @@ public class SidebarItem
     }
 
     public static SidebarItem ListGroup(string text, SideBarIconType iconType, SidebarItem[] innerItems)
-        => new(text, iconType, innerItems);
+    {
+        return new SidebarItem(text, iconType, innerItems);
+    }
 
     private SidebarItem(string text, SideBarIconType iconType, SidebarItem[] innerItems)
     {

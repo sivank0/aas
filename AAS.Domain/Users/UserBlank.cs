@@ -1,24 +1,29 @@
-﻿using AAS.Tools.Managers;
-using AAS.Tools.Types.IDs;
+﻿#region
+
 using System.Text.Json.Serialization;
+using AAS.Tools.Managers;
+using AAS.Tools.Types.IDs;
+
+#endregion
 
 namespace AAS.Domain.Users;
+
 public class UserBlank
 {
     public ID? Id { get; set; }
-    public String? FirstName { get; set; }
-    public String? MiddleName { get; set; }
-    public String? LastName { get; set; }
-    public String? Email { get; set; }
-    public String? PhoneNumber { get; set; }
+    public string? FirstName { get; set; }
+    public string? MiddleName { get; set; }
+    public string? LastName { get; set; }
+    public string? Email { get; set; }
+    public string? PhoneNumber { get; set; }
     public ID? RoleId { get; set; }
-    public String? Password { get; set; }
-    public String? RePassword { get; set; }
+    public string? Password { get; set; }
+    public string? RePassword { get; set; }
 
-    [JsonIgnore]
-    public String? Passwordhash => HashManager.DefinePasswordHash(Password);
+    [JsonIgnore] public string? Passwordhash => HashManager.DefinePasswordHash(Password);
 
-    public UserBlank(ID? id, String? firstName, String? middleName, String? lastName, String? email, String? phoneNumber, ID? roleId, String? password, String? rePassword)
+    public UserBlank(ID? id, string? firstName, string? middleName, string? lastName, string? email,
+        string? phoneNumber, ID? roleId, string? password, string? rePassword)
     {
         Id = id;
         FirstName = firstName;

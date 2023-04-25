@@ -1,4 +1,8 @@
-﻿using System.Runtime.CompilerServices;
+﻿#region
+
+using System.Runtime.CompilerServices;
+
+#endregion
 
 namespace AAS.Tools.Json.Attributes;
 
@@ -6,10 +10,12 @@ public class ShouldSerializeAttribute : Attribute
 {
     public string ShouldSerializeMethodName { get; }
 
-    public ShouldSerializeAttribute(string shouldSerializeMethodName, [CallerArgumentExpression("shouldSerializeMethodName")] string? shouldSerializeMethodNameExpression = null)
+    public ShouldSerializeAttribute(string shouldSerializeMethodName,
+        [CallerArgumentExpression("shouldSerializeMethodName")] string? shouldSerializeMethodNameExpression = null)
     {
         if (shouldSerializeMethodNameExpression is null || !shouldSerializeMethodNameExpression.Contains("nameof"))
-            throw new Exception("Некорректный формат записи ifTrue в ShouldSerializeAttribute. Ожидалось \"ifTrue: nameof(КлассСвойства.ЕгоЧлен)\"");
+            throw new Exception(
+                "Некорректный формат записи ifTrue в ShouldSerializeAttribute. Ожидалось \"ifTrue: nameof(КлассСвойства.ЕгоЧлен)\"");
 
         ShouldSerializeMethodName = shouldSerializeMethodNameExpression.Replace("nameof(", "").Replace(")", "");
     }

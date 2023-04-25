@@ -1,5 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+﻿#region
+
 using AAS.Tools.Types.IDs;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+
+#endregion
 
 namespace AAS.Tools.Binders;
 
@@ -7,10 +11,7 @@ public class IDModelBinder : IModelBinder
 {
     public Task BindModelAsync(ModelBindingContext bindingContext)
     {
-        if (bindingContext == null)
-        {
-            throw new ArgumentNullException(nameof(bindingContext));
-        }
+        if (bindingContext == null) throw new ArgumentNullException(nameof(bindingContext));
 
         string? value;
 
@@ -21,7 +22,9 @@ public class IDModelBinder : IModelBinder
             sr.Dispose();
         }
         else
+        {
             value = bindingContext.ValueProvider.GetValue(bindingContext.ModelName).FirstValue;
+        }
 
         if (string.IsNullOrWhiteSpace(value) || value == "null")
             bindingContext.Result = ModelBindingResult.Success(null);

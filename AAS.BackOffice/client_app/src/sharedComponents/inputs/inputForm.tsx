@@ -1,5 +1,5 @@
 import React from 'react';
-import { Input, IProps as InputProps } from './input';
+import {Input, IProps as InputProps} from './input';
 
 type IProps<T> = {
     label?: string | null | undefined

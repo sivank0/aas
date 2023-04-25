@@ -1,4 +1,6 @@
-﻿using AAS.Domain.AccessPolicies.Extensions;
+﻿#region
+
+using AAS.Domain.AccessPolicies.Extensions;
 using AAS.Domain.Users;
 using AAS.Domain.Users.Permissions;
 using AAS.Domain.Users.Roles;
@@ -8,13 +10,17 @@ using AAS.Services.Users.Repositories.Queries;
 using AAS.Tools.DB;
 using AAS.Tools.Types.IDs;
 
+#endregion
+
 namespace AAS.Services.Users.Repositories;
 
 public partial class UsersRepository : NpgSqlRepository, IUsersRepository
 {
-    public UsersRepository(String connectionString) : base(connectionString) { }
+    public UsersRepository(string connectionString) : base(connectionString)
+    {
+    }
 
-    #region Users 
+    #region Users
 
     public void SaveUser(UserBlank userBlank, ID systemUserId)
     {
@@ -66,13 +72,13 @@ public partial class UsersRepository : NpgSqlRepository, IUsersRepository
     {
         SqlParameter[] parameters =
         {
-            new("p_id", userId),
+            new("p_id", userId)
         };
 
         return Get<UserDb?>(Sql.Users_GetById, parameters)?.ToUser();
     }
 
-    public User? GetUser(String email, String? passwordHash)
+    public User? GetUser(string email, string? passwordHash)
     {
         SqlParameter[] parameters =
         {
@@ -88,14 +94,14 @@ public partial class UsersRepository : NpgSqlRepository, IUsersRepository
         return GetArray<UserDb>(Sql.Users_GetAll).ToUsers();
     }
 
-    public void ChangeUserPassword(ID userId, String passwordHash, ID systemUserId)
+    public void ChangeUserPassword(ID userId, string passwordHash, ID systemUserId)
     {
         SqlParameter[] parameters =
         {
             new("p_userid", userId),
             new("p_passwordhash", passwordHash),
             new("p_systemuserid", systemUserId),
-            new("p_currentdatetimeutc", DateTime.UtcNow),
+            new("p_currentdatetimeutc", DateTime.UtcNow)
         };
 
         Execute(Sql.Users_ChangePassword, parameters);
@@ -107,7 +113,7 @@ public partial class UsersRepository : NpgSqlRepository, IUsersRepository
         {
             new("p_id", userId),
             new("p_systemuserid", systemUserId),
-            new("p_currentdatetimeutc", DateTime.UtcNow),
+            new("p_currentdatetimeutc", DateTime.UtcNow)
         };
 
         Execute(Sql.Users_Remove, parameters);
@@ -125,7 +131,7 @@ public partial class UsersRepository : NpgSqlRepository, IUsersRepository
             new("p_name", userRoleBlank.Name!),
             new("p_accesspolicies", userRoleBlank.AccessPolicies.Keys()),
             new("p_systemuserid", systemUserId),
-            new("p_currentdatetimeutc", DateTime.UtcNow),
+            new("p_currentdatetimeutc", DateTime.UtcNow)
         };
 
         Execute(Sql.UserRoles_Save, parameters);

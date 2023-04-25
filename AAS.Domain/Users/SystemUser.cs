@@ -1,14 +1,18 @@
+#region
+
 using AAS.Domain.AccessPolicies;
 using AAS.Domain.Users.UserAccesses;
 using AAS.Tools.Types.IDs;
+
+#endregion
 
 namespace AAS.Domain.Users.SystemUsers;
 
 public class SystemUser
 {
     public ID Id { get; }
-    public String Email { get; }
-    public String FullName { get; }
+    public string Email { get; }
+    public string FullName { get; }
     public UserAccess Access { get; }
 
     public SystemUser(User user, UserAccess currentAccess)
@@ -19,5 +23,8 @@ public class SystemUser
         Access = currentAccess;
     }
 
-    public Boolean HasAccess(AccessPolicy accessPolicy) => Access.AccessPolicies.Contains(accessPolicy);
+    public bool HasAccess(AccessPolicy accessPolicy)
+    {
+        return Access.AccessPolicies.Contains(accessPolicy);
+    }
 }

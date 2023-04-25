@@ -1,15 +1,16 @@
 import React from "react";
-import { CSSObject, List, styled, Theme } from "@mui/material";
-import { default as SidebarModel } from '../../tools/types/sidebar/sidebar';
+import {CSSObject, List, styled, Theme} from "@mui/material";
+import {default as SidebarModel} from '../../tools/types/sidebar/sidebar';
 import MuiDrawer from '@mui/material/Drawer';
-import { useNavigate } from "react-router-dom";
-import { SingleSidebarItem } from "./singleSidebarItem";
-import { CollapsedSideBarItem } from "./collapsedSidebarItem";
+import {useNavigate} from "react-router-dom";
+import {SingleSidebarItem} from "./singleSidebarItem";
+import {CollapsedSideBarItem} from "./collapsedSidebarItem";
 
 interface Props {
     isSidebarUncollapsed: boolean
     changeIsNavigationOpen: (isOpen: boolean) => void;
 }
+
 const drawerWidth = 240;
 
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -33,8 +34,8 @@ const closedMixin = (theme: Theme): CSSObject => ({
     },
 });
 
-const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
-    ({ theme, open }) => ({
+const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})(
+    ({theme, open}) => ({
         width: drawerWidth,
         flexShrink: 0,
         whiteSpace: 'nowrap',
@@ -60,8 +61,8 @@ export const Sidebar = (props: Props) => {
     }
 
     return (
-        <Drawer variant="permanent" sx={{ position: "fixed", zIndex: 2 }} open={props.isSidebarUncollapsed}>
-            <List sx={{ marginTop: 9 }} disablePadding>
+        <Drawer variant="permanent" sx={{position: "fixed", zIndex: 2}} open={props.isSidebarUncollapsed}>
+            <List sx={{marginTop: 9}} disablePadding>
                 {
                     SidebarModel.items.map(item => (
                         item.innerItems.length == 0
@@ -69,12 +70,12 @@ export const Sidebar = (props: Props) => {
                             <SingleSidebarItem
                                 sidebarItem={item}
                                 isSidebarUncollapsed={props.isSidebarUncollapsed}
-                                navigateTo={(url) => navigateTo(url)} />
+                                navigateTo={(url) => navigateTo(url)}/>
                             :
                             <CollapsedSideBarItem
                                 sidebarItem={item}
                                 isSidebarUncollapsed={props.isSidebarUncollapsed}
-                                navigateTo={(url) => navigateTo(url)} />
+                                navigateTo={(url) => navigateTo(url)}/>
                     ))
                 }
             </List>

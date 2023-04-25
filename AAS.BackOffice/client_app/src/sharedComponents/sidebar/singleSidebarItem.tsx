@@ -1,7 +1,7 @@
-import { Link, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import {Link, ListItem, ListItemButton, ListItemIcon, ListItemText} from '@mui/material';
 import React from 'react';
-import { SidebarItem } from '../../tools/types/sidebar/sidebarItem';
-import { SideBarIcon } from '../icons/sideBarIcon';
+import {SidebarItem} from '../../tools/types/sidebar/sidebarItem';
+import {SideBarIcon} from '../icons/sideBarIcon';
 
 interface Props {
     sidebarItem: SidebarItem;
@@ -11,7 +11,7 @@ interface Props {
 
 export const SingleSidebarItem = (props: Props) => {
     return (
-        <ListItem disablePadding sx={{ display: 'block' }}>
+        <ListItem disablePadding sx={{display: 'block'}}>
             <Link
                 onClick={() => props.navigateTo(props.sidebarItem.url)}
                 sx={{
@@ -29,11 +29,11 @@ export const SingleSidebarItem = (props: Props) => {
                         minHeight: 48,
                         justifyContent: props.isSidebarUncollapsed ? 'initial' : 'center',
                         px: 2.5,
-                    }} >
-                    <ListItemIcon sx={{ minWidth: 0 }}><SideBarIcon type={props.sidebarItem.iconType} /></ListItemIcon>
+                    }}>
+                    <ListItemIcon sx={{minWidth: 0}}><SideBarIcon type={props.sidebarItem.iconType}/></ListItemIcon>
                     {
                         props.isSidebarUncollapsed &&
-                        <ListItemText primary={props.sidebarItem.text} sx={{ marginLeft: 2 }} />
+                        <ListItemText primary={props.sidebarItem.text} sx={{marginLeft: 2}}/>
                     }
                 </ListItemButton>
             </Link>

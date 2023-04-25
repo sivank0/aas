@@ -1,22 +1,23 @@
-﻿using AAS.Tools.DB.Enums;
-using AAS.Tools.DB.Mappers;
+﻿#region
+
 using System.Collections.Concurrent;
 using System.Data;
+using AAS.Tools.DB.Enums;
+using AAS.Tools.DB.Mappers;
+
+#endregion
 
 namespace AAS.Tools.DB.Common;
 
 internal static class IDbCommandExtensions
 {
-    private static readonly ConcurrentDictionary<Type, ISqlParameterMap> _parameterMaps = new ConcurrentDictionary<Type, ISqlParameterMap>();
+    private static readonly ConcurrentDictionary<Type, ISqlParameterMap> _parameterMaps = new();
 
-    private static ISqlParameterMap GetAndSetSqlParameterMap(Object value)
+    private static ISqlParameterMap GetAndSetSqlParameterMap(object value)
     {
         Type type = value.GetType();
 
-        if (_parameterMaps.TryGetValue(type, out ISqlParameterMap parameterMap))
-        {
-            return parameterMap;
-        }
+        if (_parameterMaps.TryGetValue(type, out ISqlParameterMap parameterMap)) return parameterMap;
 
         parameterMap = new SqlParameterMap(type, TypeMap.LookupDbType(type));
 
@@ -25,7 +26,7 @@ internal static class IDbCommandExtensions
         return parameterMap;
     }
 
-    private static IDbDataParameter GetDbNullParameter(this IDbCommand command, String nameParameter)
+    private static IDbDataParameter GetDbNullParameter(this IDbCommand command, string nameParameter)
     {
         IDbDataParameter parameter = command.CreateParameter();
         parameter.ParameterName = nameParameter;
@@ -34,7 +35,8 @@ internal static class IDbCommandExtensions
         return parameter;
     }
 
-    private static IDbDataParameter GetParameter(this IDbCommand command, String parameterName, Object value, ISqlParameterMap parameterMap)
+    private static IDbDataParameter GetParameter(this IDbCommand command, string parameterName, object value,
+        ISqlParameterMap parameterMap)
     {
         IDbDataParameter parameter = command.CreateParameter();
         parameter.ParameterName = parameterName;
@@ -45,7 +47,6 @@ internal static class IDbCommandExtensions
 
         return parameter;
     }
-
 
 
     public static void AddParameters(this IDbCommand command, IList<SqlParameter> parameters)
@@ -70,9 +71,9 @@ internal static class IDbCommandExtensions
 
     private static void AddParameter<T>(this IDbCommand command, IPropertyMap propertyMap, T value)
     {
-        Object obj = propertyMap.PropertyInfo.GetValue(value);
+        object obj = propertyMap.PropertyInfo.GetValue(value);
 
-        String parameterName = $"@{propertyMap.ColumnName}";
+        string parameterName = $"@{propertyMap.ColumnName}";
 
         if (obj == null)
         {
@@ -133,4 +134,3 @@ internal static class IDbCommandExtensions
         }
     }
 }
-

@@ -1,15 +1,19 @@
-﻿using AAS.Domain.AccessPolicies;
+﻿#region
+
+using AAS.Domain.AccessPolicies;
 using AAS.Domain.Users.SystemUsers;
 using AAS.Tools.Types.IDs;
+
+#endregion
 
 namespace AAS.BackOffice.Areas.Users.Models;
 
 public class BackOfficeSystemUser
 {
     public ID Id { get; }
-    public String Email { get; }
-    public String FullName { get; }
-    public Boolean HasFullAccess { get; }
+    public string Email { get; }
+    public string FullName { get; }
+    public bool HasFullAccess { get; }
     public AccessPolicy[] AvailableAccessPolicies { get; }
 
     public BackOfficeSystemUser(SystemUser systemUser)

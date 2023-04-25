@@ -1,7 +1,11 @@
-﻿using AAS.Domain.AccessPolicies.Attributes;
+﻿#region
+
+using System.Reflection;
+using AAS.Domain.AccessPolicies.Attributes;
 using AAS.Domain.AccessPolicies.Extensions;
 using AAS.Tools.Extensions;
-using System.Reflection;
+
+#endregion
 
 namespace AAS.Domain.AccessPolicies.Utils;
 

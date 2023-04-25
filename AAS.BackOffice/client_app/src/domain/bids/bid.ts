@@ -8,7 +8,8 @@ export class Bid {
         public readonly status: number,
         public readonly acceptanceDate: Date | null,
         public readonly approxmateDate: Date | null
-    ) { }
+    ) {
+    }
 }
 
 export function toBid(value: any): Bid {
@@ -23,6 +24,7 @@ export function toBid(value: any): Bid {
         value.approxmateDate,
     )
 }
+
 export function toBids(values: any[]): Bid[] {
     return values.map(toBid);
 }

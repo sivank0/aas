@@ -1,5 +1,5 @@
-import { AccessPolicy } from "../../accessPolicies/accessPolicy";
-import { UserRole } from "./userRole";
+import {AccessPolicy} from "../../accessPolicies/accessPolicy";
+import {UserRole} from "./userRole";
 
 export interface UserRoleBlank {
     id: string | null,

@@ -1,4 +1,6 @@
-﻿using AAS.Domain.Services;
+﻿#region
+
+using AAS.Domain.Services;
 using AAS.Domain.Users;
 using AAS.Domain.Users.Roles;
 using AAS.Domain.Users.SystemUsers;
@@ -7,11 +9,13 @@ using AAS.Tools.Managers;
 using AAS.Tools.Types.IDs;
 using AAS.Tools.Types.Results;
 
+#endregion
+
 namespace AAS.Services.Users;
 
 public partial class UsersService : IUsersService // + Authentification
 {
-    public SystemUser? GetSystemUser(String token)
+    public SystemUser? GetSystemUser(string token)
     {
         UserToken? userToken = GetUserToken(token);
 
@@ -30,7 +34,7 @@ public partial class UsersService : IUsersService // + Authentification
         return new SystemUser(user, userAccess);
     }
 
-    public Result Authenticate(String token)
+    public Result Authenticate(string token)
     {
         SystemUser? systemUser = GetSystemUser(token);
 
@@ -39,49 +43,52 @@ public partial class UsersService : IUsersService // + Authentification
         return Result.Success();
     }
 
-    public DataResult<UserToken?> LogIn(String? email, String? password)
+    public DataResult<UserToken?> LogIn(string? email, string? password)
     {
-        if (String.IsNullOrWhiteSpace(email))
+        if (string.IsNullOrWhiteSpace(email))
             return DataResult<UserToken?>.Fail("Не введен Email");
 
-        if (String.IsNullOrWhiteSpace(password))
+        if (string.IsNullOrWhiteSpace(password))
             return DataResult<UserToken?>.Fail("Не введен пароль");
 
         User? user = GetUser(email, HashManager.DefinePasswordHash(password));
 
-        if (user is null) return DataResult<UserToken?>.Fail("Пользователь не найден, проверьте правильность введенных данных");
+        if (user is null)
+            return DataResult<UserToken?>.Fail("Пользователь не найден, проверьте правильность введенных данных");
 
         UserToken? userToken = UserToken.New(user.Id);
 
         Result savingUserTokenResult = SaveUserToken(userToken);
 
-        if (!savingUserTokenResult.IsSuccess) return DataResult<UserToken?>.Fail(savingUserTokenResult.Errors[0].Message);
+        if (!savingUserTokenResult.IsSuccess)
+            return DataResult<UserToken?>.Fail(savingUserTokenResult.Errors[0].Message);
 
         Result authentificationResult = Authenticate(userToken.Token);
 
-        if (!authentificationResult.IsSuccess) return DataResult<UserToken?>.Fail(authentificationResult.Errors[0].Message);
+        if (!authentificationResult.IsSuccess)
+            return DataResult<UserToken?>.Fail(authentificationResult.Errors[0].Message);
 
         return DataResult<UserToken?>.Success(userToken);
     }
 
     public DataResult<UserToken?> RegisterUser(UserRegistrationBlank userRegistrationBlank)
     {
-        if (String.IsNullOrWhiteSpace(userRegistrationBlank.Email))
+        if (string.IsNullOrWhiteSpace(userRegistrationBlank.Email))
             return DataResult<UserToken?>.Fail("Не введен Email");
 
-        if (String.IsNullOrWhiteSpace(userRegistrationBlank.FirstName))
+        if (string.IsNullOrWhiteSpace(userRegistrationBlank.FirstName))
             return DataResult<UserToken?>.Fail("Не введено имя");
 
-        if (String.IsNullOrWhiteSpace(userRegistrationBlank.LastName))
+        if (string.IsNullOrWhiteSpace(userRegistrationBlank.LastName))
             return DataResult<UserToken?>.Fail("Не введена фамилия");
 
-        if (String.IsNullOrWhiteSpace(userRegistrationBlank.PhoneNumber))
+        if (string.IsNullOrWhiteSpace(userRegistrationBlank.PhoneNumber))
             return DataResult<UserToken?>.Fail("Не введнен номер телефона");
 
-        if (String.IsNullOrWhiteSpace(userRegistrationBlank.Password))
+        if (string.IsNullOrWhiteSpace(userRegistrationBlank.Password))
             return DataResult<UserToken?>.Fail("Не введнен пароль");
 
-        if (String.IsNullOrWhiteSpace(userRegistrationBlank.RePassword))
+        if (string.IsNullOrWhiteSpace(userRegistrationBlank.RePassword))
             return DataResult<UserToken?>.Fail("Не введнен повторно пароль");
 
         if (userRegistrationBlank.Password != userRegistrationBlank.RePassword)
@@ -98,10 +105,14 @@ public partial class UsersService : IUsersService // + Authentification
 
         Result savingUserTokenResult = SaveUserToken(userToken);
 
-        if (!savingUserTokenResult.IsSuccess) return DataResult<UserToken?>.Fail(savingUserTokenResult.Errors[0].Message);
+        if (!savingUserTokenResult.IsSuccess)
+            return DataResult<UserToken?>.Fail(savingUserTokenResult.Errors[0].Message);
 
         return DataResult<UserToken?>.Success(userToken);
     }
 
-    public void LogOut(String token) => _usersRepository.RemoveToken(token);
+    public void LogOut(string token)
+    {
+        _usersRepository.RemoveToken(token);
+    }
 }

@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { AuthLinks } from '../app/auth/authLinks';
-import { BidLinks } from '../app/bids/bidLinks';
-import { InfrastructureLinks } from '../app/infrastructure/components/infrastructureLinks';
-import { getCookie } from '../tools/types/cookie';
+import React, {useEffect} from 'react';
+import {useNavigate} from 'react-router-dom';
+import {AuthLinks} from '../app/auth/authLinks';
+import {BidLinks} from '../app/bids/bidLinks';
+import {InfrastructureLinks} from '../app/infrastructure/components/infrastructureLinks';
+import {getCookie} from '../tools/types/cookie';
 import Sidebar from '../tools/types/sidebar/sidebar';
 
 export const HomePage = () => {
@@ -24,6 +24,7 @@ export const HomePage = () => {
 
             navigate(Sidebar.items[0].url);
         }
+
         redirect();
     }, [])
 

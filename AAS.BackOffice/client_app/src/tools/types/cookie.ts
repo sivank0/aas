@@ -3,8 +3,7 @@ export enum CookieNames {
 }
 
 export const getCookie =
-    (name: string): string | null =>
-    { 
+    (name: string): string | null => {
         let matches = document.cookie.match(new RegExp(
             '(?:^|; )' + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + '=([^;]*)'
         ));
@@ -27,7 +26,9 @@ export const setCookie = (name: string, value: string, props: any = null) => {
 
     }
 
-    if (exp && exp.toUTCString) { props.expires = exp.toUTCString() }
+    if (exp && exp.toUTCString) {
+        props.expires = exp.toUTCString()
+    }
 
     value = encodeURIComponent(value);
 
@@ -39,7 +40,9 @@ export const setCookie = (name: string, value: string, props: any = null) => {
 
         var propValue = props[propName];
 
-        if (propValue !== true) { updatedCookie += '=' + propValue }
+        if (propValue !== true) {
+            updatedCookie += '=' + propValue
+        }
     }
 
     document.cookie = updatedCookie;

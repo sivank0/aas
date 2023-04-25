@@ -1,15 +1,31 @@
-import { Box, Button, Container, Divider, IconButton, Link, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import { User } from '../../domain/users/user';
-import { UsersProvider } from '../../domain/users/usersProvider';
+import {
+    Box,
+    Button,
+    Container,
+    Divider,
+    IconButton,
+    Link,
+    Paper,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Tooltip,
+    Typography
+} from '@mui/material';
+import React, {useEffect, useState} from 'react';
+import {User} from '../../domain/users/user';
+import {UsersProvider} from '../../domain/users/usersProvider';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import useDialog from '../../hooks/useDialog';
-import { UserEditorModal } from './userEditorModal';
-import { ConfirmDialogModal } from '../../sharedComponents/modals/modal';
-import { Password } from '@mui/icons-material';
-import { ChangePasswordModal } from './changePasswordModal';
+import {UserEditorModal} from './userEditorModal';
+import {ConfirmDialogModal} from '../../sharedComponents/modals/modal';
+import {Password} from '@mui/icons-material';
+import {ChangePasswordModal} from './changePasswordModal';
 import SystemUser from '../../domain/systemUser';
 
 export const UserProfile = () => {
@@ -26,17 +42,18 @@ export const UserProfile = () => {
             setUser(user!);
             setIsInit(true);
         }
+
         init();
     })
 
     function openUserEditorModal(userId: string | null) {
         if (userId === null) return;
-        userEditorModal.show({ userId });
+        userEditorModal.show({userId});
     }
 
     function openChangePasswordModal(userId: string | null) {
         if (userId === null) return;
-        changePasswordModal.show({ userId });
+        changePasswordModal.show({userId});
     }
 
     return (
@@ -47,7 +64,7 @@ export const UserProfile = () => {
             minHeight: '500px'
         }}>
             <Paper elevation={3}
-                sx={{ width: '560px' }}>
+                   sx={{width: '560px'}}>
                 <Box sx={{
                     padding: '10px'
                 }}>
@@ -62,10 +79,10 @@ export const UserProfile = () => {
                             Профиль
                         </Typography>
                         <IconButton onClick={() => openUserEditorModal(user?.id ?? null)}>
-                            <EditIcon />
+                            <EditIcon/>
                         </IconButton>
                     </Box>
-                    <Divider sx={{ marginY: 1 }} />
+                    <Divider sx={{marginY: 1}}/>
                     <Box sx={{
                         display: 'flex',
                         flexDirection: 'column'
@@ -108,7 +125,7 @@ export const UserProfile = () => {
                                 </Typography>
                             </Box>
                         }
-                        <Divider sx={{ marginY: 1 }} />
+                        <Divider sx={{marginY: 1}}/>
 
                         <Box sx={{
                             display: 'flex',
@@ -127,12 +144,12 @@ export const UserProfile = () => {
                             display: 'flex',
                             marginLeft: 'auto'
                         }}
-                            onClick={() => openChangePasswordModal(user?.id ?? null)}>
+                              onClick={() => openChangePasswordModal(user?.id ?? null)}>
                             Сменить пароль
                         </Link>
                     </Box>
                 </Box>
-            </Paper >
-        </Box >
+            </Paper>
+        </Box>
     )
 }

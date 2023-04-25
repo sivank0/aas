@@ -1,2 +1,3 @@
-﻿SELECT * FROM usertokens
+﻿SELECT *
+FROM usertokens
 WHERE token = @p_token;

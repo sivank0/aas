@@ -1,2 +1,3 @@
-﻿SELECT * FROM bids
+﻿SELECT *
+FROM bids
 WHERE id = @p_id

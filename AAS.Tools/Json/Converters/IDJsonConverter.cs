@@ -1,6 +1,10 @@
-﻿using AAS.Tools.Types.IDs;
+﻿#region
+
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using AAS.Tools.Types.IDs;
+
+#endregion
 
 namespace AAS.Tools.Json.Converters;
 

@@ -1,11 +1,12 @@
-import { ErrorData, mapToErrorData } from './errorData';
+import {ErrorData, mapToErrorData} from './errorData';
 
 export class Result {
     public isSuccess = this.errors.length === 0;
 
     constructor(
         public errors: ErrorData[]
-    ) { }
+    ) {
+    }
 
     public static success<T>(): Result {
         return new Result([]);

@@ -1,5 +1,5 @@
-import { Bid } from "./bid"
-import { BidStatus } from "./bidStatus"
+import {Bid} from "./bid"
+import {BidStatus} from "./bidStatus"
 
 export interface BidBlank {
     id: string | null,

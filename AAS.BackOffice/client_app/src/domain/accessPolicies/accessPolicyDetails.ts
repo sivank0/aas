@@ -4,7 +4,8 @@ export class AccessPolicyDetails {
         public readonly displayName: string,
         public readonly blockKey: number,
         public readonly blockDisplayName: string
-    ) { }
+    ) {
+    }
 }
 
 export function mapToAccessPolicyDetails(value: any): AccessPolicyDetails {

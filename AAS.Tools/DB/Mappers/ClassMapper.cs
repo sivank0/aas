@@ -1,13 +1,17 @@
-﻿using AAS.Tools.DB.Enums;
+﻿#region
+
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
 using System.Reflection;
+using AAS.Tools.DB.Enums;
+
+#endregion
 
 namespace AAS.Tools.DB.Mappers;
 
 class ClassMapper : IMapper
 {
-    public String TableName { get; }
+    public string TableName { get; }
 
     public MapperType Type => MapperType.Class;
 
@@ -21,17 +25,14 @@ class ClassMapper : IMapper
         TableName = type.GetCustomAttribute<TableAttribute>()?.Name;
         PropertyInfo[] properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
-        if (properties.Length == 0)
-        {
-            throw new ArgumentException("Count properties = 0");
-        }
+        if (properties.Length == 0) throw new ArgumentException("Count properties = 0");
 
         Properties = properties.Select(property => new PropertyMap(property)).ToArray();
     }
 
-    public Dictionary<Int32, PropertyInfo> Mappings(IDataRecord record)
+    public Dictionary<int, PropertyInfo> Mappings(IDataRecord record)
     {
-        IEnumerable<Int32> columns = Enumerable.Range(0, record.FieldCount);
+        IEnumerable<int> columns = Enumerable.Range(0, record.FieldCount);
         var properties = Properties
             .Select(x => new
             {

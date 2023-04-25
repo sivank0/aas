@@ -1,5 +1,9 @@
-﻿using AAS.Tools.Types;
+﻿#region
+
+using AAS.Tools.Types;
 using AAS.Tools.Types.IDs;
+
+#endregion
 
 namespace AAS.Tools.DB;
 
@@ -37,14 +41,8 @@ public static class MapperValue
             return elementType.GetArray(array);
         }
 
-        if (elementType == typeof(ID))
-        {
-            return ((Array)values).Cast<byte[]>().Select(x => new ID(x)).ToArray();
-        }
-        if (elementType == typeof(Jsonb))
-        {
-            return ((Array)values).Cast<Jsonb>().ToArray();
-        }
+        if (elementType == typeof(ID)) return ((Array)values).Cast<byte[]>().Select(x => new ID(x)).ToArray();
+        if (elementType == typeof(Jsonb)) return ((Array)values).Cast<Jsonb>().ToArray();
 
         return Convert.ChangeType(values, type);
     }

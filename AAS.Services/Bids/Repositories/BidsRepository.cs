@@ -1,4 +1,6 @@
-﻿using AAS.Domain.Bids;
+﻿#region
+
+using AAS.Domain.Bids;
 using AAS.Domain.Bids.Enums;
 using AAS.Services.Bids.Models;
 using AAS.Services.Bids.Repositories.Converters;
@@ -7,15 +9,21 @@ using AAS.Tools.DB;
 using AAS.Tools.Types.IDs;
 using AAS.Tools.Types.Results;
 
+#endregion
+
 namespace AAS.Services.Bids.Repositories;
 
 public class BidsRepository : NpgSqlRepository, IBidsRepository
 {
-    public BidsRepository(String connectionString) : base(connectionString) { }
+    public BidsRepository(string connectionString) : base(connectionString)
+    {
+    }
 
     public void SaveBid(BidBlank bidBlank, ID systemUserId)
     {
-        DateOnly? acceptanceDate = bidBlank.Status != BidStatus.AwaitingVerification ? DateOnly.FromDateTime(DateTime.UtcNow) : null;
+        DateOnly? acceptanceDate = bidBlank.Status != BidStatus.AwaitingVerification
+            ? DateOnly.FromDateTime(DateTime.UtcNow)
+            : null;
 
         SqlParameter[] parameters =
         {
@@ -29,7 +37,6 @@ public class BidsRepository : NpgSqlRepository, IBidsRepository
             new("p_status", bidBlank.Status!),
             new("p_systemuserid", systemUserId),
             new("p_currentdatetimeutc", DateTime.UtcNow)
-
         };
 
         Execute(Sql.Bids_Save, parameters);
@@ -39,14 +46,14 @@ public class BidsRepository : NpgSqlRepository, IBidsRepository
     {
         SqlParameter[] parameters =
         {
-            new("p_id", id),
+            new("p_id", id)
         };
         return Get<BidDb?>(Sql.Bids_GetById, parameters)?.ToBid();
     }
 
-    public PagedResult<Bid> GetPagedBids(Int32 page, Int32 count)
+    public PagedResult<Bid> GetPagedBids(int page, int count)
     {
-        (Int32 offset, Int32 limit) = NormalizeRange(page, count);
+        (int offset, int limit) = NormalizeRange(page, count);
 
         SqlParameter[] parameters =
         {
@@ -57,9 +64,9 @@ public class BidsRepository : NpgSqlRepository, IBidsRepository
         return GetPageOver<BidDb>(Sql.Bids_GetPaged, parameters).ToPagedBids();
     }
 
-    public Int32 GetBidsMaxNumber()
+    public int GetBidsMaxNumber()
     {
-        return Get<Int32>(Sql.Bids_GetMaxNumber);
+        return Get<int>(Sql.Bids_GetMaxNumber);
     }
 
     public void RemoveBid(ID bidId, ID systemUserId)

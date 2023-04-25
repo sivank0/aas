@@ -8,7 +8,7 @@
     }
   },
   "profiles": {
-    "IIS Express > Development": {
+    "AAS.BackOffice > Development": {
       "commandName": "IISExpress",
       "launchBrowser": false,
       "environmentVariables": {

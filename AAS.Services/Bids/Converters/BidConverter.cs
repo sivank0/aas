@@ -1,6 +1,10 @@
-﻿using AAS.Domain.Bids;
+﻿#region
+
+using AAS.Domain.Bids;
 using AAS.Services.Bids.Models;
 using AAS.Tools.Types.Results;
+
+#endregion
 
 namespace AAS.Services.Bids.Repositories.Converters;
 
@@ -11,7 +15,8 @@ public static class BidConverter
         DateOnly? acceptanceDate = db.AcceptanceDate != null ? DateOnly.FromDateTime(db.AcceptanceDate.Value) : null;
         DateOnly? approximateDate = db.ApproximateDate != null ? DateOnly.FromDateTime(db.ApproximateDate.Value) : null;
 
-        return new Bid(db.Id, db.Number, db.Title, db.Description, db.DenyDescription, db.Status, acceptanceDate, approximateDate, db.CreatedUserId);
+        return new Bid(db.Id, db.Number, db.Title, db.Description, db.DenyDescription, db.Status, acceptanceDate,
+            approximateDate, db.CreatedUserId);
     }
 
     public static Bid[] ToBids(this BidDb[] dbs)

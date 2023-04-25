@@ -1,6 +1,13 @@
-import { Autocomplete as MaterialAutocomplete, AutocompleteOwnerState, AutocompleteRenderGetTagProps, AutocompleteRenderOptionState, SxProps, TextField } from '@mui/material';
-import React, { useMemo } from 'react';
-import { newId } from '../../../tools/types/id';
+import {
+    Autocomplete as MaterialAutocomplete,
+    AutocompleteOwnerState,
+    AutocompleteRenderGetTagProps,
+    AutocompleteRenderOptionState,
+    SxProps,
+    TextField
+} from '@mui/material';
+import React, {useMemo} from 'react';
+import {newId} from '../../../tools/types/id';
 
 export interface IProps<TValue> {
     label?: string;
@@ -57,7 +64,7 @@ export function Autocomplete<TValue>(props: IProps<TValue>) {
                         ...params.inputProps,
                         autoComplete: 'new-password',
                         id: id,
-                    }} />
-            )} />
+                    }}/>
+            )}/>
     )
 }

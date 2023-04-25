@@ -1,17 +1,17 @@
-import { Box, Button } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import { User } from '../../domain/users/user';
-import { UsersProvider } from '../../domain/users/usersProvider';
-import { SaveButton } from '../../sharedComponents/buttons/button';
-import { InputForm } from '../../sharedComponents/inputs/inputForm';
-import { AsyncDialogProps } from '../../sharedComponents/modals/async/types';
-import { Modal, ModalActions, ModalBody, ModalTitle } from '../../sharedComponents/modals/modal';
+import {Box, Button} from '@mui/material';
+import React, {useEffect, useState} from 'react';
+import {User} from '../../domain/users/user';
+import {UsersProvider} from '../../domain/users/usersProvider';
+import {SaveButton} from '../../sharedComponents/buttons/button';
+import {InputForm} from '../../sharedComponents/inputs/inputForm';
+import {AsyncDialogProps} from '../../sharedComponents/modals/async/types';
+import {Modal, ModalActions, ModalBody, ModalTitle} from '../../sharedComponents/modals/modal';
 
 interface Props {
     userId: string | null;
 }
 
-export const ChangePasswordModal: React.FC<AsyncDialogProps<Props, boolean>> = ({ open, handleClose, data: props }) => {
+export const ChangePasswordModal: React.FC<AsyncDialogProps<Props, boolean>> = ({open, handleClose, data: props}) => {
     const [user, setUser] = useState<User | null>(null);
     const [password, setPassword] = useState<string | null>(null);
     const [rePassword, setRePassword] = useState<string | null>(null);
@@ -57,7 +57,7 @@ export const ChangePasswordModal: React.FC<AsyncDialogProps<Props, boolean>> = (
             <ModalTitle onClose={handleClose}>
                 Изменение пароля пользователя {user?.fullName}
             </ModalTitle>
-            <ModalBody sx={{ width: 500 }}>
+            <ModalBody sx={{width: 500}}>
                 <Box sx={{
                     display: 'flex',
                     gap: 1.5,
@@ -68,19 +68,19 @@ export const ChangePasswordModal: React.FC<AsyncDialogProps<Props, boolean>> = (
                         label='Пароль'
                         placeholder='Введите пароль'
                         value={password}
-                        onChange={(password) => setPassword(password)} />
+                        onChange={(password) => setPassword(password)}/>
                     <InputForm
                         type="password"
                         label='Повтор пароля'
                         placeholder='Повторите пароль'
                         value={rePassword}
-                        onChange={(rePassword) => setRePassword(rePassword)} />
+                        onChange={(rePassword) => setRePassword(rePassword)}/>
                 </Box>
             </ModalBody>
             <ModalActions>
                 <SaveButton
                     variant="contained"
-                    onClick={() => changeUserPassword()} />
+                    onClick={() => changeUserPassword()}/>
             </ModalActions>
         </Modal>
     )

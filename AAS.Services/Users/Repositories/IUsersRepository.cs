@@ -1,8 +1,11 @@
-﻿using AAS.Domain.Users;
+﻿#region
+
+using AAS.Domain.Users;
 using AAS.Domain.Users.Permissions;
 using AAS.Domain.Users.Roles;
 using AAS.Tools.Types.IDs;
-using AAS.Tools.Types.Results;
+
+#endregion
 
 namespace AAS.Services.Users.Repositories;
 
@@ -13,9 +16,9 @@ public interface IUsersRepository
     public void SaveUser(UserBlank userBlank, ID systemUserId);
     public void RegisterUser(UserRegistrationBlank userRegistrationBlank);
     public User? GetUser(ID id);
-    public User? GetUser(String email, String? passwordHash = null);
+    public User? GetUser(string email, string? passwordHash = null);
     public User[] GetUsers();
-    public void ChangeUserPassword(ID userId, String passwordHash, ID systemUserId);
+    public void ChangeUserPassword(ID userId, string passwordHash, ID systemUserId);
     public void RemoveUser(ID userId, ID systemUserId);
 
     #endregion
@@ -39,8 +42,8 @@ public interface IUsersRepository
     #region UserTokens
 
     public void SaveUserToken(UserToken userToken);
-    public UserToken? GetUserToken(String token);
-    public void RemoveToken(String token);
+    public UserToken? GetUserToken(string token);
+    public void RemoveToken(string token);
 
     #endregion
 }

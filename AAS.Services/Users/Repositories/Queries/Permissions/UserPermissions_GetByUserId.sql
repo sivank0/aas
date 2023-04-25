@@ -1,2 +1,3 @@
-﻿SELECT * FROM userpermissions
+﻿SELECT *
+FROM userpermissions
 WHERE userid = @p_userid

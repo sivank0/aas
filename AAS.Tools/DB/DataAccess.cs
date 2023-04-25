@@ -1,12 +1,16 @@
-﻿using AAS.Tools.DB.Common;
-using AAS.Tools.DB.Enums;
-using AAS.Tools.DB.Mappers;
-using AAS.Tools.Extensions;
-using AAS.Tools.Types.Results;
+﻿#region
+
 using System.Collections.Concurrent;
 using System.Data;
 using System.Dynamic;
 using System.Reflection;
+using AAS.Tools.DB.Common;
+using AAS.Tools.DB.Enums;
+using AAS.Tools.DB.Mappers;
+using AAS.Tools.Extensions;
+using AAS.Tools.Types.Results;
+
+#endregion
 
 namespace AAS.Tools.DB;
 
@@ -17,7 +21,8 @@ public class DataAccess : IDataAccess
     private IDbTransaction Transaction { get; }
 
 
-    internal DataAccess(IDbConnection connection, IDbTransaction transaction = null, ConcurrentDictionary<Type, IMapper> mappers = null)
+    internal DataAccess(IDbConnection connection, IDbTransaction transaction = null,
+        ConcurrentDictionary<Type, IMapper> mappers = null)
     {
         Mappers = mappers ?? new ConcurrentDictionary<Type, IMapper>();
         Connection = connection;
@@ -26,19 +31,12 @@ public class DataAccess : IDataAccess
 
     private IMapper GetAndSetMapperType(Type type)
     {
-        if (Mappers.TryGetValue(type, out IMapper mapperType))
-        {
-            return mapperType;
-        }
+        if (Mappers.TryGetValue(type, out IMapper mapperType)) return mapperType;
 
         if (ReflectionHelper.IsSimpleType(type))
-        {
             mapperType = new SimpleTypeMapper(type);
-        }
         else
-        {
             mapperType = new ClassMapper(type);
-        }
 
         Mappers[type] = mapperType;
 
@@ -56,7 +54,6 @@ public class DataAccess : IDataAccess
             command.CommandText = sql;
             command.Prepare();
             return command.ExecuteNonQuery();
-
         }, Transaction);
     }
 
@@ -64,9 +61,7 @@ public class DataAccess : IDataAccess
     {
         List<SqlParameter> sqlParameters = new();
         foreach (PropertyInfo property in parameters.GetType().GetProperties())
-        {
             sqlParameters.Add(new SqlParameter($"p_{property.Name.ToCamelCase()}", property.GetValue(parameters)));
-        }
 
         return Execute(sql, sqlParameters, commandType);
     }
@@ -82,24 +77,24 @@ public class DataAccess : IDataAccess
     public T Get<T>(string sql, IList<SqlParameter> parameters = null, CommandType commandType = CommandType.Text)
     {
         return Connection.ExecuteCommand(command =>
-    {
-        if (parameters != null)
-            command.AddParameters(parameters);
-
-        command.CommandType = commandType;
-        command.CommandText = sql;
-        command.Prepare();
-
-        using (IDataReader dataReader = command.ExecuteReader())
         {
-            IMapper mapper = GetAndSetMapperType(typeof(T));
-            return dataReader.GetValue<T>(mapper);
-        }
+            if (parameters != null)
+                command.AddParameters(parameters);
 
-    }, Transaction);
+            command.CommandType = commandType;
+            command.CommandText = sql;
+            command.Prepare();
+
+            using (IDataReader dataReader = command.ExecuteReader())
+            {
+                IMapper mapper = GetAndSetMapperType(typeof(T));
+                return dataReader.GetValue<T>(mapper);
+            }
+        }, Transaction);
     }
 
-    public List<T> GetList<T>(string sql, IList<SqlParameter> parameters = null, CommandType commandType = CommandType.Text)
+    public List<T> GetList<T>(string sql, IList<SqlParameter> parameters = null,
+        CommandType commandType = CommandType.Text)
     {
         return Connection.ExecuteCommand(command =>
         {
@@ -115,11 +110,11 @@ public class DataAccess : IDataAccess
                 IMapper mapper = GetAndSetMapperType(typeof(T));
                 return dataReader.GetList<T>(mapper);
             }
-
         }, Transaction);
     }
 
-    public PagedResult<T> GetPageOver<T>(string sql, IList<SqlParameter> parameters = null, CommandType commandType = CommandType.Text)
+    public PagedResult<T> GetPageOver<T>(string sql, IList<SqlParameter> parameters = null,
+        CommandType commandType = CommandType.Text)
     {
         IMapper dataType = GetAndSetMapperType(typeof(T));
 
@@ -140,7 +135,8 @@ public class DataAccess : IDataAccess
         });
     }
 
-    public PagedResult<T> GetPage<T>(string sql, IList<SqlParameter> parameters = null, CommandType commandType = CommandType.Text)
+    public PagedResult<T> GetPage<T>(string sql, IList<SqlParameter> parameters = null,
+        CommandType commandType = CommandType.Text)
     {
         IMapper dataType = GetAndSetMapperType(typeof(T));
         IMapper dataTypeInt = GetAndSetMapperType(typeof(long));
@@ -165,7 +161,8 @@ public class DataAccess : IDataAccess
         });
     }
 
-    public Dictionary<TKey, TValue> GetDictionary<TKey, TValue>(string sql, IList<SqlParameter> parameters = null, CommandType commandType = CommandType.Text)
+    public Dictionary<TKey, TValue> GetDictionary<TKey, TValue>(string sql, IList<SqlParameter> parameters = null,
+        CommandType commandType = CommandType.Text)
     {
         return Connection.ExecuteCommand(command =>
         {
@@ -203,7 +200,6 @@ public class DataAccess : IDataAccess
             command.CommandText = mapper.CreateInsertCommand();
             command.Prepare();
             command.ExecuteNonQuery();
-
         }, Transaction);
     }
 
@@ -211,7 +207,8 @@ public class DataAccess : IDataAccess
     {
         if (values == null) throw new ArgumentNullException(nameof(values), "value is null");
         if (values.Count == 0) return;
-        if (values.Any(value => value == null)) throw new ArgumentNullException(nameof(values), "values contains null value");
+        if (values.Any(value => value == null))
+            throw new ArgumentNullException(nameof(values), "values contains null value");
 
         ClassMapper mapper = GetAndSetMapperType(typeof(T)) as ClassMapper;
 
@@ -224,7 +221,6 @@ public class DataAccess : IDataAccess
                 command.AddParametersForInsert(value, mapper);
                 ExecuteNonQuery(command);
             }
-
         }, Transaction);
     }
 
@@ -240,7 +236,6 @@ public class DataAccess : IDataAccess
             command.CommandText = mapper.CreateUpdateCommand();
             command.Prepare();
             command.ExecuteNonQuery();
-
         }, Transaction);
     }
 
@@ -248,7 +243,8 @@ public class DataAccess : IDataAccess
     {
         if (values == null) throw new ArgumentNullException(nameof(values), "value is null");
         if (values.Count == 0) return;
-        if (values.Any(value => value == null)) throw new ArgumentNullException(nameof(values), "values contains null value");
+        if (values.Any(value => value == null))
+            throw new ArgumentNullException(nameof(values), "values contains null value");
 
         ClassMapper mapper = GetAndSetMapperType(typeof(T)) as ClassMapper;
 
@@ -261,7 +257,6 @@ public class DataAccess : IDataAccess
                 command.AddParametersForUpdate(value, mapper);
                 ExecuteNonQuery(command);
             }
-
         }, Transaction);
     }
 
@@ -274,7 +269,6 @@ public class DataAccess : IDataAccess
 
         Connection.ExecuteCommand(command =>
         {
-
             if (values.ContainsKey(DataCommandType.Add))
             {
                 command.CommandText = mapper.CreateInsertCommand();
@@ -333,7 +327,6 @@ public class DataAccess : IDataAccess
             command.CommandText = mapper.CreateRemoveByUpdateCommand();
             command.Prepare();
             command.ExecuteNonQuery();
-
         }, Transaction);
     }
 
@@ -341,7 +334,8 @@ public class DataAccess : IDataAccess
     {
         if (values == null) throw new ArgumentNullException(nameof(values), "values is null");
         if (values.Count == 0) return;
-        if (values.Any(value => value == null)) throw new ArgumentNullException(nameof(values), "values contains null value");
+        if (values.Any(value => value == null))
+            throw new ArgumentNullException(nameof(values), "values contains null value");
 
         ClassMapper mapper = GetAndSetMapperType(typeof(T)) as ClassMapper;
 
@@ -354,7 +348,6 @@ public class DataAccess : IDataAccess
                 command.AddParametersForRemoveByUpdate(value, mapper);
                 ExecuteNonQuery(command);
             }
-
         }, Transaction);
     }
 
@@ -365,4 +358,3 @@ public class DataAccess : IDataAccess
         GC.SuppressFinalize(this);
     }
 }
-

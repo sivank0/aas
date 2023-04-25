@@ -1,2 +1,3 @@
-﻿DELETE FROM usertokens
+﻿DELETE
+FROM usertokens
 WHERE token = @p_token;

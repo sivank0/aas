@@ -1,6 +1,6 @@
-import { useContext, useEffect, useRef } from "react";
+import {useContext, useEffect, useRef} from "react";
 import DialogContext from "../sharedComponents/modals/async/DialogContext";
-import { DialogComponent } from "../sharedComponents/modals/async/types";
+import {DialogComponent} from "../sharedComponents/modals/async/types";
 
 const useDialog = <D, R>(component: DialogComponent<D, R>) => {
     const id = useRef<string>();
@@ -9,7 +9,9 @@ const useDialog = <D, R>(component: DialogComponent<D, R>) => {
 
     useEffect(() => {
         id.current = ctx.register(component)
-        return () => { if (id.current) ctx.unregister(id.current) }
+        return () => {
+            if (id.current) ctx.unregister(id.current)
+        }
     }, [])
 
     const show = async (data: D): Promise<R> => {

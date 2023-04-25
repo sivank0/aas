@@ -1,9 +1,13 @@
-﻿using AAS.Domain.Bids;
+﻿#region
+
+using AAS.Domain.Bids;
 using AAS.Domain.Bids.Enums;
 using AAS.Domain.Services;
 using AAS.Services.Bids.Repositories;
 using AAS.Tools.Types.IDs;
 using AAS.Tools.Types.Results;
+
+#endregion
 
 namespace AAS.Services.Bids;
 
@@ -18,10 +22,10 @@ public class BidsService : IBidsService
 
     public Result SaveBid(BidBlank bidBlank, ID systemUserId)
     {
-        if (String.IsNullOrWhiteSpace(bidBlank.Title))
+        if (string.IsNullOrWhiteSpace(bidBlank.Title))
             return Result.Fail("Не введен заголовок заявки");
 
-        if (bidBlank.Status == BidStatus.Denied && String.IsNullOrWhiteSpace(bidBlank.DenyDescription))
+        if (bidBlank.Status == BidStatus.Denied && string.IsNullOrWhiteSpace(bidBlank.DenyDescription))
             return Result.Fail("Не введена причина отказа");
 
         bidBlank.Id ??= ID.New();
@@ -36,12 +40,12 @@ public class BidsService : IBidsService
         return _bidsRepository.GetBid(id);
     }
 
-    public PagedResult<Bid> GetPagedBids(Int32 page, Int32 count)
+    public PagedResult<Bid> GetPagedBids(int page, int count)
     {
         return _bidsRepository.GetPagedBids(page, count);
     }
 
-    public Int32 GetBidsMaxNumber()
+    public int GetBidsMaxNumber()
     {
         return _bidsRepository.GetBidsMaxNumber();
     }

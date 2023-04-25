@@ -1,8 +1,7 @@
-﻿namespace AAS.Tools.DB.Enums
+﻿namespace AAS.Tools.DB.Enums;
+
+internal enum MapperType
 {
-    internal enum MapperType
-    {
-        Class = 1,
-        SimpleType = 2
-    }
+    Class = 1,
+    SimpleType = 2
 }

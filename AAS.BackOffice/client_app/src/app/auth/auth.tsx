@@ -1,10 +1,10 @@
-import { Box, Button, Link, Paper, Typography } from '@mui/material';
-import { Container } from '@mui/system';
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { AuthenticationProvider } from '../../domain/users/usersProvider';
-import { InputForm } from '../../sharedComponents/inputs/inputForm';
-import { AuthLinks } from './authLinks';
+import {Box, Button, Link, Paper, Typography} from '@mui/material';
+import {Container} from '@mui/system';
+import React, {useState} from 'react';
+import {useNavigate} from 'react-router-dom';
+import {AuthenticationProvider} from '../../domain/users/usersProvider';
+import {InputForm} from '../../sharedComponents/inputs/inputForm';
+import {AuthLinks} from './authLinks';
 
 export const Auth = () => {
     const [email, setEmail] = useState<string | null>(null);
@@ -22,11 +22,11 @@ export const Auth = () => {
 
     return (
         <Container maxWidth={false}
-            sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                height: '100%',
-            }}>
+                   sx={{
+                       display: 'flex',
+                       flexDirection: 'column',
+                       height: '100%',
+                   }}>
             <Paper
                 elevation={3}
                 sx={{
@@ -45,22 +45,22 @@ export const Auth = () => {
                     label="Email"
                     placeholder="Введите email"
                     value={email}
-                    onChange={(email) => setEmail(email)} />
+                    onChange={(email) => setEmail(email)}/>
                 <InputForm
                     type="password"
                     label="Пароль"
                     placeholder="Введите пароль"
                     value={password}
-                    onChange={(password) => setPassword(password)} />
+                    onChange={(password) => setPassword(password)}/>
                 <Button variant="outlined" onClick={logIn}>
                     Войти
                 </Button>
                 <Link onClick={() => navigate(AuthLinks.registration)}
-                    sx={{
-                        fontSize: '15px',
-                        width: '30%',
-                        marginLeft: '79%'
-                    }}>
+                      sx={{
+                          fontSize: '15px',
+                          width: '30%',
+                          marginLeft: '79%'
+                      }}>
                     Регистрация
                 </Link>
             </Paper>

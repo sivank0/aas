@@ -3,11 +3,12 @@
 internal enum KeyType
 {
     /// <summary>
-    /// Обычное свойство
+    ///     Обычное свойство
     /// </summary>
     NotAKey,
+
     /// <summary>
-    /// Идентификатор
+    ///     Идентификатор
     /// </summary>
     Identity
 }

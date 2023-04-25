@@ -1,11 +1,15 @@
+#region
+
+using System.Net;
 using AAS.BackOffice.Infrastructure;
 using AAS.Domain.AccessPolicies;
 using AAS.Domain.Services;
+using AAS.Domain.Users.SystemUsers;
 using AAS.Tools.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using AAS.Domain.Users.SystemUsers;
-using System.Net;
+
+#endregion
 
 namespace AAS.BackOffice.Filters;
 
@@ -13,6 +17,7 @@ namespace AAS.BackOffice.Filters;
 internal class IsAuthorizedAttribute : ActionFilterAttribute
 {
     public AccessPolicy[] AccessPolicies;
+
     internal IsAuthorizedAttribute(params AccessPolicy[] policies)
     {
         AccessPolicies = policies;
@@ -80,9 +85,13 @@ internal class IsAuthorizedAttribute : ActionFilterAttribute
         context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
     }
 
-    private class UnauthenticatedException : Exception { }
+    private class UnauthenticatedException : Exception
+    {
+    }
 
-    private class UnauthorizedException : Exception { }
+    private class UnauthorizedException : Exception
+    {
+    }
 }
 
 public class IsAuthorizedFilter : IActionFilter

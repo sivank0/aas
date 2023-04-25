@@ -1,17 +1,21 @@
-﻿using AAS.Tools.DB.Mappers;
-using AAS.Tools.Types;
-using AAS.Tools.Types.Results;
-using Npgsql;
+﻿#region
+
 using System.Collections.Concurrent;
 using System.Data;
 using System.Dynamic;
+using AAS.Tools.DB.Mappers;
+using AAS.Tools.Types;
+using AAS.Tools.Types.Results;
+using Npgsql;
+
+#endregion
 
 namespace AAS.Tools.DB;
 
 public class NpgSqlRepository
 {
     private string ConnectionString { get; }
-    private readonly ConcurrentDictionary<Type, IMapper> _mappers = new ConcurrentDictionary<Type, IMapper>();
+    private readonly ConcurrentDictionary<Type, IMapper> _mappers = new();
 
     public NpgSqlRepository(string connectionString = null)
     {
@@ -47,17 +51,20 @@ public class NpgSqlRepository
         return Execution(command => command.Get<T>(sql, parameters, commandType));
     }
 
-    protected T[] GetArray<T>(string sql, IList<SqlParameter> parameters = null, CommandType commandType = CommandType.Text)
+    protected T[] GetArray<T>(string sql, IList<SqlParameter> parameters = null,
+        CommandType commandType = CommandType.Text)
     {
         return Execution(command => command.GetList<T>(sql, parameters, commandType)).ToArray();
     }
 
-    protected PagedResult<T> GetPageOver<T>(string sql, IList<SqlParameter> parameters = null, CommandType commandType = CommandType.Text)
+    protected PagedResult<T> GetPageOver<T>(string sql, IList<SqlParameter> parameters = null,
+        CommandType commandType = CommandType.Text)
     {
         return Execution(command => command.GetPageOver<T>(sql, parameters, commandType));
     }
 
-    protected Dictionary<TKey, TValue> GetDictionary<TKey, TValue>(string sql, IList<SqlParameter> parameters = null, CommandType commandType = CommandType.Text)
+    protected Dictionary<TKey, TValue> GetDictionary<TKey, TValue>(string sql, IList<SqlParameter> parameters = null,
+        CommandType commandType = CommandType.Text)
     {
         return Execution(command => command.GetDictionary<TKey, TValue>(sql, parameters, commandType));
     }
@@ -108,7 +115,6 @@ public class NpgSqlRepository
                     transaction.Rollback();
                     throw;
                 }
-
             }
         }
     }
@@ -133,7 +139,6 @@ public class NpgSqlRepository
                     transaction.Rollback();
                     throw;
                 }
-
             }
         }
     }

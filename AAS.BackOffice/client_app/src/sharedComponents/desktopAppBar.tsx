@@ -6,19 +6,19 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import SystemUser from '../domain/systemUser';
-import { useEffect, useMemo, useState } from 'react';
-import { UserRole } from '../domain/users/roles/userRole';
-import { AuthenticationProvider, UsersProvider } from '../domain/users/usersProvider';
-import { Sidebar } from './sidebar/sidebar';
-import { default as SidebarModel } from '../tools/types/sidebar/sidebar';
-import { Button, Link, Menu, MenuItem } from '@mui/material';
-import { BrowserType } from '../tools/browserType';
+import {useEffect, useMemo, useState} from 'react';
+import {UserRole} from '../domain/users/roles/userRole';
+import {AuthenticationProvider, UsersProvider} from '../domain/users/usersProvider';
+import {Sidebar} from './sidebar/sidebar';
+import {default as SidebarModel} from '../tools/types/sidebar/sidebar';
+import {Button, Link, Menu, MenuItem} from '@mui/material';
+import {BrowserType} from '../tools/browserType';
 import PersonIcon from '@mui/icons-material/Person';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { useNavigate } from 'react-router-dom';
-import { UserLinks } from '../app/users/userLinks';
+import {useNavigate} from 'react-router-dom';
+import {UserLinks} from '../app/users/userLinks';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
-import { ThemeMode } from './themeMode';
+import {ThemeMode} from './themeMode';
 
 interface Props {
     themeMode: ThemeMode,
@@ -33,7 +33,7 @@ type MenuState = {
 export const DesktopAppBar = (props: Props) => {
     const [userRole, setUserRole] = useState<UserRole | null>(null);
     const [isSidebarUncollapsed, setIsSidebarUncollapsed] = useState<boolean>(false);
-    const [menuState, setMenuState] = useState<MenuState>({ isOpen: false, achorEl: null });
+    const [menuState, setMenuState] = useState<MenuState>({isOpen: false, achorEl: null});
 
     const isShowSidebar = useMemo(() => SidebarModel.items.length !== 0, [SidebarModel])
 
@@ -44,13 +44,14 @@ export const DesktopAppBar = (props: Props) => {
             const userRole = await UsersProvider.getUserRole(SystemUser.id);
             setUserRole(userRole);
         }
+
         init();
     }, [])
 
     function changeMenuState(isOpen: boolean = false, event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null = null) {
         const achorEl = event?.currentTarget ?? null;
 
-        setMenuState({ isOpen, achorEl });
+        setMenuState({isOpen, achorEl});
     }
 
     function navigateToProfile() {
@@ -59,8 +60,10 @@ export const DesktopAppBar = (props: Props) => {
 
     function changeThemeMode(mode: ThemeMode) {
         switch (mode) {
-            case ThemeMode.Dark: return props.changeThemeMode(ThemeMode.Light)
-            case ThemeMode.Light: return props.changeThemeMode(ThemeMode.Dark)
+            case ThemeMode.Dark:
+                return props.changeThemeMode(ThemeMode.Light)
+            case ThemeMode.Light:
+                return props.changeThemeMode(ThemeMode.Dark)
         }
     }
 
@@ -71,8 +74,8 @@ export const DesktopAppBar = (props: Props) => {
     }
 
     return (
-        <Box sx={{ flexGrow: 1 }}>
-            <AppBar sx={{ zIndex: 3, height: 65 }}>
+        <Box sx={{flexGrow: 1}}>
+            <AppBar sx={{zIndex: 3, height: 65}}>
                 <Toolbar>
                     {
                         isShowSidebar &&
@@ -81,12 +84,12 @@ export const DesktopAppBar = (props: Props) => {
                             edge="start"
                             color="inherit"
                             aria-label="menu"
-                            sx={{ mr: 2 }}
-                            onClick={() => setIsSidebarUncollapsed(!isSidebarUncollapsed)} >
-                            <MenuIcon />
+                            sx={{mr: 2}}
+                            onClick={() => setIsSidebarUncollapsed(!isSidebarUncollapsed)}>
+                            <MenuIcon/>
                         </IconButton>
                     }
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                    <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
                         Система приема заявок
                     </Typography>
                     <Box sx={{
@@ -102,10 +105,10 @@ export const DesktopAppBar = (props: Props) => {
                                     marginRight: '10px',
                                     color: 'white'
                                 }}>
-                                <Typography sx={{ textTransform: "none" }}>
+                                <Typography sx={{textTransform: "none"}}>
                                     {SystemUser.fullName}
                                 </Typography>
-                                <Typography sx={{ textTransform: "none" }}>
+                                <Typography sx={{textTransform: "none"}}>
                                     {userRole?.name}
                                 </Typography>
                             </Box>
@@ -122,7 +125,7 @@ export const DesktopAppBar = (props: Props) => {
                 isShowSidebar &&
                 <Sidebar
                     isSidebarUncollapsed={isSidebarUncollapsed}
-                    changeIsNavigationOpen={(isUnCollapsed) => setIsSidebarUncollapsed(isUnCollapsed)} />
+                    changeIsNavigationOpen={(isUnCollapsed) => setIsSidebarUncollapsed(isUnCollapsed)}/>
             }
             <Menu
                 keepMounted
@@ -147,13 +150,13 @@ export const DesktopAppBar = (props: Props) => {
                     textDecoration: "none",
                     color: "inherit"
                 }}>
-                    <MenuItem sx={{ gap: 1 }}>
-                        <PersonIcon />
+                    <MenuItem sx={{gap: 1}}>
+                        <PersonIcon/>
                         <Typography component="span">Профиль</Typography>
                     </MenuItem>
                 </Link>
-                <MenuItem onClick={logOut} sx={{ gap: 1 }}>
-                    <LogoutIcon />
+                <MenuItem onClick={logOut} sx={{gap: 1}}>
+                    <LogoutIcon/>
                     <Typography component="span">Выйти</Typography>
                 </MenuItem>
             </Menu>

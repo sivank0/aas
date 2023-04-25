@@ -1,5 +1,5 @@
-import { SxProps, TextField, Theme } from '@mui/material';
-import React, { ChangeEvent } from 'react';
+import {SxProps, TextField, Theme} from '@mui/material';
+import React, {ChangeEvent} from 'react';
 
 export interface IProps {
     label?: string;

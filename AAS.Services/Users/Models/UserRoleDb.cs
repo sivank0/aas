@@ -1,12 +1,16 @@
-﻿using AAS.Domain.AccessPolicies;
+﻿#region
+
+using AAS.Domain.AccessPolicies;
 using AAS.Tools.Types.IDs;
+
+#endregion
 
 namespace AAS.Services.Users.Models;
 
 public class UserRoleDb
 {
     public ID Id { get; set; }
-    public String Name { get; set; }
+    public string Name { get; set; }
     public AccessPolicy[] AccessPolicies { get; set; }
 
     public ID CreatedUserId { get; set; }
@@ -15,9 +19,10 @@ public class UserRoleDb
     public ID ModifiedUserId { get; set; }
     public DateTime ModifiedDateTimeUtc { get; set; }
 
-    public Boolean IsRemoved { get; set; }
+    public bool IsRemoved { get; set; }
 
-    public UserRoleDb(ID id, string name, AccessPolicy[] accessPolicies, ID createdUserId, DateTime createdDateTimeUtc, ID modifiedUserId, DateTime modifiedDateTimeUtc, bool isRemoved)
+    public UserRoleDb(ID id, string name, AccessPolicy[] accessPolicies, ID createdUserId, DateTime createdDateTimeUtc,
+        ID modifiedUserId, DateTime modifiedDateTimeUtc, bool isRemoved)
     {
         Id = id;
         Name = name;

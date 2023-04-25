@@ -1,7 +1,11 @@
-using AAS.Domain.AccessPolicies;
+#region
+
 using AAS.BackOffice.Areas.Infrastructure.Models;
+using AAS.Domain.AccessPolicies;
 using AAS.Domain.Users.SystemUsers;
 using static AAS.BackOffice.Infrastructure.Sidebars.SidebarItem;
+
+#endregion
 
 namespace AAS.BackOffice.Infrastructure.Sidebars;
 
@@ -9,9 +13,9 @@ public static class Sidebar
 {
     private static readonly SidebarItem[] LinkItems =
     {
-        ListItem(text: "Пользователи", url: "/users", iconType: SideBarIconType.Users, policy: AccessPolicy.UsersRead),
-        ListItem(text: "Заявки", url: "/bids", iconType: SideBarIconType.Bids, policy: AccessPolicy.BidsRead),
-        ListItem(text: "Роли пользователей", url: "/user_roles", iconType: SideBarIconType.UserRoles, policy: AccessPolicy.UserRolesUpdate),
+        ListItem("Пользователи", "/users", SideBarIconType.Users, AccessPolicy.UsersRead),
+        ListItem("Заявки", "/bids", SideBarIconType.Bids, AccessPolicy.BidsRead),
+        ListItem("Роли пользователей", "/user_roles", SideBarIconType.UserRoles, AccessPolicy.UserRolesUpdate)
     };
 
     public static SidebarItem[] GetLinksTree(SystemUser? systemUser)

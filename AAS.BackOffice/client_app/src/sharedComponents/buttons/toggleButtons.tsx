@@ -1,4 +1,4 @@
-import { Box, Typography, ToggleButtonGroup, ToggleButton } from '@mui/material';
+import {Box, Typography, ToggleButtonGroup, ToggleButton} from '@mui/material';
 import React from 'react';
 
 interface Props<TValue> {
@@ -18,10 +18,14 @@ export function ToggleButtons<TValue>(props: Props<TValue>) {
     }
 
     return (
-        <Box sx={{ width: "100%" }}>
+        <Box sx={{width: "100%"}}>
             {
                 props.label &&
-                <Typography sx={theme => ({ fontSize: 14, marginBottom: 0.3, color: theme.palette.grey[700] })}>{props.label}</Typography>
+                <Typography sx={theme => ({
+                    fontSize: 14,
+                    marginBottom: 0.3,
+                    color: theme.palette.grey[700]
+                })}>{props.label}</Typography>
             }
             <ToggleButtonGroup
                 size={props.size}
@@ -37,7 +41,7 @@ export function ToggleButtons<TValue>(props: Props<TValue>) {
                     props.options.map((option, key) =>
                         <ToggleButton
                             key={key}
-                            value={option} >
+                            value={option}>
                             {props.getOptionLabel(option)}
                         </ToggleButton>
                     )

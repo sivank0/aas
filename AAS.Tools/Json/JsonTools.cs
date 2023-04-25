@@ -1,13 +1,17 @@
-﻿using AAS.Tools.Json.Converters;
+﻿#region
+
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using AAS.Tools.Json.Converters;
+
+#endregion
 
 namespace AAS.Tools.Json;
 
 public static class JsonTools
 {
-    public static JsonSerializerOptions DefaultOptions { get; set; } = AddJsonSettings(new());
+    public static JsonSerializerOptions DefaultOptions { get; set; } = AddJsonSettings(new JsonSerializerOptions());
 
     public static JsonSerializerOptions Options = new();
 

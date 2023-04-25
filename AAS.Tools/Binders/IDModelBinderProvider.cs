@@ -1,16 +1,18 @@
-﻿using AAS.Tools.Binders;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
+﻿#region
+
 using AAS.Tools.Types.IDs;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace AAS.Tools.Binders
+#endregion
+
+namespace AAS.Tools.Binders;
+
+public class IDModelBinderProvider : IModelBinderProvider
 {
-    public class IDModelBinderProvider : IModelBinderProvider
-    {
-        private readonly IDModelBinder _binder = new();
+    private readonly IDModelBinder _binder = new();
 
-        public IModelBinder? GetBinder(ModelBinderProviderContext context)
-        {
-            return (context.Metadata.ModelType == typeof(ID) || context.Metadata.ModelType == typeof(ID?)) ? _binder : null;
-        }
+    public IModelBinder? GetBinder(ModelBinderProviderContext context)
+    {
+        return context.Metadata.ModelType == typeof(ID) || context.Metadata.ModelType == typeof(ID?) ? _binder : null;
     }
 }

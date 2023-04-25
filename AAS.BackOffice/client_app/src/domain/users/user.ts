@@ -7,7 +7,8 @@ export class User {
         public readonly fullName: string,
         public readonly email: string,
         public readonly phoneNumber: string
-    ) { }
+    ) {
+    }
 }
 
 export function toUser(value: any): User {
@@ -21,6 +22,7 @@ export function toUser(value: any): User {
         value.phoneNumber
     )
 }
+
 export function toUsers(values: any[]): User[] {
     return values.map(toUser);
 }

@@ -1,12 +1,16 @@
-﻿using AAS.Domain.Bids.Enums;
+﻿#region
+
+using AAS.Domain.Bids.Enums;
 using AAS.Tools.Types.IDs;
+
+#endregion
 
 namespace AAS.Domain.Bids;
 
 public class Bid
 {
     public ID Id { get; }
-    public Int32 Number { get; }
+    public int Number { get; }
     public string Title { get; }
     public string? Description { get; }
     public string? DenyDescription { get; }
@@ -15,7 +19,8 @@ public class Bid
     public DateOnly? ApproximateDate { get; }
     public ID CreatedUserId { get; }
 
-    public Bid(ID id, Int32 number, string title, string? description, string? denyDescription, BidStatus status, DateOnly? acceptanceDate, DateOnly? approximateDate, ID createdUserId)
+    public Bid(ID id, int number, string title, string? description, string? denyDescription, BidStatus status,
+        DateOnly? acceptanceDate, DateOnly? approximateDate, ID createdUserId)
     {
         Id = id;
         Number = number;

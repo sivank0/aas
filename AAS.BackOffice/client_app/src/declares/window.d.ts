@@ -1,6 +1,6 @@
-import { BrowserType } from "../tools/browserType"
+import {BrowserType} from "../tools/browserType"
 
-export { }
+export {}
 
 declare global {
     interface Window {

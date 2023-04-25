@@ -1,11 +1,15 @@
-﻿using AAS.Tools.Types.IDs;
+﻿#region
+
+using AAS.Tools.Types.IDs;
+
+#endregion
 
 namespace AAS.Services.Users.Models;
 
 public class UserTokenDb
 {
     public ID UserId { get; set; }
-    public String Token { get; set; }
+    public string Token { get; set; }
 
     public DateTime DateTimeUtc { get; set; }
 

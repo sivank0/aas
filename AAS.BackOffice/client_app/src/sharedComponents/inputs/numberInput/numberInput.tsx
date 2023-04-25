@@ -1,5 +1,5 @@
-import { SxProps, TextField } from '@mui/material';
-import React, { ChangeEvent, useEffect, useRef } from 'react';
+import {SxProps, TextField} from '@mui/material';
+import React, {ChangeEvent, useEffect, useRef} from 'react';
 
 export interface IProps {
     label?: string;
@@ -78,6 +78,6 @@ export const NumberInput = (props: IProps) => {
             onChange={onChange}
             value={displayByIsFraction()}
             placeholder={props.placeholder}
-            variant="outlined" />
+            variant="outlined"/>
     );
 }

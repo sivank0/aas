@@ -1,8 +1,8 @@
-import { ExpandLess, ExpandMore } from '@mui/icons-material';
-import { ListItem, ListItemButton, ListItemIcon, ListItemText, Collapse, List, Link } from '@mui/material';
-import React, { useState } from 'react';
-import { SidebarItem } from '../../tools/types/sidebar/sidebarItem';
-import { SideBarIcon } from '../icons/sideBarIcon';
+import {ExpandLess, ExpandMore} from '@mui/icons-material';
+import {ListItem, ListItemButton, ListItemIcon, ListItemText, Collapse, List, Link} from '@mui/material';
+import React, {useState} from 'react';
+import {SidebarItem} from '../../tools/types/sidebar/sidebarItem';
+import {SideBarIcon} from '../icons/sideBarIcon';
 
 interface Props {
     sidebarItem: SidebarItem;
@@ -18,7 +18,7 @@ export const CollapsedSideBarItem = (props: Props) => {
     }
 
     return (
-        <ListItem disablePadding sx={{ display: 'block' }}>
+        <ListItem disablePadding sx={{display: 'block'}}>
             <ListItemButton
                 sx={{
                     minHeight: 48,
@@ -26,41 +26,43 @@ export const CollapsedSideBarItem = (props: Props) => {
                     px: 2.5,
                 }} onClick={() => changeIsCollapsedOpen(!isCollapsedOpen)}>
 
-                <ListItemIcon sx={{ minWidth: 0 }}><SideBarIcon type={props.sidebarItem.iconType} /></ListItemIcon>
+                <ListItemIcon sx={{minWidth: 0}}><SideBarIcon type={props.sidebarItem.iconType}/></ListItemIcon>
 
                 {
                     props.isSidebarUncollapsed &&
-                    <ListItemText primary={props.sidebarItem.text} sx={{ marginLeft: 2 }} />
+                    <ListItemText primary={props.sidebarItem.text} sx={{marginLeft: 2}}/>
                 }
                 {
                     props.isSidebarUncollapsed &&
-                    (isCollapsedOpen ? <ExpandLess /> : <ExpandMore />)
+                    (isCollapsedOpen ? <ExpandLess/> : <ExpandMore/>)
                 }
             </ListItemButton>
             {
                 props.sidebarItem.innerItems.map(innerItem => (
-                    <Collapse key={innerItem.id} in={isCollapsedOpen} timeout="auto" unmountOnExit sx={{ display: "flex", flexDirection: "row" }}>
-                        <List disablePadding sx={{ display: "flex", flexDirection: "row" }}>
+                    <Collapse key={innerItem.id} in={isCollapsedOpen} timeout="auto" unmountOnExit
+                              sx={{display: "flex", flexDirection: "row"}}>
+                        <List disablePadding sx={{display: "flex", flexDirection: "row"}}>
                             <Link onClick={() => props.navigateTo(innerItem.url)}
-                                sx={{
-                                    display: "flex",
-                                    flexDirection: "row",
-                                    textDecoration: "none",
-                                    justifyContent: 'center',
-                                    alignItems: "center",
-                                    color: "inherit",
-                                    width: "100%"
-                                }}>
+                                  sx={{
+                                      display: "flex",
+                                      flexDirection: "row",
+                                      textDecoration: "none",
+                                      justifyContent: 'center',
+                                      alignItems: "center",
+                                      color: "inherit",
+                                      width: "100%"
+                                  }}>
                                 <ListItemButton
                                     sx={{
                                         minHeight: 48,
                                         justifyContent: props.isSidebarUncollapsed ? 'initial' : 'center',
                                         px: 2.5,
-                                    }} >
-                                    <ListItemIcon sx={{ minWidth: 0 }}><SideBarIcon type={innerItem.iconType} /></ListItemIcon>
+                                    }}>
+                                    <ListItemIcon sx={{minWidth: 0}}><SideBarIcon
+                                        type={innerItem.iconType}/></ListItemIcon>
                                     {
                                         props.isSidebarUncollapsed &&
-                                        <ListItemText primary={innerItem.text} sx={{ marginLeft: 2 }} />
+                                        <ListItemText primary={innerItem.text} sx={{marginLeft: 2}}/>
                                     }
                                 </ListItemButton>
                             </Link>

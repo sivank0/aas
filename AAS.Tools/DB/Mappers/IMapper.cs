@@ -1,4 +1,8 @@
-﻿using AAS.Tools.DB.Enums;
+﻿#region
+
+using AAS.Tools.DB.Enums;
+
+#endregion
 
 namespace AAS.Tools.DB.Mappers;
 

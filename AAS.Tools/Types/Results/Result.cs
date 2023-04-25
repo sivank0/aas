@@ -1,4 +1,8 @@
+#region
+
 using System.Text.Json.Serialization;
+
+#endregion
 
 namespace AAS.Tools.Types.Results;
 
@@ -21,13 +25,11 @@ public class Result
 
     public static Result Fail(Error error)
     {
-
         return new Result(new List<Error>() { error });
     }
 
     public static Result Fail(string error)
     {
-
-        return new Result(new List<Error>() { new Error(error) });
+        return new Result(new List<Error>() { new(error) });
     }
 }

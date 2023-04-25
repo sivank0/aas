@@ -1,39 +1,38 @@
-﻿using System;
-using System.Linq;
+﻿#region
+
 using System.Net.NetworkInformation;
 
-namespace AAS.Tools.Types.IDs.UtilityId
+#endregion
+
+namespace AAS.Tools.Types.IDs.UtilityId;
+
+internal static class MacAddressHelper
 {
-    internal static class MacAddressHelper
+    public static byte[] GetMacAddressBytesOrRandom(Random random)
     {
-        public static Byte[] GetMacAddressBytesOrRandom(Random random)
+        try
         {
-            try
-            {
-                NetworkInterface? networkInterface = NetworkInterface.GetAllNetworkInterfaces()
-                    .Where(n => n.OperationalStatus == OperationalStatus.Up && n.NetworkInterfaceType != NetworkInterfaceType.Loopback)
-                    .OrderBy(n => n.Id)
-                    .FirstOrDefault();
+            NetworkInterface? networkInterface = NetworkInterface.GetAllNetworkInterfaces()
+                .Where(n => n.OperationalStatus == OperationalStatus.Up &&
+                            n.NetworkInterfaceType != NetworkInterfaceType.Loopback)
+                .OrderBy(n => n.Id)
+                .FirstOrDefault();
 
-                if (networkInterface == null)
-                {
-                    return GetRandom(random);
-                }
+            if (networkInterface == null) return GetRandom(random);
 
-                return networkInterface.GetPhysicalAddress().GetAddressBytes();
-            }
-            catch
-            {
-                return GetRandom(random);
-            }
+            return networkInterface.GetPhysicalAddress().GetAddressBytes();
         }
-
-        private static Byte[] GetRandom(Random random)
+        catch
         {
-            Byte[] macBytes = new Byte[6];
-            random.NextBytes(macBytes);
-
-            return macBytes;
+            return GetRandom(random);
         }
+    }
+
+    private static byte[] GetRandom(Random random)
+    {
+        byte[] macBytes = new byte[6];
+        random.NextBytes(macBytes);
+
+        return macBytes;
     }
 }

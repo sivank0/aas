@@ -1,8 +1,9 @@
-export { };
+export {};
 
 declare global {
     interface StringConstructor {
         isNullOrEmpty(str: string | null | undefined): str is null | undefined;
+
         isNullOrWhitespace(str: string | null | undefined): str is null | undefined;
     }
 }

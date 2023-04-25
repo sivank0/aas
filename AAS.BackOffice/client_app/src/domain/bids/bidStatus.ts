@@ -8,10 +8,14 @@ export enum BidStatus {
 export namespace BidStatus {
     export function getDisplayName(status: BidStatus) {
         switch (status) {
-            case BidStatus.AwaitingVerification: return "Ожидает проверки";
-            case BidStatus.Denied: return "Отклонена";
-            case BidStatus.InWork: return "В работе";
-            case BidStatus.Completed: return "Завершена";
+            case BidStatus.AwaitingVerification:
+                return "Ожидает проверки";
+            case BidStatus.Denied:
+                return "Отклонена";
+            case BidStatus.InWork:
+                return "В работе";
+            case BidStatus.Completed:
+                return "Завершена";
         }
     }
 }

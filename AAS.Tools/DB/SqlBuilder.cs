@@ -1,6 +1,10 @@
-﻿using AAS.Tools.DB.Enums;
-using AAS.Tools.DB.Mappers;
+﻿#region
+
 using System.Text;
+using AAS.Tools.DB.Enums;
+using AAS.Tools.DB.Mappers;
+
+#endregion
 
 namespace AAS.Tools.DB;
 
@@ -43,7 +47,8 @@ internal static class SqlBuilder
         if (string.IsNullOrWhiteSpace(classMapper.TableName))
             throw new ArgumentNullException("Table name is null");
 
-        return $"UPDATE {classMapper.TableName} SET {GetPropertiesListForRemoveByUpdateCommand(classMapper.Properties)}";
+        return
+            $"UPDATE {classMapper.TableName} SET {GetPropertiesListForRemoveByUpdateCommand(classMapper.Properties)}";
     }
 
     public static string CreateRemoveCommand(this ClassMapper classMapper)
@@ -63,12 +68,8 @@ internal static class SqlBuilder
         StringBuilder stringBuilder = new StringBuilder($"{identifiers[0]} = @{identifiers[0]}");
 
         if (identifiers.Length > 1)
-        {
             for (int i = 1; i < identifiers.Length; i++)
-            {
                 stringBuilder.Append($" AND {identifiers[i]} = @{identifiers[i]}");
-            }
-        }
 
         stringBuilder.Append(";");
 
@@ -103,12 +104,8 @@ internal static class SqlBuilder
             stringBuilder.Append(GetStringUpdateProperty(properties[0]));
 
             if (properties.Length > 1)
-            {
                 for (int i = 1; i < properties.Length; i++)
-                {
                     stringBuilder.Append(GetStringUpdateProperty(properties[i]));
-                }
-            }
         }
 
         stringBuilder.Append(" WHERE ");
@@ -116,12 +113,8 @@ internal static class SqlBuilder
         stringBuilder.Append($"{identifiers[0]} = @{identifiers[0]}");
 
         if (identifiers.Length > 1)
-        {
             for (int i = 1; i < identifiers.Length; i++)
-            {
                 stringBuilder.Append($" AND {identifiers[i]} = @{identifiers[i]}");
-            }
-        }
 
         stringBuilder.Append(";");
 
@@ -134,7 +127,8 @@ internal static class SqlBuilder
 
         if (identifiers.Length < 1) throw new Exception("Unknown Identifier for object");
 
-        string[] properties = propertyMaps.Where(x => x.KeyType == KeyType.NotAKey && !x.IgnoreOnUpdate && !x.IsReadOnly)
+        string[] properties = propertyMaps
+            .Where(x => x.KeyType == KeyType.NotAKey && !x.IgnoreOnUpdate && !x.IsReadOnly)
             .Select(property => property.ColumnName).ToArray();
 
         if (properties.Length < 1) throw new Exception("properties for update < 1");
@@ -145,24 +139,16 @@ internal static class SqlBuilder
         stringBuilder.Append($"{properties[0]} = @{properties[0]}");
 
         if (properties.Length > 1)
-        {
             for (int i = 1; i < properties.Length; i++)
-            {
                 stringBuilder.Append(GetStringUpdateProperty(properties[i]));
-            }
-        }
 
         stringBuilder.Append(" WHERE ");
 
         stringBuilder.Append($"{identifiers[0]} = @{identifiers[0]}");
 
         if (identifiers.Length > 1)
-        {
             for (int i = 1; i < identifiers.Length; i++)
-            {
                 stringBuilder.Append($" AND {identifiers[i]} = @{identifiers[i]}");
-            }
-        }
 
         stringBuilder.Append(";");
 

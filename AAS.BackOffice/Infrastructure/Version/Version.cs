@@ -1,9 +1,17 @@
-﻿using System.Reflection;
+﻿#region
+
+using System.Reflection;
+
+#endregion
 
 namespace AAS.BackOffice.Infrastructure.Version;
 
 public static class Version
 {
-    private static readonly String AssemblyVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-    public static String WithVersion(this String url) => $"{url}?v={AssemblyVersion}";
+    private static readonly string AssemblyVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+
+    public static string WithVersion(this string url)
+    {
+        return $"{url}?v={AssemblyVersion}";
+    }
 }

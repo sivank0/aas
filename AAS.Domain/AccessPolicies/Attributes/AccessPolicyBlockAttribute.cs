@@ -1,17 +1,21 @@
-﻿using AAS.Domain.AccessPolicies.Utils;
+﻿#region
+
+using AAS.Domain.AccessPolicies.Utils;
 using AAS.Tools.Extensions;
+
+#endregion
 
 namespace AAS.Domain.AccessPolicies.Attributes;
 
 [AttributeUsage(AttributeTargets.All)]
 public class AccessPolicyBlockAttribute : Attribute
 {
-    public Int32 Key { get; }
-    public String DisplayName { get; }
+    public int Key { get; }
+    public string DisplayName { get; }
 
     public AccessPolicyBlockAttribute(AccessPolicyBlock accessPolicyBlock)
     {
-        Key = (Int32)accessPolicyBlock;
+        Key = (int)accessPolicyBlock;
         DisplayName = accessPolicyBlock.GetDisplayName();
     }
 }

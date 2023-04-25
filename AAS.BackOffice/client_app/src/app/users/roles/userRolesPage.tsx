@@ -1,16 +1,16 @@
-import { Box, Container, Divider, Fab, Grid, Paper, Tooltip, Typography } from '@mui/material';
-import React, { useEffect, useRef, useState } from 'react';
-import { AccessPolicy } from '../../../domain/accessPolicies/accessPolicy';
-import { UserRole } from '../../../domain/users/roles/userRole';
-import { UserRoleBlank } from '../../../domain/users/roles/userRoleBlank';
-import { UserRolesProvider } from '../../../domain/users/roles/userRolesProvider';
-import { InputForm } from '../../../sharedComponents/inputs/inputForm';
+import {Box, Container, Divider, Fab, Grid, Paper, Tooltip, Typography} from '@mui/material';
+import React, {useEffect, useRef, useState} from 'react';
+import {AccessPolicy} from '../../../domain/accessPolicies/accessPolicy';
+import {UserRole} from '../../../domain/users/roles/userRole';
+import {UserRoleBlank} from '../../../domain/users/roles/userRoleBlank';
+import {UserRolesProvider} from '../../../domain/users/roles/userRolesProvider';
+import {InputForm} from '../../../sharedComponents/inputs/inputForm';
 import SaveIcon from '@mui/icons-material/Save';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 import useDialog from '../../../hooks/useDialog';
-import { ConfirmDialogModal } from '../../../sharedComponents/modals/modal';
+import {ConfirmDialogModal} from '../../../sharedComponents/modals/modal';
 
 type Policy = {
     blockKey: number;
@@ -46,7 +46,7 @@ export const UserRolesPage = () => {
             const policies: Policy[] = [];
 
             function toPolicyItem(key: number, name: string): PolicyItem {
-                return { key, name };
+                return {key, name};
             }
 
             blockKeys.map(blockKey => {
@@ -56,7 +56,7 @@ export const UserRolesPage = () => {
 
                 accessPoliciesDetails.filter(apd => apd.blockKey === blockKey).map(apd => accessPolicies.push(toPolicyItem(apd.key, apd.displayName)));
 
-                policies.push({ blockKey, blockName: blockName!, accessPolicies })
+                policies.push({blockKey, blockName: blockName!, accessPolicies})
             })
 
             setPolicies(policies);
@@ -102,7 +102,7 @@ export const UserRolesPage = () => {
 
         setUserRoleBlank(blank => {
             const accessPolicy = accessPolicyKey as AccessPolicy;
-            const userRoleBlank = { ...blank! };
+            const userRoleBlank = {...blank!};
 
             let accessPolicies = [...userRoleBlank.accessPolicies];
 
@@ -122,7 +122,7 @@ export const UserRolesPage = () => {
             return userRoleBlankRef.current = null;
         }
 
-        const isConfirmed = await confirmationDialog.show({ title: "Вы действительно хотите прекратить редактировать роль?" });
+        const isConfirmed = await confirmationDialog.show({title: "Вы действительно хотите прекратить редактировать роль?"});
 
         if (!isConfirmed) return;
 
@@ -133,7 +133,7 @@ export const UserRolesPage = () => {
     async function removeUserRole() {
         if (userRoleBlank === null) return;
 
-        const isConfirmed = await confirmationDialog.show({ title: "Вы действительно хотите удалить роль?" });
+        const isConfirmed = await confirmationDialog.show({title: "Вы действительно хотите удалить роль?"});
 
         if (!isConfirmed) return;
 
@@ -152,7 +152,7 @@ export const UserRolesPage = () => {
     return (
         <Container maxWidth={false}>
             <Typography variant="h5">Роли пользователей</Typography>
-            <Divider sx={{ marginTop: 2, marginBottom: 3 }} />
+            <Divider sx={{marginTop: 2, marginBottom: 3}}/>
             {
                 userRoleBlank == null
                     ?
@@ -161,30 +161,30 @@ export const UserRolesPage = () => {
                         options={userRoles}
                         size="small"
                         label='Выберите роль'
-                        sx={{ width: 300 }}
+                        sx={{width: 300}}
                         value={null}
                         getOptionLabel={(option) => option.name}
                         isOptionEqualToValue={(first, second) => first.id === second.id}
-                        onChange={(userRole) => changeSelectedRole(userRole?.id ?? null)} />
+                        onChange={(userRole) => changeSelectedRole(userRole?.id ?? null)}/>
                     :
                     <InputForm
-                        sx={{ width: 300 }}
+                        sx={{width: 300}}
                         type="text"
                         label='Название роли'
                         size="small"
                         placeholder='Введите название роли'
                         value={userRoleBlank.name}
-                        onChange={(name) => setUserRoleBlank(blank => ({ ...blank!, name }))} />
+                        onChange={(name) => setUserRoleBlank(blank => ({...blank!, name}))}/>
             }
             {
                 userRoleBlank !== null &&
-                <Grid container spacing={2} sx={{ marginTop: 3 }}>
+                <Grid container spacing={2} sx={{marginTop: 3}}>
                     {
                         policies.map(policy =>
-                            <Grid item xs={6} >
-                                <Paper sx={{ padding: 2 }} elevation={3}>
+                            <Grid item xs={6}>
+                                <Paper sx={{padding: 2}} elevation={3}>
                                     <Typography>{policy.blockName}</Typography>
-                                    <Divider sx={{ marginY: 1 }} />
+                                    <Divider sx={{marginY: 1}}/>
                                     <Box display="flex" flexDirection="column">
                                         {
                                             policy.accessPolicies.map(ap =>
@@ -192,7 +192,7 @@ export const UserRolesPage = () => {
                                                     type="checkBox"
                                                     label={ap.name}
                                                     checked={userRoleBlank.accessPolicies.includes(ap.key)}
-                                                    onChange={() => changeAccessPolicies(ap.key)} />
+                                                    onChange={() => changeAccessPolicies(ap.key)}/>
                                             )
                                         }
                                     </Box>
@@ -214,21 +214,21 @@ export const UserRolesPage = () => {
                                 right: 24,
                                 bottom: 24
                             }}>
-                            <AddIcon />
+                            <AddIcon/>
                         </Fab>
                     </Tooltip>
                     :
-                    <Box sx={{ display: "flex", position: "absolute", right: 24, bottom: 24, gap: 3 }}>
+                    <Box sx={{display: "flex", position: "absolute", right: 24, bottom: 24, gap: 3}}>
                         <Tooltip title="Сохранить роль">
                             <Fab onClick={() => saveUserRole()} color='primary'>
-                                <SaveIcon />
+                                <SaveIcon/>
                             </Fab>
                         </Tooltip>
                         {
                             userRoleBlank.id !== null &&
                             <Tooltip title="Удалить роль">
                                 <Fab onClick={() => removeUserRole()} color='error'>
-                                    <DeleteIcon />
+                                    <DeleteIcon/>
                                 </Fab>
                             </Tooltip>
                         }
@@ -241,7 +241,7 @@ export const UserRolesPage = () => {
                                         backgroundColor: theme.palette.grey[500]
                                     }
                                 })}>
-                                <CloseIcon />
+                                <CloseIcon/>
                             </Fab>
                         </Tooltip>
                     </Box>

@@ -1,4 +1,8 @@
-﻿using AAS.Tools.Types.IDs;
+﻿#region
+
+using AAS.Tools.Types.IDs;
+
+#endregion
 
 namespace AAS.Tools.DB;
 

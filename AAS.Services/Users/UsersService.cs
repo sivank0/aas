@@ -1,13 +1,18 @@
-﻿using AAS.Domain.Services;
+﻿#region
+
+using AAS.Domain.Services;
 using AAS.Domain.Users;
+using AAS.Domain.Users.Permissions;
 using AAS.Domain.Users.Roles;
 using AAS.Services.Users.Repositories;
+using AAS.Tools.Managers;
 using AAS.Tools.Types.IDs;
 using AAS.Tools.Types.Results;
-using AAS.Tools.Managers;
-using AAS.Domain.Users.Permissions;
+
+#endregion
 
 namespace AAS.Services.Users;
+
 public partial class UsersService : IUsersService
 {
     private readonly IUsersRepository _usersRepository;
@@ -21,20 +26,20 @@ public partial class UsersService : IUsersService
 
     public Result SaveUser(UserBlank userBlank, ID systemUserId)
     {
-        if (String.IsNullOrWhiteSpace(userBlank.Email)) return Result.Fail("Не введен Email");
+        if (string.IsNullOrWhiteSpace(userBlank.Email)) return Result.Fail("Не введен Email");
 
-        if (String.IsNullOrWhiteSpace(userBlank.FirstName)) return Result.Fail("Не введено имя");
+        if (string.IsNullOrWhiteSpace(userBlank.FirstName)) return Result.Fail("Не введено имя");
 
-        if (String.IsNullOrWhiteSpace(userBlank.LastName)) return Result.Fail("Не введена фамилия");
+        if (string.IsNullOrWhiteSpace(userBlank.LastName)) return Result.Fail("Не введена фамилия");
 
-        if (String.IsNullOrWhiteSpace(userBlank.PhoneNumber)) return Result.Fail("Не введнен номер телефона");
+        if (string.IsNullOrWhiteSpace(userBlank.PhoneNumber)) return Result.Fail("Не введнен номер телефона");
 
         if (userBlank.Id is null)
         {
-            if (String.IsNullOrWhiteSpace(userBlank.Password))
+            if (string.IsNullOrWhiteSpace(userBlank.Password))
                 return Result.Fail("Не введен пароль");
 
-            if (String.IsNullOrWhiteSpace(userBlank.RePassword))
+            if (string.IsNullOrWhiteSpace(userBlank.RePassword))
                 return Result.Fail("Не введен повтор пароля");
 
             if (userBlank.Password != userBlank.RePassword)
@@ -60,7 +65,7 @@ public partial class UsersService : IUsersService
         return _usersRepository.GetUser(id);
     }
 
-    public User? GetUser(String email, String? passwordHash = null)
+    public User? GetUser(string email, string? passwordHash = null)
     {
         return _usersRepository.GetUser(email, passwordHash);
     }
@@ -70,21 +75,22 @@ public partial class UsersService : IUsersService
         return _usersRepository.GetUsers();
     }
 
-    public Result ChangeUserPassword(ID userId, String? password, String? rePassword, ID systemUserId)
+    public Result ChangeUserPassword(ID userId, string? password, string? rePassword, ID systemUserId)
     {
         User? user = GetUser(userId);
 
         if (user is null) return Result.Fail("Пользователь, которому меняется пароль не найден");
 
-        if (String.IsNullOrWhiteSpace(password)) return Result.Fail("Не введен пароль");
+        if (string.IsNullOrWhiteSpace(password)) return Result.Fail("Не введен пароль");
 
-        if (String.IsNullOrWhiteSpace(rePassword)) return Result.Fail("Не введен повтор пароля");
+        if (string.IsNullOrWhiteSpace(rePassword)) return Result.Fail("Не введен повтор пароля");
 
         if (password != rePassword) return Result.Fail("Пароли должны совпадать");
 
-        String? passwordHash = HashManager.DefinePasswordHash(password);
+        string? passwordHash = HashManager.DefinePasswordHash(password);
 
-        if (String.IsNullOrWhiteSpace(passwordHash)) return Result.Fail("Не удалось изменить пароль, повторите попытку ещё раз");
+        if (string.IsNullOrWhiteSpace(passwordHash))
+            return Result.Fail("Не удалось изменить пароль, повторите попытку ещё раз");
 
         _usersRepository.ChangeUserPassword(userId, passwordHash, systemUserId);
 
@@ -104,7 +110,7 @@ public partial class UsersService : IUsersService
 
     public Result SaveUserRole(UserRoleBlank userRoleBlank, ID systemUserId)
     {
-        if (String.IsNullOrWhiteSpace(userRoleBlank.Name))
+        if (string.IsNullOrWhiteSpace(userRoleBlank.Name))
             return Result.Fail("Не введено название роли");
 
         if (userRoleBlank.AccessPolicies.Length == 0)

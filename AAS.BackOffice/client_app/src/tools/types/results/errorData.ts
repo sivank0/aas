@@ -2,7 +2,8 @@ export class ErrorData {
     constructor(
         public key: string | null,
         public message: string
-    ) { }
+    ) {
+    }
 }
 
 export const mapToErrorData = (errors: any[]): ErrorData[] => {

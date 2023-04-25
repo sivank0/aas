@@ -1,15 +1,30 @@
-import { Box, Button, Container, Divider, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import { User } from '../../domain/users/user';
-import { UsersProvider } from '../../domain/users/usersProvider';
+import {
+    Box,
+    Button,
+    Container,
+    Divider,
+    IconButton,
+    Paper,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Tooltip,
+    Typography
+} from '@mui/material';
+import React, {useEffect, useState} from 'react';
+import {User} from '../../domain/users/user';
+import {UsersProvider} from '../../domain/users/usersProvider';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import useDialog from '../../hooks/useDialog';
-import { UserEditorModal } from './userEditorModal';
-import { ConfirmDialogModal } from '../../sharedComponents/modals/modal';
-import { Password } from '@mui/icons-material';
-import { ChangePasswordModal } from './changePasswordModal';
+import {UserEditorModal} from './userEditorModal';
+import {ConfirmDialogModal} from '../../sharedComponents/modals/modal';
+import {Password} from '@mui/icons-material';
+import {ChangePasswordModal} from './changePasswordModal';
 
 export const UsersPage = () => {
     const [users, setUsers] = useState<User[]>([]);
@@ -30,7 +45,7 @@ export const UsersPage = () => {
     }
 
     async function openUserEditorModal(userId: string | null = null) {
-        const isEdited = await userEditorModal.show({ userId });
+        const isEdited = await userEditorModal.show({userId});
 
         if (!isEdited) return;
 
@@ -38,13 +53,13 @@ export const UsersPage = () => {
     }
 
     function openChangePasswordModal(userId: string) {
-        changePasswordModal.show({ userId });
+        changePasswordModal.show({userId});
     }
 
     async function removeUser(userId: string) {
         const removingUser = users.find(user => user.id === userId) ?? null;
 
-        const isConfirmed = await confirmationDialog.show({ title: `Вы действительно хотите удалить пользователя: ${removingUser?.fullName}` })
+        const isConfirmed = await confirmationDialog.show({title: `Вы действительно хотите удалить пользователя: ${removingUser?.fullName}`})
 
         if (!isConfirmed) return;
 
@@ -57,18 +72,18 @@ export const UsersPage = () => {
 
     return (
         <Container maxWidth={false}>
-            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 3 }}>
+            <Box sx={{display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 3}}>
                 <Typography variant="h5">
                     Пользователи
                 </Typography>
-                <Button startIcon={<AddIcon />} variant="outlined" onClick={() => openUserEditorModal()}>
+                <Button startIcon={<AddIcon/>} variant="outlined" onClick={() => openUserEditorModal()}>
                     Добавить
                 </Button>
             </Box>
             {
                 isInit &&
                 <TableContainer component={Paper} elevation={3}>
-                    <Table sx={{ minWidth: 650 }}>
+                    <Table sx={{minWidth: 650}}>
                         <TableHead>
                             <TableRow>
                                 <TableCell>Фамилия, имя, отчество</TableCell>
@@ -81,7 +96,7 @@ export const UsersPage = () => {
                                 users.map(user =>
                                     <TableRow
                                         key={user.id}
-                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }} >
+                                        sx={{'&:last-child td, &:last-child th': {border: 0}}}>
                                         <TableCell component="th" scope="row">
                                             {user.fullName}
                                         </TableCell>
@@ -90,17 +105,17 @@ export const UsersPage = () => {
                                             <Box display="flex">
                                                 <Tooltip title="Редактировать">
                                                     <IconButton onClick={() => openUserEditorModal(user.id)}>
-                                                        <EditIcon />
+                                                        <EditIcon/>
                                                     </IconButton>
                                                 </Tooltip>
                                                 <Tooltip title="Изменить пароль">
                                                     <IconButton onClick={() => openChangePasswordModal(user.id)}>
-                                                        <Password />
+                                                        <Password/>
                                                     </IconButton>
                                                 </Tooltip>
                                                 <Tooltip title="Удалить">
                                                     <IconButton onClick={() => removeUser(user.id)}>
-                                                        <DeleteIcon />
+                                                        <DeleteIcon/>
                                                     </IconButton>
                                                 </Tooltip>
                                             </Box>

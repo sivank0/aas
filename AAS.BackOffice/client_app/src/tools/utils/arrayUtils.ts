@@ -1,15 +1,21 @@
-import { isNumber } from './numberUtils';
+import {isNumber} from './numberUtils';
 
-export { };
+export {};
 
 declare global {
     interface Array<T> {
         distinct(): Array<T>;
+
         distinctBy(predicate: (a: T, b: T) => boolean): Array<T>;
+
         intersect(other: Array<T>): Array<T>;
+
         groupBy<GroupKey>(groupPredicate: (value: T) => GroupKey): Map<GroupKey, T[]>;
+
         groupSelectBy<GroupKey, SelectKey>(groupPredicate: (value: T) => GroupKey, selectPredicate: (value: T) => SelectKey): Map<SelectKey, T[]>;
+
         findLast(predicate: (value: T, index: number, obj: T[]) => boolean): T | undefined;
+
         firstOrNull(): T | null;
     }
 }
@@ -55,7 +61,7 @@ Array.prototype.groupSelectBy = function <T, GroupKey, SelectKey>(groupPredicate
         const collection = map.get(key);
 
         if (!collection) {
-            map.set(key, { selectKey: selectPredicate(arrayItem), values: [arrayItem] });
+            map.set(key, {selectKey: selectPredicate(arrayItem), values: [arrayItem]});
         } else {
             collection.values.push(arrayItem);
         }
@@ -85,7 +91,7 @@ Array.prototype.firstOrNull = function <T>(): T | null {
 
 export const arrayRange = (start: number, end: number, step: number = 1): number[] => {
     const length = Math.floor((end - start) / step) + 1;
-    return Array.from({ length }, (_, k) => start + k * step);
+    return Array.from({length}, (_, k) => start + k * step);
 }
 
 export const sortAlphabetically = (_1: string, _2: string) => {

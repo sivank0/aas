@@ -1,8 +1,11 @@
-﻿using AAS.Tools.DB.Attributes;
-using AAS.Tools.DB.Enums;
-using AAS.Tools.DB.Mappers;
+﻿#region
+
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Reflection;
+using AAS.Tools.DB.Attributes;
+using AAS.Tools.DB.Enums;
+
+#endregion
 
 namespace AAS.Tools.DB.Mappers;
 
@@ -33,12 +36,8 @@ internal class PropertyMap : IPropertyMap
         UpdateOnRemove = propertyInfo.GetCustomAttribute<UpdateOnRemoveAttribute>() != null;
         IdentifierAttribute identifierAttribute = PropertyInfo.GetCustomAttribute<IdentifierAttribute>();
 
-        if (IsReadOnly && identifierAttribute != null)
-        {
-            throw new ArgumentException($"Property {Name} is readOnly");
-        }
+        if (IsReadOnly && identifierAttribute != null) throw new ArgumentException($"Property {Name} is readOnly");
 
         KeyType = identifierAttribute != null ? KeyType.Identity : KeyType.NotAKey;
     }
 }
-

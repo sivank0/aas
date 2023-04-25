@@ -1,2 +1,3 @@
-﻿SELECT * FROM userroles
+﻿SELECT *
+FROM userroles
 WHERE NOT isremoved

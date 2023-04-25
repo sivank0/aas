@@ -1,4 +1,4 @@
-import { AccessPolicy } from "./accessPolicies/accessPolicy";
+import {AccessPolicy} from "./accessPolicies/accessPolicy";
 
 export class SystemUser {
     constructor(
@@ -7,7 +7,8 @@ export class SystemUser {
         public readonly fullName: string,
         public readonly hasFullAccess: boolean,
         public readonly availableAccessPolicies: AccessPolicy[]
-    ) { }
+    ) {
+    }
 
     public static loadSystemUser(): SystemUser | null {
         const systemUser = (window as any).systemUser;
@@ -27,6 +28,7 @@ export class SystemUser {
         return this.availableAccessPolicies.includes(accessPolicy);
     }
 }
+
 const systemUser: SystemUser | null = SystemUser.loadSystemUser();
 
 export default systemUser!;

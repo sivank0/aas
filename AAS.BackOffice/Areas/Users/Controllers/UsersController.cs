@@ -1,4 +1,6 @@
-﻿using AAS.BackOffice.Controllers;
+﻿#region
+
+using AAS.BackOffice.Controllers;
 using AAS.BackOffice.Filters;
 using AAS.Domain.AccessPolicies;
 using AAS.Domain.Services;
@@ -9,7 +11,10 @@ using AAS.Tools.Types.IDs;
 using AAS.Tools.Types.Results;
 using Microsoft.AspNetCore.Mvc;
 
+#endregion
+
 namespace AAS.BackOffice.Areas.Users.Controllers;
+
 public class UsersController : BaseController
 {
     private readonly IUsersService _usersService;
@@ -20,6 +25,7 @@ public class UsersController : BaseController
     }
 
     #region Users
+
     [HttpPost("users/save")]
     [IsAuthorized(AccessPolicy.UsersRead)]
     public Result SaveUser([FromBody] UserBlank userBlank)
@@ -36,13 +42,13 @@ public class UsersController : BaseController
 
     [HttpGet("users/get_details_for_editor")]
     [IsAuthorized(AccessPolicy.UsersUpdate)]
-    public Object? GetUserDetailsForEditor(ID userId)
+    public object? GetUserDetailsForEditor(ID userId)
     {
         User? user = _usersService.GetUser(userId);
 
         if (user is null) return null;
 
-        Boolean hasUserRolesReadAccess = SystemUser.HasAccess(AccessPolicy.UserRolesRead);
+        bool hasUserRolesReadAccess = SystemUser.HasAccess(AccessPolicy.UserRolesRead);
 
         UserRole[] userRoles = hasUserRolesReadAccess
             ? _usersService.GetUserRoles()
@@ -62,7 +68,7 @@ public class UsersController : BaseController
         return _usersService.GetUsers();
     }
 
-    public record ChangeUserPasswordRequest(ID UserId, String? Password, String? RePassword);
+    public record ChangeUserPasswordRequest(ID UserId, string? Password, string? RePassword);
 
     [HttpGet("users/change_password")]
     [IsAuthorized(AccessPolicy.UsersUpdate)]

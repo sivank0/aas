@@ -1,9 +1,13 @@
-﻿using AAS.Tools.Json.Attributes;
+﻿#region
+
 using System.Collections.Concurrent;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using AAS.Tools.Json.Attributes;
+
+#endregion
 
 namespace AAS.Tools.Json.Converters;
 
@@ -17,9 +21,9 @@ public class AnyTypeJsonConverterFactory : JsonConverterFactory
     {
         string assemblyName = assembly.FullName!.Split(",")[0];
         _availableTypes = assembly.GetTypes().Where(t => !t.IsEnum &&
-                                                        !t.IsInterface &&
-                                                        t.GetCustomAttribute<CompilerGeneratedAttribute>() is null &&
-                                                        t.FullName!.Contains(assemblyName)).ToArray();
+                                                         !t.IsInterface &&
+                                                         t.GetCustomAttribute<CompilerGeneratedAttribute>() is null &&
+                                                         t.FullName!.Contains(assemblyName)).ToArray();
     }
 
     public override bool CanConvert(Type typeForConvert)
@@ -101,27 +105,33 @@ public class AnyTypeJsonConverter<T> : JsonConverter<T>
         {
             return this switch
             {
-                Property property => property.ShouldSerializeMember is null || (GetValue(obj, property.ShouldSerializeMember) is bool shouldSerialize
-                    ? shouldSerialize
-                    : throw new Exception("Значение атрибута ShouldSerialize не имеет тип Boolean")),
+                Property property => property.ShouldSerializeMember is null ||
+                                     (GetValue(obj, property.ShouldSerializeMember) is bool shouldSerialize
+                                         ? shouldSerialize
+                                         : throw new Exception(
+                                             "Значение атрибута ShouldSerialize не имеет тип Boolean")),
                 Method => false,
                 _ => throw new Exception("Некорректный тип члена класса")
             };
         }
 
-        public object? GetValue(object obj) => MemberInfo switch
+        public object? GetValue(object obj)
         {
-            PropertyInfo propertyInfo => propertyInfo.GetValue(obj),
-            MethodInfo methodInfo => methodInfo.Invoke(obj, null),
-            _ => throw new Exception("Некорректный тип члена класса")
-        };
+            return MemberInfo switch
+            {
+                PropertyInfo propertyInfo => propertyInfo.GetValue(obj),
+                MethodInfo methodInfo => methodInfo.Invoke(obj, null),
+                _ => throw new Exception("Некорректный тип члена класса")
+            };
+        }
 
         public object? GetValue(object? src, string propertyName)
         {
             if (src is null) throw new ArgumentException("Value cannot be null.", "src");
             if (propertyName is null) throw new ArgumentException("Value cannot be null.", "propertyName");
 
-            JsonMember? property = JsonMembers.GetOrAdd(src.GetType(), Get).FirstOrDefault(member => member.Name == propertyName);
+            JsonMember? property = JsonMembers.GetOrAdd(src.GetType(), Get)
+                .FirstOrDefault(member => member.Name == propertyName);
             return property?.GetValue(src);
         }
 
@@ -129,17 +139,17 @@ public class AnyTypeJsonConverter<T> : JsonConverter<T>
         {
             List<JsonMember> members = new();
 
-            PropertyInfo[] properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(p => p.CanRead && p.GetCustomAttribute<JsonIgnoreAttribute>() is null).ToArray();
+            PropertyInfo[] properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                .Where(p => p.CanRead && p.GetCustomAttribute<JsonIgnoreAttribute>() is null).ToArray();
             foreach (PropertyInfo property in properties)
             {
-                ShouldSerializeAttribute? shouldSerializeAttribute = property.GetCustomAttribute<ShouldSerializeAttribute>();
+                ShouldSerializeAttribute? shouldSerializeAttribute =
+                    property.GetCustomAttribute<ShouldSerializeAttribute>();
                 members.Add(new Property(property, shouldSerializeAttribute?.ShouldSerializeMethodName));
             }
 
-            foreach (MethodInfo method in type.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
-            {
-                members.Add(new Method(method));
-            }
+            foreach (MethodInfo method in type.GetMethods(BindingFlags.Instance | BindingFlags.Public |
+                                                          BindingFlags.NonPublic)) members.Add(new Method(method));
 
             return members.ToArray();
         }

@@ -1,4 +1,4 @@
-import { InfrastructureLinks } from "../app/infrastructure/components/infrastructureLinks";
+import {InfrastructureLinks} from "../app/infrastructure/components/infrastructureLinks";
 
 export class HttpClient {
     private static toQueryString(obj: any) {
@@ -42,7 +42,7 @@ export class HttpClient {
         let fullUrl = `${host}${url}${HttpClient.toQueryString(data)}`;
         const headers = HttpClient.getHeaders();
 
-        const resp = await fetch(fullUrl, { method: 'GET', headers: headers });
+        const resp = await fetch(fullUrl, {method: 'GET', headers: headers});
 
         const response = await HttpClient.httpHandler(resp);
 

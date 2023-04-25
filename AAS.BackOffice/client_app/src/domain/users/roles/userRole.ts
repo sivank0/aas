@@ -1,11 +1,12 @@
-import { AccessPolicy } from "../../accessPolicies/accessPolicy";
+import {AccessPolicy} from "../../accessPolicies/accessPolicy";
 
 export class UserRole {
     constructor(
         public readonly id: string,
         public readonly name: string,
         public readonly accessPolicies: AccessPolicy[]
-    ) { }
+    ) {
+    }
 }
 
 export function mapToUserRole(value: any): UserRole {

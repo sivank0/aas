@@ -1,20 +1,22 @@
-﻿using System;
+﻿#region
+
 using System.Runtime.InteropServices;
 
-namespace AAS.Tools.Types.IDs.UtilityId
+#endregion
+
+namespace AAS.Tools.Types.IDs.UtilityId;
+
+internal static class IdCreateSequentialWinApi
 {
-    internal static class IdCreateSequentialWinApi
+    [DllImport("rpcrt4.dll", SetLastError = true)]
+    private static extern int UuidCreateSequential(out Guid guid);
+
+    public static Guid GetSequentialGuid()
     {
-		[DllImport("rpcrt4.dll", SetLastError = true)]
-		private static extern Int32 UuidCreateSequential(out Guid guid);
+        const int RPC_S_OK = 0;
+        int rpcResult = UuidCreateSequential(out Guid guid);
+        if (rpcResult != RPC_S_OK) guid = Guid.NewGuid();
 
-		public static Guid GetSequentialGuid()
-		{
-			const Int32 RPC_S_OK = 0;
-			Int32 rpcResult = UuidCreateSequential(out Guid guid);
-			if (rpcResult != RPC_S_OK) guid = Guid.NewGuid();
-
-			return guid;
-		}
-	}
+        return guid;
+    }
 }

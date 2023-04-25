@@ -1,15 +1,19 @@
-﻿using AAS.Domain.Bids.Enums;
+﻿#region
+
+using AAS.Domain.Bids.Enums;
 using AAS.Tools.Types.IDs;
+
+#endregion
 
 namespace AAS.Services.Bids.Models;
 
 public class BidDb
 {
     public ID Id { get; set; }
-    public Int32 Number { get; set; }
-    public String Title { get; set; }
-    public String Description { get; set; }
-    public String? DenyDescription { get; set; }
+    public int Number { get; set; }
+    public string Title { get; set; }
+    public string Description { get; set; }
+    public string? DenyDescription { get; set; }
     public BidStatus Status { get; set; }
     public DateTime? AcceptanceDate { get; set; }
     public DateTime? ApproximateDate { get; set; }
@@ -19,9 +23,11 @@ public class BidDb
 
     public ID? ModifiedUserId { get; set; }
     public DateTime? ModifiedDateTimeUtc { get; set; }
-    public Boolean IsRemoved { get; set; }
+    public bool IsRemoved { get; set; }
 
-    public BidDb(ID id, Int32 number, string title, string description, string? denyDescription, BidStatus status, DateTime? acceptanceDate, DateTime? approximateDate, ID createdUserId, DateTime createdDateTimeUtc, ID? modifiedUserId, DateTime? modifiedDateTimeUtc, bool isRemoved)
+    public BidDb(ID id, int number, string title, string description, string? denyDescription, BidStatus status,
+        DateTime? acceptanceDate, DateTime? approximateDate, ID createdUserId, DateTime createdDateTimeUtc,
+        ID? modifiedUserId, DateTime? modifiedDateTimeUtc, bool isRemoved)
     {
         Id = id;
         Number = number;

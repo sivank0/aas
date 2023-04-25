@@ -1,7 +1,7 @@
-import { InputProps, SxProps, TextField } from "@mui/material";
-import { Theme } from "@mui/system";
-import React, { ChangeEvent, useMemo } from "react";
-import { newId } from "../../../tools/types/id";
+import {InputProps, SxProps, TextField} from "@mui/material";
+import {Theme} from "@mui/system";
+import React, {ChangeEvent, useMemo} from "react";
+import {newId} from "../../../tools/types/id";
 
 export interface IProps {
     label: string;
@@ -52,6 +52,6 @@ export const TextInput = (props: IProps) => {
             placeholder={props.placeholder}
             variant={props.variant ?? "outlined"}
             value={props.value ?? ""}
-            InputProps={props.InputProps} />
+            InputProps={props.InputProps}/>
     )
 }

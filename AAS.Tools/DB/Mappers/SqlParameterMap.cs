@@ -1,4 +1,8 @@
-﻿using System.Data;
+﻿#region
+
+using System.Data;
+
+#endregion
 
 namespace AAS.Tools.DB.Mappers;
 

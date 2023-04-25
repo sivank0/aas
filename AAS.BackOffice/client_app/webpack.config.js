@@ -28,34 +28,34 @@ module.exports = (env) => {
                     }
                 ]
             },
-            {
-                test: /\.s(a|c)ss$/,
-                exclude: /\.module.(s(a|c)ss)$/,
-                use: [
-                    'style-loader',
-                    'css-loader',
-                    {
-                        loader: 'sass-loader'
-                    }
-                ]
-            },
-            {
-                test: /\.css$/,
-                use: ['style-loader', 'css-loader']
-            },
-            {
-                test: /\.js$/,
-                enforce: 'pre',
-                use: ['source-map-loader'],
-                exclude: /(node-modules)/
-            },
-            {
-                test: /\.tsx?$/,
-                exclude: /(node_modules)/,
-                loader: "ts-loader",
-            },
-            { test: /\.(png|jpe?g|gif|svg)$/i, type: 'asset/resource' },
-            { test: /\.(woff|woff2|eot|ttf|otf)$/i, type: "asset/resource" },
+                {
+                    test: /\.s(a|c)ss$/,
+                    exclude: /\.module.(s(a|c)ss)$/,
+                    use: [
+                        'style-loader',
+                        'css-loader',
+                        {
+                            loader: 'sass-loader'
+                        }
+                    ]
+                },
+                {
+                    test: /\.css$/,
+                    use: ['style-loader', 'css-loader']
+                },
+                {
+                    test: /\.js$/,
+                    enforce: 'pre',
+                    use: ['source-map-loader'],
+                    exclude: /(node-modules)/
+                },
+                {
+                    test: /\.tsx?$/,
+                    exclude: /(node_modules)/,
+                    loader: "ts-loader",
+                },
+                {test: /\.(png|jpe?g|gif|svg)$/i, type: 'asset/resource'},
+                {test: /\.(woff|woff2|eot|ttf|otf)$/i, type: "asset/resource"},
             ]
         },
         resolve: {

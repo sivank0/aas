@@ -1,6 +1,6 @@
-import { Box, Button, ButtonGroup, Paper, Typography } from '@mui/material';
+import {Box, Button, ButtonGroup, Paper, Typography} from '@mui/material';
 import React from 'react';
-import { InputForm } from '../inputs/inputForm';
+import {InputForm} from '../inputs/inputForm';
 
 interface Props {
     page: number,
@@ -22,8 +22,8 @@ export const PaginationButtons = (props: Props) => {
     }
 
     return (
-        <Box sx={{ display: "flex", gap: 1 }}>
-            <ButtonGroup sx={{ backgroundColor: "#fff" }}>
+        <Box sx={{display: "flex", gap: 1}}>
+            <ButtonGroup sx={{backgroundColor: "#fff"}}>
                 <Button
                     variant='contained'
                     onClick={() => previousPage()}>
@@ -32,7 +32,7 @@ export const PaginationButtons = (props: Props) => {
                 <Typography
                     component={Paper}
                     elevation={3}
-                    sx={{ display: 'flex', alignItems: "center", paddingX: 2 }}>
+                    sx={{display: 'flex', alignItems: "center", paddingX: 2}}>
                     {props.page}
                 </Typography>
                 <Button
@@ -49,7 +49,7 @@ export const PaginationButtons = (props: Props) => {
                 options={props.countInPageOptions}
                 isOptionEqualToValue={(first, second) => first === second}
                 getOptionLabel={(option) => option.toString()}
-                onChange={(countInPage) => props.onChangeCountInPage(countInPage!)} />
+                onChange={(countInPage) => props.onChangeCountInPage(countInPage!)}/>
         </Box>
     )
 }

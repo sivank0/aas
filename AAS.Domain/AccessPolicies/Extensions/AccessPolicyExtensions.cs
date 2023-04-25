@@ -1,12 +1,22 @@
-﻿using AAS.Domain.AccessPolicies.Utils;
+﻿#region
+
+using AAS.Domain.AccessPolicies.Utils;
+
+#endregion
 
 namespace AAS.Domain.AccessPolicies.Extensions;
 
 public static class AccessPolicyExtensions
 {
-    public static Int32 Key(this AccessPolicy accessPolicy) => (Int32)accessPolicy;
+    public static int Key(this AccessPolicy accessPolicy)
+    {
+        return (int)accessPolicy;
+    }
 
-    public static Int32[] Keys(this AccessPolicy[] accessPolicies) => accessPolicies.Select(Key).ToArray();
+    public static int[] Keys(this AccessPolicy[] accessPolicies)
+    {
+        return accessPolicies.Select(Key).ToArray();
+    }
 
     public static AccessPolicyDetails ToDetails(this AccessPolicy accessPolicy)
     {

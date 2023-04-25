@@ -1,11 +1,16 @@
+#region
+
 using AAS.BackOffice.Filters;
 using AAS.Domain;
 using AAS.Services.Configurator;
+using AAS.Tools.Binders;
 using AAS.Tools.Json;
 using Microsoft.AspNetCore.ResponseCompression;
-using AAS.Tools.Binders;
+
+#endregion
 
 namespace AAS.BackOffice;
+
 public class Startup
 {
     private readonly IWebHostEnvironment _environment;
@@ -31,18 +36,18 @@ public class Startup
         });
 
         services.AddControllersWithViews(mvcOptions =>
-        {
-            mvcOptions.EnableEndpointRouting = false;
-            mvcOptions.Filters.Add<IsAuthorizedFilter>();
-            mvcOptions.ModelBinderProviders.Insert(0, new IDModelBinderProvider());
-        })
-        .AddJsonOptions(options =>
-        {
-            options.JsonSerializerOptions
-                 .AddJsonSettings()
-                 .ApplyToolsConverters()
-                 .ApplyAnyTypeConverters(DomainAssembly.Itself);
-        });
+            {
+                mvcOptions.EnableEndpointRouting = false;
+                mvcOptions.Filters.Add<IsAuthorizedFilter>();
+                mvcOptions.ModelBinderProviders.Insert(0, new IDModelBinderProvider());
+            })
+            .AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions
+                    .AddJsonSettings()
+                    .ApplyToolsConverters()
+                    .ApplyAnyTypeConverters(DomainAssembly.Itself);
+            });
 
         services.Initialize(_configuration);
     }
@@ -50,10 +55,7 @@ public class Startup
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
-        if (env.IsDevelopment())
-        {
-            app.UseDeveloperExceptionPage();
-        }
+        if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
 
         app.UseResponseCompression();
         app.UseHttpsRedirection();
@@ -66,8 +68,8 @@ public class Startup
         app.UseMvc(routes =>
         {
             routes.MapRoute(
-                name: "default",
-                template: "{controller=Home}/{action=Index}/{id?}");
+                "default",
+                "{controller=Home}/{action=Index}/{id?}");
         });
     }
 }

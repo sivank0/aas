@@ -1,8 +1,8 @@
 import HttpClient from "../../../tools/httpClient";
-import { mapToResult, Result } from "../../../tools/types/results/result";
-import { AccessPolicyDetails, mapToAccessPoliciesDetails } from "../../accessPolicies/accessPolicyDetails";
-import { mapToUserRoles, UserRole } from "./userRole";
-import { UserRoleBlank } from "./userRoleBlank";
+import {mapToResult, Result} from "../../../tools/types/results/result";
+import {AccessPolicyDetails, mapToAccessPoliciesDetails} from "../../accessPolicies/accessPolicyDetails";
+import {mapToUserRoles, UserRole} from "./userRole";
+import {UserRoleBlank} from "./userRoleBlank";
 
 export class UserRolesProvider {
     public static async saveUserRole(userRoleBlank: UserRoleBlank): Promise<Result> {
@@ -21,7 +21,7 @@ export class UserRolesProvider {
     }
 
     public static async removeRole(userRoleId: string): Promise<Result> {
-        const result = await HttpClient.getJsonAsync("/user_roles/remove", { userRoleId });
+        const result = await HttpClient.getJsonAsync("/user_roles/remove", {userRoleId});
         return mapToResult(result);
     }
 }

@@ -1,3 +1,5 @@
+#region
+
 using AAS.Domain.Services;
 using AAS.Services.Bids;
 using AAS.Services.Bids.Repositories;
@@ -7,15 +9,17 @@ using AAS.Tools.Converters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
+#endregion
+
 namespace AAS.Services.Configurator;
 
 public static class ServicesConfigurator
 {
     public static void Initialize(this IServiceCollection services, IConfiguration configuration)
     {
-        String? connectionString = configuration.GetSection("ConnectionString").Value;
+        string? connectionString = configuration.GetSection("ConnectionString").Value;
 
-        if (String.IsNullOrWhiteSpace(connectionString))
+        if (string.IsNullOrWhiteSpace(connectionString))
             throw new Exception("[ServicesConfigurator] parameter 'connectionString' is null");
 
         TextJsonSerializer jsonSerializer = new();
@@ -28,12 +32,12 @@ public static class ServicesConfigurator
 
         #endregion Repositories
 
-        #region Services  
+        #region Services
 
         services.AddSingleton<IUsersService, UsersService>();
         services.AddSingleton<IBidsService, BidsService>();
 
-        #endregion Services 
+        #endregion Services
 
         services.AddSingleton(configuration);
         services.BuildServiceProvider();

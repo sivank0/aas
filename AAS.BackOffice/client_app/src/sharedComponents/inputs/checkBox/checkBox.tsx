@@ -1,5 +1,5 @@
-import { Checkbox, FormControlLabel, SxProps, Theme } from '@mui/material';
-import React, { ChangeEvent } from 'react';
+import {Checkbox, FormControlLabel, SxProps, Theme} from '@mui/material';
+import React, {ChangeEvent} from 'react';
 
 export interface IProps {
     label?: string;
@@ -33,8 +33,8 @@ export const CheckBox = (props: IProps) => {
                     disabled={props.disabled}
                     onClick={props.onClick}
                     onChange={onChange}
-                    color={color} />
+                    color={color}/>
             }
-            label={props.label} />
+            label={props.label}/>
     )
 }

@@ -1,3 +1,6 @@
+#region
+
+using System.Net;
 using AAS.BackOffice.Controllers;
 using AAS.BackOffice.Infrastructure;
 using AAS.Domain.Services;
@@ -5,7 +8,8 @@ using AAS.Domain.Users;
 using AAS.Tools.Types.Results;
 using Microsoft.AspNetCore.Mvc;
 using PMS.Tools.Managers;
-using System.Net;
+
+#endregion
 
 namespace AAS.BackOffice.Areas.Infrastructure.Controllers;
 
@@ -21,9 +25,9 @@ public class AuthenticationController : BaseController
     [HttpGet("/authentication")]
     public ActionResult Authentication()
     {
-        String? token = CookieManager.Read(Request, CookieNames.Token);
+        string? token = CookieManager.Read(Request, CookieNames.Token);
 
-        if (String.IsNullOrWhiteSpace(token)) return ReactApp();
+        if (string.IsNullOrWhiteSpace(token)) return ReactApp();
 
         Result authenticationResult = _usersService.Authenticate(token);
 
@@ -35,7 +39,10 @@ public class AuthenticationController : BaseController
     [HttpPost("authentication/register_user")]
     public Result RegisterUser([FromBody] UserRegistrationBlank userRegistrationBlank)
     {
-        DataResult<UserToken?> registrationResult = _usersService.RegisterUser(userRegistrationBlank); // REFACTORING в DataResult можно добавить атрибут MemberNotNullWhen, чтобы не делать ! или проверку Data на null
+        DataResult<UserToken?>
+            registrationResult =
+                _usersService.RegisterUser(
+                    userRegistrationBlank); // REFACTORING в DataResult можно добавить атрибут MemberNotNullWhen, чтобы не делать ! или проверку Data на null
 
         if (!registrationResult.IsSuccess) return Result.Fail(registrationResult.Errors[0].Message);
 
@@ -48,30 +55,33 @@ public class AuthenticationController : BaseController
         return Result.Success();
     }
 
-    public record UserAuthenticationRequest(String? Email, String? Password);
+    public record UserAuthenticationRequest(string? Email, string? Password);
 
     [HttpPost("authentication/log_in")]
-    public DataResult<String?> LogIn([FromBody] UserAuthenticationRequest userAuthenticationRequest)
+    public DataResult<string?> LogIn([FromBody] UserAuthenticationRequest userAuthenticationRequest)
     {
-        String? oldToken = CookieManager.Read(Request, CookieNames.Token);
+        string? oldToken = CookieManager.Read(Request, CookieNames.Token);
 
-        if (!String.IsNullOrWhiteSpace(oldToken)) return DataResult<String?>.Success(oldToken);
+        if (!string.IsNullOrWhiteSpace(oldToken)) return DataResult<string?>.Success(oldToken);
 
-        DataResult<UserToken?> authentificationResult = _usersService.LogIn(userAuthenticationRequest.Email, userAuthenticationRequest.Password);
+        DataResult<UserToken?> authentificationResult =
+            _usersService.LogIn(userAuthenticationRequest.Email, userAuthenticationRequest.Password);
 
-        if (!authentificationResult.IsSuccess) return DataResult<String?>.Fail(authentificationResult.Errors[0].Message);
+        if (!authentificationResult.IsSuccess)
+            return DataResult<string?>.Fail(authentificationResult.Errors[0].Message);
 
-        if (String.IsNullOrWhiteSpace(authentificationResult.Data!.Token))
-            return DataResult<String?>.Success(authentificationResult.Data.Token);
+        if (string.IsNullOrWhiteSpace(authentificationResult.Data!.Token))
+            return DataResult<string?>.Success(authentificationResult.Data.Token);
 
-        CookieManager.Write(Response, new Cookie(CookieNames.Token, authentificationResult.Data.Token), DateTime.MaxValue);
-        return DataResult<String?>.Success(authentificationResult.Data.Token);
+        CookieManager.Write(Response, new Cookie(CookieNames.Token, authentificationResult.Data.Token),
+            DateTime.MaxValue);
+        return DataResult<string?>.Success(authentificationResult.Data.Token);
     }
 
     [HttpPost("authentication/log_out")]
     public Result LogOut()
     {
-        String? token = CookieManager.Read(Request, CookieNames.Token);
+        string? token = CookieManager.Read(Request, CookieNames.Token);
 
         if (token is null) return Result.Fail("Токен не найден");
 

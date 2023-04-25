@@ -1,20 +1,25 @@
-﻿using System.Security.Cryptography;
+﻿#region
+
+using System.Security.Cryptography;
 using System.Text;
+
+#endregion
 
 namespace AAS.Tools.Managers;
 
 public class HashManager
 {
-    public static String? DefinePasswordHash(String? password)
+    public static string? DefinePasswordHash(string? password)
     {
-        if (String.IsNullOrWhiteSpace(password)) return null;
+        if (string.IsNullOrWhiteSpace(password)) return null;
 
-        Byte[] bytes = Encoding.Unicode.GetBytes(password);
-        MD5CryptoServiceProvider cryptoService = new MD5CryptoServiceProvider(); // REFACTORING MD5CryptoServiceProvider is obsolete
-        Byte[] byteHash = cryptoService.ComputeHash(bytes);
-        String hash = String.Empty;
+        byte[] bytes = Encoding.Unicode.GetBytes(password);
+        MD5CryptoServiceProvider
+            cryptoService = new MD5CryptoServiceProvider(); // REFACTORING MD5CryptoServiceProvider is obsolete
+        byte[] byteHash = cryptoService.ComputeHash(bytes);
+        string hash = string.Empty;
 
-        foreach (Byte b in byteHash) hash += $"{b:x2}";
+        foreach (byte b in byteHash) hash += $"{b:x2}";
 
         return hash;
     }

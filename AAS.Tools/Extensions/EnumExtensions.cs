@@ -1,5 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿#region
+
+using System.ComponentModel.DataAnnotations;
 using System.Reflection;
+
+#endregion
 
 namespace AAS.Tools.Extensions;
 
