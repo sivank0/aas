@@ -60,7 +60,6 @@ public class Startup
         services.Configure<IISServerOptions>(x => { x.MaxRequestBodySize = 200 * 1024 * 1024; });
     }
 
-
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
         app.UseCors("_myAllowSpecificOrigins");
