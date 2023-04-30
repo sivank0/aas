@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <LangVersion>11</LangVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="System.Text.Json" Version="7.0.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\AAS.Configurator\AAS.Configurator.csproj" />
+        <ProjectReference Include="..\AAS.Domain\AAS.Domain.csproj" />
+        <ProjectReference Include="..\AAS.Services.Configurator\AAS.Services.Configurator.csproj" />
+        <ProjectReference Include="..\AAS.Services\AAS.Services.csproj" />
+    </ItemGroup>
+
+</Project>

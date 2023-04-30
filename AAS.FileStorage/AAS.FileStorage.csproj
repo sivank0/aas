@@ -7,9 +7,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\AAS.BackOffice\AAS.BackOffice.csproj" />
-        <ProjectReference Include="..\AAS.Domain\AAS.Domain.csproj" />
-        <ProjectReference Include="..\AAS.Tools\AAS.Tools.csproj" />
+      <ProjectReference Include="..\src\AAS.Configurator\AAS.Configurator.csproj" />
+      <ProjectReference Include="..\src\AAS.Services.Configurator\AAS.Services.Configurator.csproj" />
     </ItemGroup>
 
 </Project>

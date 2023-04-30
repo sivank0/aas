@@ -3,12 +3,12 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:59401/",
-      "sslPort": 44395
+      "applicationUrl": "http://localhost:55615/",
+      "sslPort": 44378
     }
   },
   "profiles": {
-    "AAS.FileStorage > Development": {
+    "AAS.BackOffice > Development": {
       "commandName": "IISExpress",
       "launchBrowser": false,
       "environmentVariables": {
