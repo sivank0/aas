@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AAS.Services.Configurator",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AAS.Configurator", "src\AAS.Configurator\AAS.Configurator.csproj", "{6462B192-034B-4005-BA71-A8E7C8929B9F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AAS.FileStorage", "AAS.FileStorage\AAS.FileStorage.csproj", "{A5E7C4D7-06B1-4988-B627-698C36472BA3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AAS.FileStorage", "src\AAS.FileStorage\AAS.FileStorage.csproj", "{A5E7C4D7-06B1-4988-B627-698C36472BA3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
