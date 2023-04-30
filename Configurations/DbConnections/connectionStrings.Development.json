@@ -1,4 +1,0 @@
-{
-	"ConnectionString": "Server=localhost;Username=postgres;Password=1111;Database=aas;Port=5433;",
-	"Environment": "Development"
-}
