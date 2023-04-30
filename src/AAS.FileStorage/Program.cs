@@ -1,18 +1,12 @@
-#region
-
 using System.IO.Compression;
-using AAS.BackOffice;
 using AAS.Configurator.Extensions;
 using AAS.Domain;
-using AAS.FileStorage;
 using AAS.FileStorage.Infrastucture;
 using AAS.Services.Configurator;
 using AAS.Tools.Binders;
 using AAS.Tools.Json;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.FileProviders;
-
-#endregion
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args); 
 
