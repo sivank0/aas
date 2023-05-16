@@ -19,6 +19,7 @@ import {useNavigate} from 'react-router-dom';
 import {UserLinks} from '../app/users/userLinks';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import {ThemeMode} from './themeMode';
+import {useLocationName} from "./useLocationName";
 
 interface Props {
     themeMode: ThemeMode,
@@ -90,7 +91,7 @@ export const DesktopAppBar = (props: Props) => {
                         </IconButton>
                     }
                     <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
-                        Система приема заявок
+                        Система приема заявок — {useLocationName()}
                     </Typography>
                     <Box sx={{
                         display: 'flex',

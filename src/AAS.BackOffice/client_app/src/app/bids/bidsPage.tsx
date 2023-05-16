@@ -1,4 +1,4 @@
-import {Box, Button, Container, Divider, Grid, Typography} from '@mui/material';
+import {Box, Button, Container, Divider, Grid, Menu, MenuItem, ToggleButtonGroup, Typography} from '@mui/material';
 import React, {useEffect, useState} from 'react';
 import useDialog from '../../hooks/useDialog';
 import {ConfirmDialogModal} from '../../sharedComponents/modals/modal';
@@ -9,6 +9,11 @@ import {BidCard} from '../../sharedComponents/cards/bidCard';
 import {AddButton} from '../../sharedComponents/buttons/button';
 import {BrowserType} from '../../tools/browserType';
 import {PaginationButtons} from '../../sharedComponents/buttons/paginationButtons';
+import {FilterAlt} from "@mui/icons-material";
+import {Enum} from "../../tools/types/enum";
+import {BidStatus} from "../../domain/bids/bidStatus";
+import {ToggleButtons} from "../../sharedComponents/buttons/toggleButtons";
+import {BidBlank} from "../../domain/bids/bidBlank";
 
 type PaginationState = {
     page: number;
@@ -23,6 +28,7 @@ export const BidsPage = () => {
         countInPage: 50,
         totalRows: null
     });
+    const [bidBlank, setBidBlank] = useState<BidBlank>(BidBlank.getDefault());
 
     const bidEditorModal = useDialog(BidEditorModal);
 
@@ -44,10 +50,41 @@ export const BidsPage = () => {
         init();
     }
 
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const open = Boolean(anchorEl);
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
     return (
         <Container maxWidth={false}>
             <Box sx={{display: "flex", justifyContent: "space-between"}}>
-                <Typography variant="h5">Заявки</Typography>
+                <Button variant={"contained"}
+                        aria-controls={open ? 'basic-menu' : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={open ? 'true' : undefined}
+                        onClick={handleClick}>
+                    <FilterAlt/>
+                </Button>
+                <Menu
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleClose}
+                    MenuListProps={{
+                        'aria-labelledby': 'basic-button',
+                    }}
+                >
+                    <MenuItem>
+                        <ToggleButtons
+                            value={bidBlank.status}
+                            options={Enum.getNumberValues<BidStatus>(BidStatus)}
+                            getOptionLabel={(option) => BidStatus.getDisplayName(option)}
+                            onChange={(status) => setBidBlank(blank => ({...blank, status}))}/>
+                    </MenuItem>
+                </Menu>
                 <AddButton onClick={() => openBidEditorModal()}>
                     Создать заявку
                 </AddButton>

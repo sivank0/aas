@@ -9,6 +9,7 @@ interface Props<TValue> {
     getOptionLabel: (option: TValue) => string;
     disabled?: boolean;
     onChange: (value: TValue) => void;
+    exclusive?: boolean;
 }
 
 export function ToggleButtons<TValue>(props: Props<TValue>) {
@@ -30,7 +31,7 @@ export function ToggleButtons<TValue>(props: Props<TValue>) {
             <ToggleButtonGroup
                 size={props.size}
                 value={props.value}
-                exclusive
+                exclusive={props.exclusive ?? false}
                 disabled={props.disabled}
                 onChange={(_, value: TValue) => onChange(value)}
                 sx={{

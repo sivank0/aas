@@ -100,6 +100,7 @@ export const BidEditorModal: React.FC<AsyncDialogProps<Props, boolean>> = ({open
                         props.bidId !== null &&
                         <ToggleButtons
                             value={bidBlank.status}
+                            exclusive={true}
                             options={Enum.getNumberValues<BidStatus>(BidStatus)}
                             getOptionLabel={(option) => BidStatus.getDisplayName(option)}
                             onChange={(status) => setBidBlank(blank => ({...blank, status}))}/>
