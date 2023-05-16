@@ -13,28 +13,21 @@ public class FileStorageService : IFileStorageService
     {
         _fileStorageProvider = fileStorageProvider;
     }
-    
-    public async Task<Result> SaveFiles(params FileDetailsOfBytes[] fileDetails)
+
+    public Task<Result> SaveAndRemoveFiles(FileDetailsOfBytes[] fileDetails, String[]? removeFilePaths)
     {
-        try
-        {
-            return await _fileStorageProvider.SaveFiles(fileDetails);
-        }
-        catch
-        {
-            return Result.Fail("Сохранение файлов произошло с ошибками");
-        }
+        return SendRequest(fileDetails, removeFilePaths ?? Array.Empty<String>());
     }
 
-    public async Task<Result> RemoveFiles(params string[] removeFilePaths)
+    private async Task<Result> SendRequest(FileDetailsOfBytes[] fileDetails, String[] removeFilePaths)
     {
         try
         {
-            return await _fileStorageProvider.RemoveFiles(removeFilePaths);
+            return await _fileStorageProvider.SendRequest(fileDetails, removeFilePaths);
         }
         catch
         {
-            return Result.Fail("Удаление файлов произошло с ошибками");
+            return Result.Fail("Произошла ошибка при выполнении запроса, повторите попытку ещё раз");
         }
     }
 }

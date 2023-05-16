@@ -10,12 +10,17 @@ public class Result
 {
     public Error[] Errors { get; }
 
-    public bool IsSuccess => Errors.Length == 0;
+    [JsonIgnore] public Boolean IsSuccess => Errors.Length == 0;
 
-    [JsonConstructor]
     public Result(List<Error> errors)
     {
         Errors = errors.ToArray();
+    }
+
+    [JsonConstructor]
+    public Result(Error[] errors)
+    {
+        Errors = errors;
     }
 
     public static Result Success()
@@ -28,8 +33,8 @@ public class Result
         return new Result(new List<Error>() { error });
     }
 
-    public static Result Fail(string error)
+    public static Result Fail(String error)
     {
-        return new Result(new List<Error>() { new(error) });
+        return new Result(new List<Error>() { new Error(error) });
     }
 }

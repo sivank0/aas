@@ -22,7 +22,7 @@ public partial class UsersRepository : NpgSqlRepository, IUsersRepository
 
     #region Users
 
-    public void SaveUser(UserBlank userBlank, ID systemUserId)
+    public void SaveUser(UserBlank userBlank, String? userPhotoPath, ID systemUserId)
     {
         SqlParameter[] saveUserParameters =
         {
@@ -33,6 +33,7 @@ public partial class UsersRepository : NpgSqlRepository, IUsersRepository
             new("p_email", userBlank.Email!),
             new("p_phonenumber", userBlank.PhoneNumber!),
             new("p_passwordhash", userBlank.Passwordhash ?? ""),
+            new("p_userphotopath", userPhotoPath),
             new("p_systemuserid", systemUserId),
             new("p_currentdatetimeutc", DateTime.UtcNow)
         };

@@ -40,14 +40,11 @@ public partial class UsersService : IUsersService
 
         if (userBlank.Id is null)
         {
-            if (string.IsNullOrWhiteSpace(userBlank.Password))
-                return Result.Fail("Не введен пароль");
+            if (string.IsNullOrWhiteSpace(userBlank.Password)) return Result.Fail("Не введен пароль");
 
-            if (string.IsNullOrWhiteSpace(userBlank.RePassword))
-                return Result.Fail("Не введен повтор пароля");
+            if (string.IsNullOrWhiteSpace(userBlank.RePassword)) return Result.Fail("Не введен повтор пароля");
 
-            if (userBlank.Password != userBlank.RePassword)
-                return Result.Fail("Пароли не совпадают");
+            if (userBlank.Password != userBlank.RePassword) return Result.Fail("Пароли не совпадают");
         }
 
         if (userBlank.RoleId is null)
@@ -55,22 +52,27 @@ public partial class UsersService : IUsersService
 
         UserRole? userRole = GetUserRole(userBlank.RoleId.Value);
 
-        if (userRole is null)
-            return Result.Fail("Выбранная роль не существует");
+        if (userRole is null) return Result.Fail("Выбранная роль не существует");
 
         userBlank.Id ??= ID.New();
 
+        String? userPhotoPath = userBlank.FileBlank?.Path; 
+        
         if (userBlank.FileBlank is not null)
         {
             (FileDetailsOfBytes[] fileDetailsOfBytes, String[] removeFilePaths) =
-                FileBlank.GetFileDetails(userBlank.FileBlank, "", userBlank.Id!.Value);
-            
-            Result result = await _fileStorageService.SaveFiles(fileDetailsOfBytes);
+                FileBlank.GetFileDetails(userBlank.FileBlank, userId: userBlank.Id!.Value);
 
-            if (!result.IsSuccess) return Result.Fail(result.Errors[0]);
+            Result result = await _fileStorageService.SaveAndRemoveFiles(fileDetailsOfBytes, removeFilePaths);
+
+            if (!result.IsSuccess)
+            {
+                userPhotoPath = null;
+                return Result.Fail(result.Errors[0]);
+            }
         }
 
-        _usersRepository.SaveUser(userBlank, systemUserId);
+        _usersRepository.SaveUser(userBlank, userPhotoPath, systemUserId);
         return Result.Success();
     }
 

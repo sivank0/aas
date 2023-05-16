@@ -1,4 +1,5 @@
 ﻿using System.Net.Http.Json;
+using System.Text;
 using AAS.Tools.Converters;
 using AAS.Tools.Json;
 using AAS.Tools.Types.Files;
@@ -13,19 +14,20 @@ public class FileStorageProvider : IFileStorageProvider
 
     public FileStorageProvider(HttpClient httpClient, IJsonSerializer jsonSerializer)
     {
-        httpClient.BaseAddress = new Uri("https://localhost:44395/");
+        httpClient.BaseAddress = new Uri("https://localhost:44395");
         _httpClient = httpClient;
         _jsonSerializer = jsonSerializer;
     }
 
-    public async Task<Result> SaveFiles(FileDetailsOfBytes[] fileDetails)
+    public async Task<Result> SendRequest(FileDetailsOfBytes[] fileDetails, String[] removeFilePaths)
     {
         try
         {
-            Object data = new { FileDetails = fileDetails };
+            Object data = new { FileDetails = fileDetails, RemoveFilePaths = removeFilePaths };
 
-            HttpResponseMessage response =
-                await _httpClient.PostAsJsonAsync("files/save", data, options: JsonTools.DefaultOptions);
+            HttpContent httpContent =
+                new StringContent(_jsonSerializer.Serialize(data), Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await _httpClient.PostAsync("/files/upload", httpContent);
 
             String result = await response.Content.ReadAsStringAsync();
 
@@ -35,14 +37,9 @@ public class FileStorageProvider : IFileStorageProvider
 
             return uploadResult;
         }
-        catch (Exception ex)
+        catch
         {
             return Result.Fail("Не удалось получить ответ от сервера, повторите попытку ещё раз");
         }
-    }
-
-    public Task<Result> RemoveFiles(string[] removeFilePaths)
-    {
-        throw new NotImplementedException();
     }
 }

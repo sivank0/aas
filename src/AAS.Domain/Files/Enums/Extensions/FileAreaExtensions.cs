@@ -1,6 +1,14 @@
 ﻿namespace AAS.Domain.Files.Enums.Extensions;
 
-public class FileAreaExtensions
+public static class FileAreaExtensions
 {
-    
+    public static String GetFileDirectory(this FileArea fileArea)
+    {
+        return fileArea switch
+        {
+            FileArea.User => "Users/",
+            FileArea.Bid => "Bids/",
+            _ => "Files/"
+        };
+    }
 }

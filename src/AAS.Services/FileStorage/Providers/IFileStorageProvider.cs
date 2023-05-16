@@ -5,6 +5,5 @@ namespace AAS.Services.FileStorage.Providers;
 
 public interface IFileStorageProvider
 {
-    public Task<Result> SaveFiles(FileDetailsOfBytes[] fileDetails);
-    public Task<Result> RemoveFiles(String[] removeFilePaths);
+    Task<Result> SendRequest(FileDetailsOfBytes[] fileDetails, String[] removeFilePaths);
 }

@@ -26,19 +26,18 @@ public class FileController : Controller
         return path.Substring(0, rightPositionSeparator);
     }
 
-    // public record FileStorageRequest(FileDetails[] FileDetails, string[] FilePathsForRemove);
-    //
-    // [HttpPost("files/upload")]
-    // public async Task<Result> Upload([FromBody] FileStorageRequest request)
-    // {
-    //     Result result = RemoveFiles(request.FilePathsForRemove);
-    //
-    //     result = await SaveFiles(request.FileDetails);
-    //
-    //     return result;
-    // }
+    public record FileStorageRequest(FileDetailsOfBytes[] FileDetails, string[] RemoveFilePaths);
 
-    [HttpPost("files/save")]
+    [HttpPost("files/upload")]
+    public async Task<Result> Upload([FromBody] FileStorageRequest request)
+    {
+        Result result = RemoveFiles(request.RemoveFilePaths);
+
+        result = await SaveFiles(request.FileDetails);
+
+        return result;
+    }
+
     public async Task<Result> SaveFiles([FromBody] FileDetails[] fileDetails)
     {
         List<Error> errors = new List<Error>();
@@ -56,14 +55,15 @@ public class FileController : Controller
 
                 if (ms.Length == 0) throw new Exception("MemoryStream is empty");
 
-                string fullPath = $"C:/FileStorage/AAS/{fileDetail.Path}";
+                string fullPath = $"C:/FileStorage/AAS/{fileDetail.Path}{fileDetail.Name}{fileDetail.Extension}";
                 string dir = FileSystemSeparator.GetPath(GetDirectory(fullPath));
 
                 if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
-
-                await System.IO.File.WriteAllBytesAsync(FileSystemSeparator.GetPath(fullPath), ms.ToArray());
+                
+                String pathToSave = FileSystemSeparator.GetPath(fullPath);
+                await System.IO.File.WriteAllBytesAsync(pathToSave, ms.ToArray());
             }
-            catch
+            catch (Exception ex)
             {
                 errors.Add(new Error("Не удалось сохранить файл, повторите попытку ещё раз"));
             }
@@ -74,7 +74,6 @@ public class FileController : Controller
             : Result.Success();
     }
 
-    [HttpPost("files/remove")]
     public Result RemoveFiles([FromBody] string[] filePathsForRemove)
     {
         List<Error> errors = new List<Error>();
