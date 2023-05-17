@@ -1,6 +1,7 @@
 ﻿#region
 
 using System.Text.Json.Serialization;
+using AAS.Domain.Files;
 using AAS.Tools.Types.IDs;
 
 #endregion
@@ -10,7 +11,7 @@ namespace AAS.Domain.Users;
 public class User
 {
     public ID Id { get; }
-    public String AvatarPath { get; }
+    public Files.File? Photo { get; }
     public string FirstName { get; }
     public string? MiddleName { get; }
     public string LastName { get; }
@@ -23,11 +24,11 @@ public class User
 
     [JsonIgnore] public string PasswordHash { get; }
 
-    public User(ID id, String avatarPath, string firstName, string? middleName, string lastName, string email,
+    public User(ID id, Files.File? photo, string firstName, string? middleName, string lastName, string email,
         string passwordHash, string phoneNumber)
     {
         Id = id;
-        AvatarPath = avatarPath;
+        Photo = photo;
         FirstName = firstName;
         MiddleName = middleName;
         LastName = lastName;

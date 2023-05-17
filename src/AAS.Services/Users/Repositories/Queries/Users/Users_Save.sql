@@ -31,8 +31,9 @@ VALUES (
     email = @p_email,
     passwordhash = CASE
     WHEN @p_passwordHash IS NULL OR @p_passwordHash='' THEN users.passwordhash
-    ELSE @p_passwordHash,
+    ELSE @p_passwordHash
+    END,
+    photopath = @p_userphotopath,
 	phonenumber = @p_phonenumber,
 	modifieddatetimeutc = @p_currentdatetimeutc,
 	modifieduserid = @p_systemuserid
-END

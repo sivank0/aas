@@ -1,4 +1,5 @@
 using System.IO.Compression;
+using AAS.Configurator;
 using AAS.Configurator.Extensions;
 using AAS.Domain;
 using AAS.FileStorage.Infrastucture;
@@ -50,7 +51,7 @@ application
     .UseResponseCompression()
     .UseStaticFiles(new StaticFileOptions
     {
-        FileProvider = new PhysicalFileProvider(FileSystemSeparator.GetPath("C:/FileStorage/AAS"))
+        FileProvider = new PhysicalFileProvider(FileSystemSeparator.GetPath(Configurations.FileStorage.UploadFolder))
     })
     .UseRouting()
     .UseEndpoints(endpoints =>

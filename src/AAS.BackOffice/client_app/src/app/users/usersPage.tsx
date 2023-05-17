@@ -25,6 +25,7 @@ import {UserEditorModal} from './userEditorModal';
 import {ConfirmDialogModal} from '../../sharedComponents/modals/modal';
 import {Password} from '@mui/icons-material';
 import {ChangePasswordModal} from './changePasswordModal';
+import { TooltippedAvatar } from '../../sharedComponents/avatar';
 
 export const UsersPage = () => {
     const [users, setUsers] = useState<User[]>([]);
@@ -35,13 +36,17 @@ export const UsersPage = () => {
     const confirmationDialog = useDialog(ConfirmDialogModal);
 
     useEffect(() => {
-        init();
+        try{
+            loadUsers();
+        }
+        finally{
+            setIsInit(true);
+        }
     }, [])
-
-    async function init() {
+    
+    async function loadUsers() {
         const users = await UsersProvider.getUsers();
         setUsers(users);
-        setIsInit(true);
     }
 
     async function openUserEditorModal(userId: string | null = null) {
@@ -49,7 +54,7 @@ export const UsersPage = () => {
 
         if (!isEdited) return;
 
-        init();
+        loadUsers();
     }
 
     function openChangePasswordModal(userId: string) {
@@ -67,9 +72,9 @@ export const UsersPage = () => {
 
         if (!result.isSuccess) return alert(result.errors[0].message);
 
-        init();
+        loadUsers();
     }
-
+    console.log(users)
     return (
         <Container maxWidth={false}>
             <Box sx={{display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 3}}>
@@ -86,6 +91,7 @@ export const UsersPage = () => {
                     <Table sx={{minWidth: 650}}>
                         <TableHead>
                             <TableRow>
+                                <TableCell>Фото</TableCell>
                                 <TableCell>Фамилия, имя, отчество</TableCell>
                                 <TableCell>Email</TableCell>
                                 <TableCell>Действия</TableCell>
@@ -97,6 +103,9 @@ export const UsersPage = () => {
                                     <TableRow
                                         key={user.id}
                                         sx={{'&:last-child td, &:last-child th': {border: 0}}}>
+                                        <TableCell component="th" scope="row">
+                                            <TooltippedAvatar imageSrc={user.photo?.url} title={user.fullName} />
+                                        </TableCell>
                                         <TableCell component="th" scope="row">
                                             {user.fullName}
                                         </TableCell>

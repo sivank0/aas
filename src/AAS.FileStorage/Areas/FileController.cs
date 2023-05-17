@@ -38,7 +38,7 @@ public class FileController : Controller
         return result;
     }
 
-    public async Task<Result> SaveFiles([FromBody] FileDetails[] fileDetails)
+    private async Task<Result> SaveFiles(FileDetails[] fileDetails)
     {
         List<Error> errors = new List<Error>();
 
@@ -59,7 +59,7 @@ public class FileController : Controller
                 string dir = FileSystemSeparator.GetPath(GetDirectory(fullPath));
 
                 if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
-                
+
                 String pathToSave = FileSystemSeparator.GetPath(fullPath);
                 await System.IO.File.WriteAllBytesAsync(pathToSave, ms.ToArray());
             }
@@ -74,7 +74,7 @@ public class FileController : Controller
             : Result.Success();
     }
 
-    public Result RemoveFiles([FromBody] string[] filePathsForRemove)
+    private Result RemoveFiles(string[] filePathsForRemove)
     {
         List<Error> errors = new List<Error>();
 

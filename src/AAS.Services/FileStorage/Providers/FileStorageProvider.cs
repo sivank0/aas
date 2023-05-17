@@ -1,5 +1,6 @@
 ﻿using System.Net.Http.Json;
 using System.Text;
+using AAS.Configurator;
 using AAS.Tools.Converters;
 using AAS.Tools.Json;
 using AAS.Tools.Types.Files;
@@ -14,7 +15,7 @@ public class FileStorageProvider : IFileStorageProvider
 
     public FileStorageProvider(HttpClient httpClient, IJsonSerializer jsonSerializer)
     {
-        httpClient.BaseAddress = new Uri("https://localhost:44395");
+        httpClient.BaseAddress = new Uri(Configurations.FileStorage.Host);
         _httpClient = httpClient;
         _jsonSerializer = jsonSerializer;
     }

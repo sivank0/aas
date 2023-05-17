@@ -37,7 +37,9 @@ export namespace UserBlank {
             middleName: user.middleName,
             lastName: user.lastName,
             email: user.email,
-            fileBlank: null,
+            fileBlank: user.photo === null 
+                ? null 
+                : FileBlank.fromFile(user.photo),
             phoneNumber: user.phoneNumber,
             roleId: roleId,
             password: null,

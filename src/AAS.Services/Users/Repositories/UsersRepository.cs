@@ -22,8 +22,14 @@ public partial class UsersRepository : NpgSqlRepository, IUsersRepository
 
     #region Users
 
-    public void SaveUser(UserBlank userBlank, String? userPhotoPath, ID systemUserId)
+    public void SaveUser(UserBlank userBlank, ID systemUserId)
     {
+        String? userPhotoPath = userBlank.FileBlank is null
+            ? null
+            : String.IsNullOrWhiteSpace(userBlank.FileBlank.Path)
+                ? null
+                : userBlank.FileBlank.Path;
+
         SqlParameter[] saveUserParameters =
         {
             new("p_id", userBlank.Id!.Value),

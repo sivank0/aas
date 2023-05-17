@@ -2,8 +2,8 @@ import { Avatar, Box, Fade, SvgIconTypeMap, Typography, } from '@mui/material';
 import { OverridableComponent } from '@mui/material/OverridableComponent';
 import React, { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import { FileBlank } from '../../../domain/files/fileBlank';
-import { FileState } from '../../../domain/files/enums/fileState';
-import { FileDetailsOfBase64 } from '../../../tools/types/files/fileDetails';
+import { FileState } from '../../../domain/files/enums/fileState'; 
+import { CloseIconButton } from '../../buttons/button';
 
 export interface IProps {
     fileBlank: FileBlank | null;
@@ -36,12 +36,10 @@ export const ImageInput = (props: IProps) => {
         if (props.fileBlank === null || props.fileBlank.state === FileState.Removed)
             return null;
 
-        return props.fileBlank.base64 ?? null;
-    }, [props.fileBlank])
+        return props.fileBlank.url ?? props.fileBlank.base64 ?? null;
+    }, [props.fileBlank, props.fileBlank?.state])
 
     useEffect(() => setIsInit(true), [imageBlankUrl])
-
-
 
     async function onChange(event: ChangeEvent<HTMLInputElement>) {
         const readFile = (file: File): Promise<string | ArrayBuffer | null> => new Promise((resolve, reject) => {
@@ -64,10 +62,22 @@ export const ImageInput = (props: IProps) => {
     }
 
     function removeImage() {
-        // if (props.fileBlank === null) return;
+        if (props.fileBlank === null) return;
+        
+        let fileBlank: FileBlank | null = props.fileBlank;
 
-        // const image = ImageBlank.remove(props.fileBlank)
-        // props.removeImage(image);
+        switch(props.fileBlank.state){
+            case FileState.Added:{
+                fileBlank = null;
+                break;
+            }
+            case FileState.Intact:{
+                fileBlank.state = FileState.Removed;
+                break;
+            }
+            case FileState.Removed: return;
+        }
+        props.removeImage(fileBlank);
     }
 
     return (
@@ -116,10 +126,10 @@ export const ImageInput = (props: IProps) => {
                         multiple
                         type="file" />
                 </Box>
-                {/* {
+                {
                     imageBlankUrl !== null &&
-                    <RemoveButton
-                        buttonType='icon'
+                    <CloseIconButton
+                        title='Удалить изображение'
                         onClick={removeImage}
                         size="small"
                         sx={(theme) => ({
@@ -133,8 +143,8 @@ export const ImageInput = (props: IProps) => {
                                 backgroundColor: theme.palette.error.contrastText,
                                 opacity: 0.9,
                             }
-                        })} />
-                } */}
+                        })}  />
+                }
             </Box>
         </Fade>
     )

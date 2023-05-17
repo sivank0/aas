@@ -13,7 +13,7 @@ public interface IUsersRepository
 {
     #region Users
 
-    public void SaveUser(UserBlank userBlank, String? userPhotoPath, ID systemUserId);
+    public void SaveUser(UserBlank userBlank, ID systemUserId);
     public void RegisterUser(UserRegistrationBlank userRegistrationBlank);
     public User? GetUser(ID id);
     public User? GetUser(string email, string? passwordHash = null);

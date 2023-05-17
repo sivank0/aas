@@ -56,8 +56,6 @@ public partial class UsersService : IUsersService
 
         userBlank.Id ??= ID.New();
 
-        String? userPhotoPath = userBlank.FileBlank?.Path; 
-        
         if (userBlank.FileBlank is not null)
         {
             (FileDetailsOfBytes[] fileDetailsOfBytes, String[] removeFilePaths) =
@@ -66,13 +64,14 @@ public partial class UsersService : IUsersService
             Result result = await _fileStorageService.SaveAndRemoveFiles(fileDetailsOfBytes, removeFilePaths);
 
             if (!result.IsSuccess)
-            {
-                userPhotoPath = null;
                 return Result.Fail(result.Errors[0]);
-            }
+
+            userBlank.FileBlank.Path = fileDetailsOfBytes.Length != 0
+                ? fileDetailsOfBytes.FirstOrDefault()?.FullPath
+                : null;
         }
 
-        _usersRepository.SaveUser(userBlank, userPhotoPath, systemUserId);
+        _usersRepository.SaveUser(userBlank, systemUserId);
         return Result.Success();
     }
 

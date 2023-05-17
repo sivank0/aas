@@ -8,13 +8,15 @@ public class DataUrl
 
 		const Int32 prefixSize = 5;
 		Int32 dataIndex = value.IndexOf(',', prefixSize);
+
 		if (dataIndex < 0) return null;
 
 		String data = value.Substring(dataIndex + 1);
 		String type = value.Substring(prefixSize, dataIndex - prefixSize);
+
 		if (!type.EndsWith("base64", StringComparison.OrdinalIgnoreCase)) return null;
 
-		return new(type, data);
+		return new(type.Replace("base64", ""), data);
 	}
 
 	public String Type { get; }

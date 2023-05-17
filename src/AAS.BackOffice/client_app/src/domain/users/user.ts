@@ -1,6 +1,9 @@
+import { File, mapToFile } from "../files/file";
+
 export class User {
     constructor(
         public readonly id: string,
+        public readonly photo: File | null,
         public readonly firstName: string,
         public readonly middleName: string | null,
         public readonly lastName: string,
@@ -14,6 +17,9 @@ export class User {
 export function toUser(value: any): User {
     return new User(
         value.id,
+        value.photo === null 
+            ? null 
+            : mapToFile(value.photo),
         value.firstName,
         value.middleName,
         value.lastName,

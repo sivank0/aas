@@ -60,6 +60,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\AAS.Configurator\AAS.Configurator.csproj" />
         <ProjectReference Include="..\AAS.Domain\AAS.Domain.csproj" />
         <ProjectReference Include="..\AAS.Tools\AAS.Tools.csproj" />
     </ItemGroup>

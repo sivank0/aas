@@ -40,7 +40,7 @@ public class FileBlank
                     ? bidId
                     : userId;
 
-                if (fileParentId is null) throw new Exception("FileParentId is null");
+                if (fileParentId is null) throw new ArgumentNullException(nameof(fileParentId));
 
                 String path = String.Concat(fileBlank.Area.GetFileDirectory(), fileParentId, "/");
 
