@@ -19,7 +19,7 @@ import {useNavigate} from 'react-router-dom';
 import {UserLinks} from '../app/users/userLinks';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import {ThemeMode} from './themeMode';
-import {useLocationName} from "./useLocationName";
+import {useLocationName} from "../hooks/useLocationName";
 
 interface Props {
     themeMode: ThemeMode,

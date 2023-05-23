@@ -46,7 +46,7 @@ export const UserEditorModal: React.FC<AsyncDialogProps<Props, boolean>> = ({ op
         alert('Изменения сохранены');
         handleClose(true);
     }
-    
+
     console.log(userBlank)
 
     return (
@@ -63,13 +63,13 @@ export const UserEditorModal: React.FC<AsyncDialogProps<Props, boolean>> = ({ op
                     <InputForm
                         label=""
                         size={200}
-                        type='imageInput'
+                        type='image-input'
                         acceptTypes="image/jpeg,image/png,image/jpg"
                         fileBlank={userBlank.fileBlank}
                         defaultImage={{ image: PersonIcon, size: '8rem' }}
                         alignItem={{ marginLeft: 'auto', marginRight: 'auto' }}
                         addImage={(fileBlank) => setUserBlank(userBlank => ({ ...userBlank, fileBlank }))}
-                        removeImage={(fileBlank) => setUserBlank(userBlank => ({...userBlank, fileBlank}))} />
+                        removeImage={(fileBlank) => setUserBlank(userBlank => ({ ...userBlank, fileBlank }))} />
                     <Box sx={{
                         display: 'flex',
                         flexDirection: 'row'

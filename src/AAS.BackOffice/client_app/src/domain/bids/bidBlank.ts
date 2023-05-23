@@ -1,5 +1,6 @@
-import {Bid} from "./bid"
-import {BidStatus} from "./bidStatus"
+import { FileBlank } from "../files/fileBlank"
+import { Bid } from "./bid"
+import { BidStatus } from "./bidStatus"
 
 export interface BidBlank {
     id: string | null,
@@ -9,6 +10,7 @@ export interface BidBlank {
     status: BidStatus,
     acceptanceDate: Date | null,
     approximateDate: Date | null,
+    fileBlanks: FileBlank[]
 }
 
 export namespace BidBlank {
@@ -21,6 +23,7 @@ export namespace BidBlank {
             status: BidStatus.AwaitingVerification,
             acceptanceDate: null,
             approximateDate: null,
+            fileBlanks: [],
         }
     }
 
@@ -33,6 +36,7 @@ export namespace BidBlank {
             status: bid.status,
             acceptanceDate: bid.acceptanceDate,
             approximateDate: bid.approxmateDate,
+            fileBlanks: []
         }
     }
 }

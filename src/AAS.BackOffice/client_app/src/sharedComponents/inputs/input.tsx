@@ -6,6 +6,7 @@ import { IProps as AutocompleteProps, Autocomplete } from "./selects/select";
 import { IProps as MultiAutocompleteProps, MultiAutocomplete } from "./selects/multiSelect";
 import { IProps as CheckBoxProps, CheckBox } from "./checkBox/checkBox";
 import { IProps as ImageInputProps, ImageInput } from "./imageInput/imageInput";
+import { IProps as MultiFileInputProps, MultiFileInput } from "./multiFIleInput/multiFileInput";
 
 type NumberInputPropsType = { type: 'number' } & NumberInputProps;
 type TextInputPropsType = { type: 'text' } & TextInputProps;
@@ -14,7 +15,8 @@ type TextAreaInputPropsType = { type: 'text-area' } & TextAreaProps;
 type AutocompletePropsType<T> = { type: "select" } & AutocompleteProps<T>;
 type MultiAutocompletePropsType<T> = { type: "multi-select" } & MultiAutocompleteProps<T>;
 type CheckBoxPropsType = { type: "checkBox" } & CheckBoxProps;
-type ImageInputPropsType = { type: "imageInput" } & ImageInputProps;
+type ImageInputPropsType = { type: "image-input" } & ImageInputProps;
+type MultiFileInputPropsType = { type: "multi-file-input" } & MultiFileInputProps;
 
 export type IProps<T> =
     (
@@ -22,10 +24,11 @@ export type IProps<T> =
         PasswordInputPropsType |
         TextAreaInputPropsType |
         NumberInputPropsType |
-        AutocompletePropsType<T> |
-        MultiAutocompletePropsType<T> |
         CheckBoxPropsType |
-        ImageInputPropsType
+        ImageInputPropsType |
+        MultiFileInputPropsType |
+        AutocompletePropsType<T> |
+        MultiAutocompletePropsType<T>
     )
 
 export function Input<T>(props: IProps<T>) {
@@ -44,7 +47,9 @@ export function Input<T>(props: IProps<T>) {
             return <MultiAutocomplete {...props} />;
         case 'checkBox':
             return <CheckBox {...props} />;
-        case 'imageInput':
+        case 'image-input':
             return <ImageInput {...props} />;
+        case 'multi-file-input':
+            return <MultiFileInput {...props} />;
     }
 } 
