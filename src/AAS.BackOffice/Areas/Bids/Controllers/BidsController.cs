@@ -36,11 +36,11 @@ public class BidsController : BaseController
         return _bidsService.GetBid(bidId);
     }
 
-    [HttpGet("bids/get_page")]
+    [HttpGet("bids/get_all")]
     [IsAuthorized(AccessPolicy.BidsRead)]
-    public PagedResult<Bid> GetBidsPage(int page, int countInPage)
+    public Bid[] GetBidsAll()
     {
-        return _bidsService.GetPagedBids(page, countInPage);
+        return _bidsService.GetAllBids();
     }
 
     [HttpGet("bids/remove")]

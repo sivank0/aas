@@ -10,9 +10,9 @@ export class BidsProvider {
         return mapToResult(result);
     }
 
-    public static async getBidPage(page: number, countInPage: number): Promise<Page<Bid>> {
-        const pagedBids = await HttpClient.getJsonAsync("/bids/get_page", {page, countInPage});
-        return mapToPage<Bid>(pagedBids);
+    public static async getBidsAll(): Promise<Bid[]> {
+        const bids = await HttpClient.getJsonAsync("/bids/get_all");
+        return toBids(bids);
     }
 
     public static async removeBid(bidId: string): Promise<Result> {

@@ -40,9 +40,9 @@ public class BidsService : IBidsService
         return _bidsRepository.GetBid(id);
     }
 
-    public PagedResult<Bid> GetPagedBids(int page, int count)
+    public Bid[] GetAllBids()
     {
-        return _bidsRepository.GetPagedBids(page, count);
+        return _bidsRepository.GetAllBids();
     }
 
     public int GetBidsMaxNumber()

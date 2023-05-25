@@ -8,7 +8,7 @@ export interface BidBlank {
     denyDescription: string | null,
     status: BidStatus,
     acceptanceDate: Date | null,
-    approximateDate: Date | null,
+    approximateDate: string | Date | null | undefined,
 }
 
 export namespace BidBlank {
@@ -32,7 +32,7 @@ export namespace BidBlank {
             denyDescription: bid.denyDescription,
             status: bid.status,
             acceptanceDate: bid.acceptanceDate,
-            approximateDate: bid.approxmateDate,
+            approximateDate: bid.approximateDate,
         }
     }
 }

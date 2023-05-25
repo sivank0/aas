@@ -1,4 +1,15 @@
-import {Box, Button, Container, Divider, Grid, Menu, MenuItem, ToggleButtonGroup, Typography} from '@mui/material';
+import {
+    Box,
+    Button,
+    Container,
+    Divider,
+    Grid,
+    Menu,
+    MenuItem,
+    ToggleButtonGroup,
+    Typography,
+    Paper
+} from '@mui/material';
 import React, {useEffect, useState} from 'react';
 import useDialog from '../../hooks/useDialog';
 import {ConfirmDialogModal} from '../../sharedComponents/modals/modal';
@@ -14,6 +25,7 @@ import {Enum} from "../../tools/types/enum";
 import {BidStatus} from "../../domain/bids/bidStatus";
 import {ToggleButtons} from "../../sharedComponents/buttons/toggleButtons";
 import {BidBlank} from "../../domain/bids/bidBlank";
+import {DragDropContext, Draggable, Droppable, DropResult} from "@hello-pangea/dnd";
 
 type PaginationState = {
     page: number;
@@ -21,25 +33,50 @@ type PaginationState = {
     totalRows: number | null;
 }
 
+type Column = {
+    id: string;
+    title: string;
+    status: BidStatus;
+    bids: Bid[];
+}
+
 export const BidsPage = () => {
+
+    const [columns, setColumns] = useState<Column[]>([]);
     const [bids, setBids] = useState<Bid[]>([]);
-    const [paginationState, setPaginationState] = useState<PaginationState>({
-        page: 1,
-        countInPage: 50,
-        totalRows: null
-    });
-    const [bidBlank, setBidBlank] = useState<BidBlank>(BidBlank.getDefault());
+    const [isInit, setIsInit] = useState<boolean>(false);
+
 
     const bidEditorModal = useDialog(BidEditorModal);
 
     useEffect(() => {
-        init();
-    }, [paginationState.page, paginationState.countInPage])
+        try {
+            loadBids();
+        } finally {
+            setIsInit(true);
+        }
+    }, [])
 
-    async function init() {
-        const pagedBids = await BidsProvider.getBidPage(paginationState.page, paginationState.countInPage);
-        setBids(pagedBids.values);
-        setPaginationState(state => ({...state, totalRows: pagedBids.totalRows}))
+    useEffect(() => {
+        fillColumns();
+    }, [bids])
+
+    function fillColumns() {
+        const columns: Column[] = []
+        Enum.getNumberValues<BidStatus>(BidStatus).map((bidStatus, index) => {
+            columns.push({
+                id: `columns--${index}`,
+                title: BidStatus.getDisplayName(bidStatus),
+                status: bidStatus,
+                bids: bids.filter(bid => bid.status === bidStatus)
+            })
+        })
+        setColumns(columns)
+    }
+
+    async function loadBids() {
+        const bids = await BidsProvider.getBidsAll();
+        setBids(bids);
     }
 
     async function openBidEditorModal(bidId: string | null = null) {
@@ -47,75 +84,97 @@ export const BidsPage = () => {
 
         if (!isEdited) return;
 
-        init();
+        loadBids();
     }
 
-    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-    const open = Boolean(anchorEl);
-    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        setAnchorEl(event.currentTarget);
+    function onDragEnd(result: DropResult) {
+        if (!result.destination) return;
+
+        const {source, destination, draggableId} = result;
+
+        const sourceColumn = columns.find(col => col.id == source.droppableId);
+        const destColumn = columns.find(col => col.id == destination.droppableId);
+
+        if (sourceColumn === null || destColumn === null) return;
+
+        const sourceItems = sourceColumn!.bids;
+        const destItems = destColumn!.bids;
+        const [removed] = sourceItems.splice(source.index, 1);
+        destItems.splice(destination.index, 0, removed);
+
+        let isReplaced: boolean = false;
+
+        if (source.droppableId === destination.droppableId) {
+            if (source.index !== destination.index) isReplaced = true;
+        } else {
+            isReplaced = true;
+        }
+
+        const destColumnId = destColumn!.id;
+
     };
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
+
 
     return (
         <Container maxWidth={false}>
             <Box sx={{display: "flex", justifyContent: "space-between"}}>
-                <Button variant={"contained"}
-                        aria-controls={open ? 'basic-menu' : undefined}
-                        aria-haspopup="true"
-                        aria-expanded={open ? 'true' : undefined}
-                        onClick={handleClick}>
-                    <FilterAlt/>
-                </Button>
-                <Menu
-                    anchorEl={anchorEl}
-                    open={open}
-                    onClose={handleClose}
-                    MenuListProps={{
-                        'aria-labelledby': 'basic-button',
-                    }}
-                >
-                    <MenuItem>
-                        <ToggleButtons
-                            value={bidBlank.status}
-                            options={Enum.getNumberValues<BidStatus>(BidStatus)}
-                            getOptionLabel={(option) => BidStatus.getDisplayName(option)}
-                            onChange={(status) => setBidBlank(blank => ({...blank, status}))}/>
-                    </MenuItem>
-                </Menu>
                 <AddButton onClick={() => openBidEditorModal()}>
                     Создать заявку
                 </AddButton>
             </Box>
             <Divider sx={{marginY: 3}}/>
-            <Grid container spacing={2}>
-                {
-                    bids.map((bid) =>
-                        <Grid key={bid.id} item
-                              lg={window.browserType === BrowserType.Desktop ? 4 : undefined}
-                              md={window.browserType === BrowserType.Desktop ? 6 : undefined}>
-                            <BidCard
-                                bid={bid}
-                                openBidEditor={(bidId) => openBidEditorModal(bidId)}/>
-                        </Grid>
-                    )
-                }
-            </Grid>
-            <Box sx={{
-                marginTop: '15px',
-                display: 'flex',
-                width: '100%',
-                justifyContent: 'right'
-            }}>
-                <PaginationButtons
-                    page={paginationState.page}
-                    countInPage={paginationState.countInPage}
-                    countInPageOptions={[50, 100, 150]}
-                    onChangePage={(page) => setPaginationState(state => ({...state, page}))}
-                    onChangeCountInPage={(countInPage) => setPaginationState(state => ({...state, countInPage}))}/>
-            </Box>
+            <DragDropContext onDragEnd={(result) => onDragEnd(result)}>
+                <Box sx={{
+                    display: 'grid',
+                    overflowY: 'hidden',
+                    gridTemplateColumns: `repeat(${columns.length}, minmax(340px, 1fr))`,
+                    overflowX: 'auto',
+                    gap: 3
+                }}>
+                    {
+                        columns.map(column =>
+                            <Box>
+                                <Paper key={`head--${column.id}`}>
+                                    {
+                                        column.title
+                                    }
+                                </Paper>
+                                <Droppable droppableId={column.id} key={column.id}>
+                                    {
+                                        (provided, _) => {
+                                            return (
+                                                <Box {...provided.droppableProps} ref={provided.innerRef}>
+                                                    {
+                                                        column.bids.map((bid, index) =>
+                                                            <Draggable draggableId={bid.id} index={index} key={bid.id}>
+                                                                {
+                                                                    (provided, snapshot) => {
+                                                                        return (
+                                                                            <BidCard
+                                                                                bid={bid}
+                                                                                provided={provided}
+                                                                                snapshot={snapshot}
+                                                                                openBidEditor={(bidId) => openBidEditorModal(bidId)}/>
+                                                                        )
+                                                                    }
+                                                                }
+                                                            </Draggable>
+                                                        )
+                                                    }
+                                                    {
+                                                        provided.placeholder
+                                                    }
+                                                </Box>
+                                            )
+                                        }
+                                    }
+
+                                </Droppable>
+                            </Box>
+                        )
+                    }
+                </Box>
+            </DragDropContext>
         </Container>
     )
 }

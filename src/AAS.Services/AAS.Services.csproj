@@ -33,7 +33,6 @@
 
     <ItemGroup>
         <EmbeddedResource Include="Bids\Repositories\Queries\Bids\Bids_GetById.sql" />
-        <EmbeddedResource Include="Bids\Repositories\Queries\Bids\Bids_GetPaged.sql" />
         <EmbeddedResource Include="Bids\Repositories\Queries\Bids\Bids_GetMaxNumber.sql" />
         <EmbeddedResource Include="Bids\Repositories\Queries\Bids\Bids_Remove.sql" />
         <EmbeddedResource Include="Bids\Repositories\Queries\Bids\Bids_Save.sql" />
@@ -63,6 +62,14 @@
         <ProjectReference Include="..\AAS.Configurator\AAS.Configurator.csproj" />
         <ProjectReference Include="..\AAS.Domain\AAS.Domain.csproj" />
         <ProjectReference Include="..\AAS.Tools\AAS.Tools.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Bids\Repositories\Queries\Bids\Bids_GetAll.sql" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Include="Bids\Repositories\Queries\Bids\Bids_GetAll.sql" />
     </ItemGroup>
 
 </Project>

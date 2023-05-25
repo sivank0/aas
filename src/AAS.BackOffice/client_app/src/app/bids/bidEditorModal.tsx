@@ -1,4 +1,4 @@
-import {Box, IconButton, Tooltip,} from '@mui/material';
+import {Box, IconButton, Tooltip, Typography,} from '@mui/material';
 import React, {useEffect, useState} from 'react';
 import {BidBlank} from '../../domain/bids/bidBlank';
 import {BidsProvider} from '../../domain/bids/bidProvider';
@@ -11,6 +11,10 @@ import {AsyncDialogProps} from '../../sharedComponents/modals/async/types';
 import {ConfirmDialogModal, Modal, ModalActions, ModalBody, ModalTitle} from '../../sharedComponents/modals/modal';
 import {Enum} from '../../tools/types/enum';
 import DeleteIcon from '@mui/icons-material/Delete';
+import {DayPicker} from 'react-day-picker';
+import {ru} from 'date-fns/locale';
+import 'react-day-picker/dist/style.css';
+import {endOfDay} from "date-fns";
 
 interface Props {
     bidId: string | null;
@@ -18,7 +22,6 @@ interface Props {
 
 export const BidEditorModal: React.FC<AsyncDialogProps<Props, boolean>> = ({open, handleClose, data: props}) => {
     const [bidBlank, setBidBlank] = useState<BidBlank>(BidBlank.getDefault());
-
     const confirmationDialog = useDialog(ConfirmDialogModal)
 
     useEffect(() => {
@@ -30,6 +33,7 @@ export const BidEditorModal: React.FC<AsyncDialogProps<Props, boolean>> = ({open
             if (bid === null) return;
 
             setBidBlank(BidBlank.fromBid(bid));
+
         }
 
         if (open) init();
@@ -39,6 +43,8 @@ export const BidEditorModal: React.FC<AsyncDialogProps<Props, boolean>> = ({open
 
 
     async function saveBidBlank() {
+        bidBlank.approximateDate = endOfDay(new Date(bidBlank.approximateDate!))
+
         const result = await BidsProvider.saveBid(bidBlank)
 
         if (!result.isSuccess) return alert(result.errors[0].message)
@@ -86,6 +92,12 @@ export const BidEditorModal: React.FC<AsyncDialogProps<Props, boolean>> = ({open
                         minRows={3}
                         value={bidBlank.description}
                         onChange={(description) => setBidBlank(blank => ({...blank, description}))}/>
+                    <DayPicker locale={ru}
+                               ISOWeek mode="single"
+                               showOutsideDays
+                               footer={'Выберите дату окончания разработки'}
+                               selected={new Date(bidBlank.approximateDate!)}
+                               onSelect={(approximateDate) => setBidBlank(blank => ({...blank, approximateDate}))}/>
                     {
                         (props.bidId !== null && bidBlank.status === BidStatus.Denied) &&
                         <InputForm

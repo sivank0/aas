@@ -12,7 +12,7 @@ public interface IBidsRepository
 {
     public void SaveBid(BidBlank bidBlank, ID systemUserId);
     public Bid? GetBid(ID id);
-    public PagedResult<Bid> GetPagedBids(int page, int countInPage);
+    public Bid[] GetAllBids();
     public int GetBidsMaxNumber();
     public void RemoveBid(ID bidId, ID systemUserId);
 }

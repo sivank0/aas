@@ -7,7 +7,7 @@ export class Bid {
         public readonly denyDescription: string | null,
         public readonly status: number,
         public readonly acceptanceDate: Date | null,
-        public readonly approxmateDate: Date | null
+        public readonly approximateDate: Date | null
     ) {
     }
 }
@@ -21,7 +21,7 @@ export function toBid(value: any): Bid {
         value.denyDescription,
         value.status,
         value.acceptanceDate,
-        value.approxmateDate,
+        value.approximateDate,
     )
 }
 

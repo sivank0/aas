@@ -7,8 +7,11 @@ import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import DoNotDisturbIcon from '@mui/icons-material/DoNotDisturb';
 import EngineeringIcon from '@mui/icons-material/Engineering';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
+import {DraggableProvided, DraggableStateSnapshot} from "@hello-pangea/dnd";
 
 interface Props {
+    provided: DraggableProvided;
+    snapshot: DraggableStateSnapshot;
     bid: Bid;
     openBidEditor: (bidId: string) => void;
 }
@@ -30,7 +33,10 @@ export const BidCard = (props: Props) => {
 
     return (
         <Card
-            elevation={3}
+            {...props.provided?.draggableProps}
+            {...props.provided?.dragHandleProps}
+            ref={props.provided?.innerRef}
+            elevation={props.snapshot?.isDragging ? 6 : 3}
             sx={{cursor: "pointer"}}
             onClick={() => props.openBidEditor(props.bid.id)}>
             <CardHeader

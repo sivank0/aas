@@ -12,6 +12,6 @@ public interface IBidsService
 {
     Result SaveBid(BidBlank bidBlank, ID systenUserId);
     Bid? GetBid(ID id);
-    PagedResult<Bid> GetPagedBids(int page, int count);
+    Bid[] GetAllBids();
     Result RemoveBid(ID bidId, ID systemUserId);
 }
