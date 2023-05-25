@@ -1,31 +1,20 @@
+import { DragDropContext, Draggable, DropResult, Droppable } from "@hello-pangea/dnd";
 import {
     Box,
-    Button,
     Container,
     Divider,
-    Grid,
-    Menu,
-    MenuItem,
-    ToggleButtonGroup,
-    Typography,
     Paper
 } from '@mui/material';
-import React, {useEffect, useState} from 'react';
-import useDialog from '../../hooks/useDialog';
-import {ConfirmDialogModal} from '../../sharedComponents/modals/modal';
-import {BidsProvider} from '../../domain/bids/bidProvider';
-import {BidEditorModal} from './bidEditorModal';
-import {Bid} from '../../domain/bids/bid';
-import {BidCard} from '../../sharedComponents/cards/bidCard';
-import {AddButton} from '../../sharedComponents/buttons/button';
-import {BrowserType} from '../../tools/browserType';
-import {PaginationButtons} from '../../sharedComponents/buttons/paginationButtons';
-import {FilterAlt} from "@mui/icons-material";
-import {Enum} from "../../tools/types/enum";
-import {BidStatus} from "../../domain/bids/bidStatus";
-import {ToggleButtons} from "../../sharedComponents/buttons/toggleButtons";
-import {BidBlank} from "../../domain/bids/bidBlank";
-import {DragDropContext, Draggable, Droppable, DropResult} from "@hello-pangea/dnd";
+import React, { useEffect, useState } from 'react';
+import { Bid } from '../../domain/bids/bid';
+import { BidsProvider } from '../../domain/bids/bidProvider';
+import { BidStatus } from "../../domain/bids/bidStatus";
+import useDialog from "../../hooks/useDialog";
+import { AddButton } from '../../sharedComponents/buttons/button';
+import { BidCard } from '../../sharedComponents/cards/bidCard';
+import { Enum } from "../../tools/types/enum";
+import { BidDenyDescriptionEditorModal } from "./modals/bidDenyDescriptionEditorModal";
+import { BidEditorModal } from "./modals/bidEditorModal";
 
 type PaginationState = {
     page: number;
@@ -41,13 +30,12 @@ type Column = {
 }
 
 export const BidsPage = () => {
+    const bidDenyDescriptionEditorModal = useDialog(BidDenyDescriptionEditorModal);
+    const bidEditorModal = useDialog(BidEditorModal);
 
     const [columns, setColumns] = useState<Column[]>([]);
     const [bids, setBids] = useState<Bid[]>([]);
     const [isInit, setIsInit] = useState<boolean>(false);
-
-
-    const bidEditorModal = useDialog(BidEditorModal);
 
     useEffect(() => {
         try {
@@ -79,18 +67,12 @@ export const BidsPage = () => {
         setBids(bids);
     }
 
-    async function openBidEditorModal(bidId: string | null = null) {
-        const isEdited = await bidEditorModal.show({bidId});
-
-        if (!isEdited) return;
-
-        loadBids();
-    }
-
-    function onDragEnd(result: DropResult) {
+    async function onDragEnd(result: DropResult) {
         if (!result.destination) return;
 
-        const {source, destination, draggableId} = result;
+        const { source, destination, draggableId } = result;
+
+        if (source.droppableId === destination.droppableId) return;
 
         const sourceColumn = columns.find(col => col.id == source.droppableId);
         const destColumn = columns.find(col => col.id == destination.droppableId);
@@ -102,48 +84,78 @@ export const BidsPage = () => {
         const [removed] = sourceItems.splice(source.index, 1);
         destItems.splice(destination.index, 0, removed);
 
-        let isReplaced: boolean = false;
+        const destColumnStatus = destColumn!.status;
 
-        if (source.droppableId === destination.droppableId) {
-            if (source.index !== destination.index) isReplaced = true;
-        } else {
-            isReplaced = true;
-        }
-
-        const destColumnId = destColumn!.id;
-
+        await changeBidStatus(draggableId, destColumnStatus);
     };
 
+    async function changeBidStatus(bidId: string, bidStatus: BidStatus) {
+        if (bidStatus === BidStatus.Denied) {
+            const isEdited = await bidDenyDescriptionEditorModal.show({ bidId });
+
+            if (!isEdited) {
+                loadBids();
+                return alert(`Для того, чтобы переместить заявку в статус ${BidStatus.getDisplayName(bidStatus)} необходимо ввести причину отказа`);
+            }
+        }
+
+        const result = await BidsProvider.changeBidStatus(bidId, bidStatus);
+
+        if (!result.isSuccess) alert(result.errors[0].message);
+
+        loadBids();
+    }
+
+    async function openBidEditorModal(bidId: string | null = null) {
+        const isEdited = await bidEditorModal.show({ bidId });
+
+        if (!isEdited) return;
+
+        loadBids();
+    }
 
     return (
-        <Container maxWidth={false}>
-            <Box sx={{display: "flex", justifyContent: "space-between"}}>
+        <Container maxWidth={false} sx={{ paddingTop: 2, height: '100%' }}>
+            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                 <AddButton onClick={() => openBidEditorModal()}>
                     Создать заявку
                 </AddButton>
             </Box>
-            <Divider sx={{marginY: 3}}/>
+            <Divider sx={{ marginY: 3 }} />
             <DragDropContext onDragEnd={(result) => onDragEnd(result)}>
                 <Box sx={{
                     display: 'grid',
                     overflowY: 'hidden',
                     gridTemplateColumns: `repeat(${columns.length}, minmax(340px, 1fr))`,
+                    height: 'calc(100% - 110px)',
                     overflowX: 'auto',
                     gap: 3
                 }}>
                     {
                         columns.map(column =>
-                            <Box>
-                                <Paper key={`head--${column.id}`}>
-                                    {
-                                        column.title
-                                    }
+                            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                                <Paper
+                                    key={`head--${column.id}`}
+                                    sx={{
+                                        padding: 1,
+                                        textAlign: 'center',
+                                        backgroundColor: theme => theme.palette.grey[300]
+                                    }}>
+                                    {column.title}
                                 </Paper>
                                 <Droppable droppableId={column.id} key={column.id}>
                                     {
                                         (provided, _) => {
                                             return (
-                                                <Box {...provided.droppableProps} ref={provided.innerRef}>
+                                                <Box
+                                                    {...provided.droppableProps}
+                                                    ref={provided.innerRef}
+                                                    sx={{
+                                                        height: '100%',
+                                                        border: '1px dashed #000',
+                                                        borderRadius: 1,
+                                                        padding: 1
+                                                    }}>
                                                     {
                                                         column.bids.map((bid, index) =>
                                                             <Draggable draggableId={bid.id} index={index} key={bid.id}>
@@ -154,21 +166,24 @@ export const BidsPage = () => {
                                                                                 bid={bid}
                                                                                 provided={provided}
                                                                                 snapshot={snapshot}
-                                                                                openBidEditor={(bidId) => openBidEditorModal(bidId)}/>
+                                                                                openBidEditor={(bidId) => openBidEditorModal(bidId)}
+                                                                                sx={{
+                                                                                    marginBottom: 2,
+                                                                                    ':last-child': {
+                                                                                        marginBottom: 0
+                                                                                    }
+                                                                                }} />
                                                                         )
                                                                     }
                                                                 }
                                                             </Draggable>
                                                         )
                                                     }
-                                                    {
-                                                        provided.placeholder
-                                                    }
+                                                    {provided.placeholder}
                                                 </Box>
                                             )
                                         }
                                     }
-
                                 </Droppable>
                             </Box>
                         )

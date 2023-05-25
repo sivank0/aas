@@ -1,8 +1,9 @@
-import {Bid} from "./bid"
-import {BidStatus} from "./bidStatus"
+import { Bid } from "./bid"
+import { BidStatus } from "./bidStatus"
 
 export interface BidBlank {
     id: string | null,
+    number: number | null,
     title: string | null,
     description: string | null,
     denyDescription: string | null,
@@ -15,6 +16,7 @@ export namespace BidBlank {
     export function getDefault(): BidBlank {
         return {
             id: null,
+            number: null,
             title: null,
             description: null,
             denyDescription: null,
@@ -27,6 +29,7 @@ export namespace BidBlank {
     export function fromBid(bid: Bid): BidBlank {
         return {
             id: bid.id,
+            number: bid.number,
             title: bid.title,
             description: bid.description,
             denyDescription: bid.denyDescription,

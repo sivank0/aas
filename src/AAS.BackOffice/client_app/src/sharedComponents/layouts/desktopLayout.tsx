@@ -1,14 +1,13 @@
-import React, {useEffect, useState} from "react";
+import { ThemeProvider } from "@emotion/react";
+import { Box, CssBaseline, createTheme } from "@mui/material";
+import { ruRU } from '@mui/material/locale';
+import { SnackbarProvider } from "notistack";
+import React, { PropsWithChildren, useEffect, useState } from "react";
 import "../../content/desktopMain.css";
-import {ThemeProvider} from "@emotion/react";
-import {Box, createTheme, CssBaseline, Palette} from "@mui/material";
-import {ruRU} from '@mui/material/locale';
-import {SnackbarProvider} from "notistack";
-import {PropsWithChildren} from "react";
-import {DesktopAppBar} from "../desktopAppBar";
-import DialogProvider from "../modals/async/DialogProvider";
 import SystemUser from "../../domain/systemUser";
-import {ThemeMode} from "../themeMode";
+import { DesktopAppBar } from "../desktopAppBar";
+import DialogProvider from "../modals/async/DialogProvider";
+import { ThemeMode } from "../themeMode";
 
 interface LayoutProps {
 }
@@ -57,15 +56,15 @@ export const DesktopLayout = (props: PropsWithChildren<LayoutProps>) => {
                     {
                         isInit &&
                         <>
-                            <CssBaseline/>
+                            <CssBaseline />
                             {
                                 SystemUser !== null &&
-                                <DesktopAppBar themeMode={themeMode} changeThemeMode={(mode) => changeThemeMode(mode)}/>
+                                <DesktopAppBar themeMode={themeMode} changeThemeMode={(mode) => changeThemeMode(mode)} />
                             }
                             <Box sx={{
                                 width: SystemUser === null ? "100%" : "calc(100% - 65px)",
                                 height: SystemUser === null ? "100%" : "calc(100% - 65px)",
-                                marginTop: SystemUser === null ? 0 : "89px",
+                                marginTop: SystemUser === null ? 0 : "65px",
                                 marginLeft: SystemUser === null ? 0 : "65px"
                             }}>
                                 {props.children}
