@@ -1,8 +1,8 @@
-import {Box, Dialog, DialogActions, DialogContent, DialogTitle, SxProps, Theme} from "@mui/material";
-import React, {PropsWithChildren} from "react";
-import {BrowserType} from "../../tools/browserType";
-import {AsyncDialogProps} from "./async/types";
-import {CancelButton, CloseIconButton, SuccessButton} from "../buttons/button";
+import { Box, Dialog, DialogActions, DialogContent, DialogTitle, SxProps, Theme } from "@mui/material";
+import React, { PropsWithChildren } from "react";
+import { BrowserType } from "../../tools/browserType";
+import { CancelButton, CloseIconButton, SuccessButton } from "../buttons/button";
+import { AsyncDialogProps } from "./async/types";
 
 interface ModalProps {
     isOpen: boolean;
@@ -13,7 +13,7 @@ export const Modal = (props: PropsWithChildren<ModalProps>) => {
     return (
         <Dialog
             fullScreen={window.browserType === BrowserType.Mobile}
-            sx={{overflow: "hidden"}}
+            sx={{ overflow: "hidden" }}
             maxWidth={false}
             open={props.isOpen}
             onClose={props.onClose}>
@@ -28,12 +28,12 @@ interface ModalTitleProps {
 
 export const ModalTitle = (props: PropsWithChildren<ModalTitleProps>) => {
     return (
-        <DialogTitle sx={{position: "relative"}}>
+        <DialogTitle sx={{ position: "relative" }}>
             {props.children}
             <CloseIconButton
                 title="Закрыть"
-                sx={{position: "absolute", right: 4, top: 4}}
-                onClick={() => props.onClose()}/>
+                sx={{ position: "absolute", right: 4, top: 4 }}
+                onClick={() => props.onClose()} />
         </DialogTitle>
     )
 }
@@ -44,7 +44,7 @@ interface ModalBodyProps {
 
 export const ModalBody = (props: PropsWithChildren<ModalBodyProps>) => {
     return (
-        <DialogContent sx={{"&.MuiDialogContent-root": {paddingX: 2, paddingY: 1}, ...props.sx}}>
+        <DialogContent sx={{ "&.MuiDialogContent-root": { paddingX: 2, paddingY: 1 }, ...props.sx }}>
             {props.children}
         </DialogContent>
     )
@@ -63,14 +63,10 @@ interface ConfirmDialogProps {
     body?: React.ReactNode;
 }
 
-export const ConfirmDialogModal: React.FC<AsyncDialogProps<ConfirmDialogProps, boolean>> = ({
-                                                                                                open,
-                                                                                                handleClose,
-                                                                                                data
-                                                                                            }) => {
+export const ConfirmDialogModal: React.FC<AsyncDialogProps<ConfirmDialogProps, boolean>> = ({ open, handleClose, data }) => {
     return (
         <Modal isOpen={open} onClose={() => handleClose(false)}>
-            <Box sx={window.browserType === BrowserType.Mobile ? {} : {width: 600}}>
+            <Box sx={window.browserType === BrowserType.Mobile ? {} : { width: 600 }}>
                 {
                     data.title !== undefined &&
                     <ModalTitle onClose={() => handleClose(false)}>

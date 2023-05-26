@@ -4,6 +4,7 @@ using AAS.BackOffice.Controllers;
 using AAS.BackOffice.Filters;
 using AAS.Domain.AccessPolicies;
 using AAS.Domain.Bids;
+using AAS.Domain.Bids.Enums;
 using AAS.Domain.Services;
 using AAS.Tools.Types.IDs;
 using AAS.Tools.Types.Results;
@@ -36,11 +37,25 @@ public class BidsController : BaseController
         return _bidsService.GetBid(bidId);
     }
 
-    [HttpGet("bids/get_page")]
+    [HttpGet("bids/get_all")]
     [IsAuthorized(AccessPolicy.BidsRead)]
-    public PagedResult<Bid> GetBidsPage(int page, int countInPage)
+    public Bid[] GetBidsAll()
     {
-        return _bidsService.GetPagedBids(page, countInPage);
+        return _bidsService.GetAllBids();
+    }
+
+    [HttpGet("bids/change_bid_deny_description")]
+    [IsAuthorized(AccessPolicy.BidsUpdate)]
+    public Result ChangeBidStatus(ID bidId, String? bidDenyDescription)
+    {
+        return _bidsService.ChangeBidDenyDescription(bidId, bidDenyDescription);
+    }
+
+    [HttpGet("bids/change_bid_status")]
+    [IsAuthorized(AccessPolicy.BidsUpdate)]
+    public Result ChangeBidStatus(ID bidId, BidStatus bidStatus)
+    {
+        return _bidsService.ChangeBidStatus(bidId, bidStatus);
     }
 
     [HttpGet("bids/remove")]

@@ -51,17 +51,9 @@ public class BidsRepository : NpgSqlRepository, IBidsRepository
         return Get<BidDb?>(Sql.Bids_GetById, parameters)?.ToBid();
     }
 
-    public PagedResult<Bid> GetPagedBids(int page, int count)
+    public Bid[] GetAllBids()
     {
-        (int offset, int limit) = NormalizeRange(page, count);
-
-        SqlParameter[] parameters =
-        {
-            new("p_offset", offset),
-            new("p_limit", limit)
-        };
-
-        return GetPageOver<BidDb>(Sql.Bids_GetPaged, parameters).ToPagedBids();
+        return GetArray<BidDb>(Sql.Bids_GetAll).ToBids();
     }
 
     public int GetBidsMaxNumber()
@@ -69,6 +61,28 @@ public class BidsRepository : NpgSqlRepository, IBidsRepository
         return Get<int>(Sql.Bids_GetMaxNumber);
     }
 
+    public void ChangeBidDenyDescription(ID bidId, String bidDenyDescription)
+    {
+        SqlParameter[] parameters =
+        {
+            new("p_bidid", bidId),
+            new("p_biddenydescription", bidDenyDescription)
+        };
+        
+        Execute(Sql.Bids_ChangeDenyDescription, parameters);
+    }
+    
+    public void ChangeBidStatus(ID bidId, BidStatus bidStatus)
+    {
+        SqlParameter[] parameters =
+        {
+            new("p_bidid", bidId),
+            new("p_bidstatus", bidStatus)
+        };
+        
+        Execute(Sql.Bids_ChangeStatus, parameters);
+    }
+    
     public void RemoveBid(ID bidId, ID systemUserId)
     {
         SqlParameter[] parameters =

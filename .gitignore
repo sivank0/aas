@@ -26,3 +26,4 @@ src/AAS.BackOffice/wwwroot/dist
 src/AAS.BackOffice/ClientApps/package-lock.json
 /.vscode/
 /publish
+connectionString.json

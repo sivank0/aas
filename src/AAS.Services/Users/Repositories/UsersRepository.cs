@@ -59,6 +59,12 @@ public partial class UsersRepository : NpgSqlRepository, IUsersRepository
 
     public void RegisterUser(UserRegistrationBlank userRegistrationBlank)
     {
+        String? userPhotoPath = userRegistrationBlank.FileBlank is null
+            ? null
+            : String.IsNullOrWhiteSpace(userRegistrationBlank.FileBlank.Path)
+                ? null
+                : userRegistrationBlank.FileBlank.Path;
+        
         SqlParameter[] parameters =
         {
             new("p_id", userRegistrationBlank.Id!.Value),
@@ -68,6 +74,7 @@ public partial class UsersRepository : NpgSqlRepository, IUsersRepository
             new("p_email", userRegistrationBlank.Email!),
             new("p_passwordhash", userRegistrationBlank.PasswordHash),
             new("p_phonenumber", userRegistrationBlank.PhoneNumber!),
+            new("p_userphotopath", userPhotoPath),
             new("p_systemuserid", userRegistrationBlank.Id!),
             new("p_currentdatetimeutc", DateTime.UtcNow)
         };

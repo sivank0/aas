@@ -40,14 +40,47 @@ public class BidsService : IBidsService
         return _bidsRepository.GetBid(id);
     }
 
-    public PagedResult<Bid> GetPagedBids(int page, int count)
+    public Bid[] GetAllBids()
     {
-        return _bidsRepository.GetPagedBids(page, count);
+        return _bidsRepository.GetAllBids();
     }
 
     public int GetBidsMaxNumber()
     {
         return _bidsRepository.GetBidsMaxNumber();
+    }
+
+    public Result ChangeBidDenyDescription(ID bidId, String? bidDenyDescription = null,
+        Boolean canBeBidDenyDescriptionNull = false)
+    {
+        if (!canBeBidDenyDescriptionNull && String.IsNullOrWhiteSpace(bidDenyDescription))
+            return Result.Fail("Необходимо ввести причину отказа по заявке");
+
+        Bid? existingBid = GetBid(bidId);
+
+        if (existingBid is null) return Result.Fail("Заявка не найдена");
+
+        _bidsRepository.ChangeBidDenyDescription(bidId, bidDenyDescription);
+
+        return Result.Success();
+    }
+
+    public Result ChangeBidStatus(ID bidId, BidStatus bidStatus)
+    {
+        Bid? existingBid = GetBid(bidId);
+
+        if (existingBid is null) return Result.Fail("Заявка не найдена");
+
+        if (bidStatus == BidStatus.Denied)
+        {
+            if (String.IsNullOrWhiteSpace(existingBid.DenyDescription))
+                return Result.Fail("Необходимо указать причину отказа по заявке");
+        }
+        else ChangeBidDenyDescription(bidId, canBeBidDenyDescriptionNull: true);
+        
+        _bidsRepository.ChangeBidStatus(bidId, bidStatus);
+
+        return Result.Success();
     }
 
     public Result RemoveBid(ID bidId, ID systemUserId)

@@ -1,16 +1,20 @@
-import { Box, IconButton, Paper, Tooltip, } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import { BidBlank } from '../../domain/bids/bidBlank';
-import { BidsProvider } from '../../domain/bids/bidProvider';
-import { BidStatus } from '../../domain/bids/bidStatus';
-import useDialog from '../../hooks/useDialog';
-import { SaveButton } from '../../sharedComponents/buttons/button';
-import { ToggleButtons } from '../../sharedComponents/buttons/toggleButtons';
-import { InputForm } from '../../sharedComponents/inputs/inputForm';
-import { AsyncDialogProps } from '../../sharedComponents/modals/async/types';
-import { ConfirmDialogModal, Modal, ModalActions, ModalBody, ModalTitle } from '../../sharedComponents/modals/modal';
-import { Enum } from '../../tools/types/enum';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { Box, IconButton, Tooltip } from '@mui/material';
+import { endOfDay } from "date-fns";
+import { ru } from 'date-fns/locale';
+import React, { useEffect, useState } from 'react';
+import { DayPicker } from 'react-day-picker';
+import 'react-day-picker/dist/style.css';
+import { BidBlank } from '../../../domain/bids/bidBlank';
+import { BidsProvider } from '../../../domain/bids/bidProvider';
+import { BidStatus } from '../../../domain/bids/bidStatus';
+import useDialog from '../../../hooks/useDialog';
+import { SaveButton } from '../../../sharedComponents/buttons/button';
+import { ToggleButtons } from '../../../sharedComponents/buttons/toggleButtons';
+import { InputForm } from '../../../sharedComponents/inputs/inputForm';
+import { AsyncDialogProps } from '../../../sharedComponents/modals/async/types';
+import { ConfirmDialogModal, Modal, ModalActions, ModalBody, ModalTitle } from '../../../sharedComponents/modals/modal';
+import { Enum } from '../../../tools/types/enum';
 
 interface Props {
     bidId: string | null;
@@ -18,7 +22,6 @@ interface Props {
 
 export const BidEditorModal: React.FC<AsyncDialogProps<Props, boolean>> = ({ open, handleClose, data: props }) => {
     const [bidBlank, setBidBlank] = useState<BidBlank>(BidBlank.getDefault());
-
     const confirmationDialog = useDialog(ConfirmDialogModal)
 
     useEffect(() => {
@@ -30,6 +33,7 @@ export const BidEditorModal: React.FC<AsyncDialogProps<Props, boolean>> = ({ ope
             if (bid === null) return;
 
             setBidBlank(BidBlank.fromBid(bid));
+
         }
 
         if (open) init();
@@ -39,6 +43,8 @@ export const BidEditorModal: React.FC<AsyncDialogProps<Props, boolean>> = ({ ope
 
 
     async function saveBidBlank() {
+        bidBlank.approximateDate = endOfDay(new Date(bidBlank.approximateDate!))
+
         const result = await BidsProvider.saveBid(bidBlank)
 
         if (!result.isSuccess) return alert(result.errors[0].message)
@@ -86,6 +92,12 @@ export const BidEditorModal: React.FC<AsyncDialogProps<Props, boolean>> = ({ ope
                         minRows={3}
                         value={bidBlank.description}
                         onChange={(description) => setBidBlank(blank => ({ ...blank, description }))} />
+                    <DayPicker locale={ru}
+                        ISOWeek mode="single"
+                        showOutsideDays
+                        footer={'Выберите дату окончания разработки'}
+                        selected={new Date(bidBlank.approximateDate!)}
+                        onSelect={(approximateDate) => setBidBlank(blank => ({ ...blank, approximateDate }))} />
                     {
                         props.bidId !== null &&
                         <ToggleButtons
@@ -112,7 +124,7 @@ export const BidEditorModal: React.FC<AsyncDialogProps<Props, boolean>> = ({ ope
                                 type="multi-file-input"
                                 extensions={[".jpg", ".jpeg", ".png", ".bmp", ".tif", ".webp", "doc", "docx"]}
                                 fileBlanks={bidBlank.fileBlanks}
-                                onChange={(fileBlanks) => setBidBlank(bidBlank => ({ ...bidBlank, fileBlanks }))}
+                            onChange={(status) => setBidBlank(blank => ({ ...blank, status }))} />
                                 getFile={(fileBlank) => { }}
                                 removeFile={(fileBlanks, fileIndex) => { }} />
                         </Box>

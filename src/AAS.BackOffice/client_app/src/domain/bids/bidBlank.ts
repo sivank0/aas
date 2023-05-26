@@ -4,12 +4,13 @@ import { BidStatus } from "./bidStatus"
 
 export interface BidBlank {
     id: string | null,
+    number: number | null,
     title: string | null,
     description: string | null,
     denyDescription: string | null,
     status: BidStatus,
     acceptanceDate: Date | null,
-    approximateDate: Date | null,
+    approximateDate: string | Date | null | undefined,
     fileBlanks: FileBlank[]
 }
 
@@ -17,6 +18,7 @@ export namespace BidBlank {
     export function getDefault(): BidBlank {
         return {
             id: null,
+            number: null,
             title: null,
             description: null,
             denyDescription: null,
@@ -30,12 +32,13 @@ export namespace BidBlank {
     export function fromBid(bid: Bid): BidBlank {
         return {
             id: bid.id,
+            number: bid.number,
             title: bid.title,
             description: bid.description,
             denyDescription: bid.denyDescription,
             status: bid.status,
             acceptanceDate: bid.acceptanceDate,
-            approximateDate: bid.approxmateDate,
+            approximateDate: bid.approximateDate,
             fileBlanks: []
         }
     }
