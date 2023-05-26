@@ -30,16 +30,12 @@ builder.Services.Configure<GzipCompressionProviderOptions>(options =>
     {
         x.MaxRequestBodySize = 200 * 1024 * 1024;
     })
-    .AddControllersWithViews(mvcOptions =>
-    {
-        mvcOptions.ModelBinderProviders.Insert(0, new IDModelBinderProvider());
-    })
+    .AddControllers()
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions
             .AddJsonSettings()
-            .ApplyToolsConverters()
-            .ApplyAnyTypeConverters(DomainAssembly.Itself);
+            .ApplyToolsConverters();
     });
 
 WebApplication application = builder.Build();

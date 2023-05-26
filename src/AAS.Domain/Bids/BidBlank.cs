@@ -1,6 +1,7 @@
 ﻿#region
 
 using AAS.Domain.Bids.Enums;
+using AAS.Domain.Files;
 using AAS.Tools.Types.IDs;
 
 #endregion
@@ -14,10 +15,11 @@ public class BidBlank
     public string? Title { get; set; }
     public string? Description { get; set; }
     public string? DenyDescription { get; set; }
+    public FileBlank[] FileBlanks { get; set; }
     public BidStatus Status { get; set; }
     public DateOnly? ApproximateDate { get; set; }
 
-    public BidBlank(ID? id, int? number, string? title, string? description, string? denyDescription, BidStatus status,
+    public BidBlank(ID? id, int? number, string? title, string? description, string? denyDescription, FileBlank[] fileBlanks, BidStatus status,
         DateOnly? approximateDate)
     {
         Id = id;
@@ -25,6 +27,7 @@ public class BidBlank
         Title = title;
         Description = description;
         DenyDescription = denyDescription;
+        FileBlanks = fileBlanks;
         Status = status;
         ApproximateDate = approximateDate;
     }

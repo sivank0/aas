@@ -19,7 +19,7 @@ public class BidsRepository : NpgSqlRepository, IBidsRepository
     {
     }
 
-    public void SaveBid(BidBlank bidBlank, ID systemUserId)
+    public void SaveBid(BidBlank bidBlank, String[] bidFilePaths, ID systemUserId)
     {
         DateOnly? acceptanceDate = bidBlank.Status != BidStatus.AwaitingVerification
             ? DateOnly.FromDateTime(DateTime.UtcNow)
@@ -33,6 +33,7 @@ public class BidsRepository : NpgSqlRepository, IBidsRepository
             new("p_description", bidBlank.Description!),
             new("p_denydescription", bidBlank.DenyDescription!),
             new("p_acceptancedate", acceptanceDate),
+            new("p_filepaths", bidFilePaths),
             new("p_approximatedate", bidBlank.ApproximateDate!),
             new("p_status", bidBlank.Status!),
             new("p_systemuserid", systemUserId),

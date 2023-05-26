@@ -1,6 +1,8 @@
+import PersonIcon from '@mui/icons-material/Person';
 import { Box } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { AccessPolicy } from '../../domain/accessPolicies/accessPolicy';
+import { FileArea } from '../../domain/files/enums/fileArea';
 import SystemUser from '../../domain/systemUser';
 import { UserRole } from '../../domain/users/roles/userRole';
 import { UserBlank } from '../../domain/users/userBlank';
@@ -9,7 +11,6 @@ import { SaveButton } from '../../sharedComponents/buttons/button';
 import { InputForm } from '../../sharedComponents/inputs/inputForm';
 import { AsyncDialogProps } from '../../sharedComponents/modals/async/types';
 import { Modal, ModalActions, ModalBody, ModalTitle } from '../../sharedComponents/modals/modal';
-import PersonIcon from '@mui/icons-material/Person';
 
 interface Props {
     userId: string | null;
@@ -47,8 +48,6 @@ export const UserEditorModal: React.FC<AsyncDialogProps<Props, boolean>> = ({ op
         handleClose(true);
     }
 
-    console.log(userBlank)
-
     return (
         <Modal isOpen={open} onClose={() => handleClose(false)}>
             <ModalTitle onClose={() => handleClose(false)}>
@@ -65,6 +64,7 @@ export const UserEditorModal: React.FC<AsyncDialogProps<Props, boolean>> = ({ op
                         size={200}
                         type='image-input'
                         acceptTypes="image/jpeg,image/png,image/jpg"
+                        fileArea={FileArea.User}
                         fileBlank={userBlank.fileBlank}
                         defaultImage={{ image: PersonIcon, size: '8rem' }}
                         alignItem={{ marginLeft: 'auto', marginRight: 'auto' }}

@@ -25,7 +25,7 @@ public class BidsController : BaseController
 
     [HttpPost("bids/save")]
     [IsAuthorized(AccessPolicy.BidsUpdate)]
-    public Result SaveBid([FromBody] BidBlank bidBlank)
+    public Task<Result> SaveBid([FromBody] BidBlank bidBlank)
     {
         return _bidsService.SaveBid(bidBlank, SystemUser.Id);
     }

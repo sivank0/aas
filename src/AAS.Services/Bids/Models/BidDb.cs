@@ -14,6 +14,7 @@ public class BidDb
     public string Title { get; set; }
     public string Description { get; set; }
     public string? DenyDescription { get; set; }
+    public String[] FilePaths { get; set; }
     public BidStatus Status { get; set; }
     public DateTime? AcceptanceDate { get; set; }
     public DateTime? ApproximateDate { get; set; }
@@ -25,7 +26,7 @@ public class BidDb
     public DateTime? ModifiedDateTimeUtc { get; set; }
     public bool IsRemoved { get; set; }
 
-    public BidDb(ID id, int number, string title, string description, string? denyDescription, BidStatus status,
+    public BidDb(ID id, int number, string title, string description, string? denyDescription, String[] filePaths, BidStatus status,
         DateTime? acceptanceDate, DateTime? approximateDate, ID createdUserId, DateTime createdDateTimeUtc,
         ID? modifiedUserId, DateTime? modifiedDateTimeUtc, bool isRemoved)
     {
@@ -34,6 +35,7 @@ public class BidDb
         Title = title;
         Description = description;
         DenyDescription = denyDescription;
+        FilePaths = filePaths;
         Status = status;
         AcceptanceDate = acceptanceDate;
         ApproximateDate = approximateDate;

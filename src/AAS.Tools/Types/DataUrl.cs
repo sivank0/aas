@@ -16,7 +16,7 @@ public class DataUrl
 
 		if (!type.EndsWith("base64", StringComparison.OrdinalIgnoreCase)) return null;
 
-		return new(type.Replace("base64", ""), data);
+		return new(type, data);
 	}
 
 	public String Type { get; }

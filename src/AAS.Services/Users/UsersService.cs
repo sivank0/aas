@@ -58,8 +58,8 @@ public partial class UsersService : IUsersService
 
         if (userBlank.FileBlank is not null)
         {
-            (FileDetailsOfBytes[] fileDetailsOfBytes, String[] removeFilePaths) =
-                FileBlank.GetFileDetails(userBlank.FileBlank, userId: userBlank.Id!.Value);
+            (FileDetailsOfBase64[] fileDetailsOfBytes, String[] removeFilePaths) =
+                FileBlank.GetUserFileDetails(userBlank.Id!.Value, userBlank.FileBlank);
 
             Result result = await _fileStorageService.SaveAndRemoveFiles(fileDetailsOfBytes, removeFilePaths);
 

@@ -1,19 +1,20 @@
 {
   "name": "aas",
   "dependencies": {
+    "@emotion/react": "^11.11.0",
+    "@emotion/styled": "^11.11.0",
+    "@hello-pangea/dnd": "16.2.0",
     "@mui/icons-material": "5.11.16",
     "@mui/lab": "5.0.0-alpha.131",
-    "@hello-pangea/dnd": "^16.2.0",
     "@mui/material": "5.13.2",
     "date-fns": "2.30.0",
-    "date-fns": "2.30.0",
     "react": "18.2.0",
-    "react-day-picker": "^8.7.1",
+    "react-day-picker": "8.7.1",
     "react-dom": "18.2.0",
     "react-router-dom": "6.11.2"
   },
   "devDependencies": {
-    "@types/react": "18.2.6",
+    "@types/react": "18.2.7",
     "@types/react-dom": "18.2.4",
     "@types/react-router-dom": "5.3.3",
     "css-loader": "6.7.4",
@@ -21,10 +22,10 @@
     "sass-loader": "13.3.0",
     "source-map-loader": "4.0.1",
     "style-loader": "3.3.3",
-    "ts-loader": "9.4.2",
+    "ts-loader": "9.4.3",
     "tslib": "2.5.2",
     "typescript": "5.0.4",
-    "webpack": "5.83.1",
+    "webpack": "5.84.1",
     "webpack-cli": "5.1.1",
     "webpack-merge": "5.9.0"
   },

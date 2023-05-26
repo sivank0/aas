@@ -2,6 +2,7 @@
 
 public enum FileArea
 {
-    User = 1,
-    Bid = 2
+    Unknown = 1,
+    User = 2,
+    Bid = 3
 }

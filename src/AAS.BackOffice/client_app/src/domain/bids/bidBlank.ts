@@ -39,7 +39,7 @@ export namespace BidBlank {
             status: bid.status,
             acceptanceDate: bid.acceptanceDate,
             approximateDate: bid.approximateDate,
-            fileBlanks: []
+            fileBlanks: bid.files.map(file => FileBlank.fromFile(file))
         }
     }
 }

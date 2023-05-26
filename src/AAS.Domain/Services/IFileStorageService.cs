@@ -5,5 +5,5 @@ namespace AAS.Domain.Services;
 
 public interface IFileStorageService
 {
-    Task<Result> SaveAndRemoveFiles(FileDetailsOfBytes[] fileDetails, String[]? removeFilePaths = null);
+    Task<Result> SaveAndRemoveFiles(FileDetailsOfBase64[] fileDetails, String[]? removeFilePaths = null);
 }

@@ -1,11 +1,8 @@
-#region
-
+using AAS.Configurator;
 using AAS.FileStorage.Infrastucture;
 using AAS.Tools.Types.Files;
 using AAS.Tools.Types.Results;
 using Microsoft.AspNetCore.Mvc;
-
-#endregion
 
 namespace AAS.FileStorage.Areas;
 
@@ -26,7 +23,7 @@ public class FileController : Controller
         return path.Substring(0, rightPositionSeparator);
     }
 
-    public record FileStorageRequest(FileDetailsOfBytes[] FileDetails, string[] RemoveFilePaths);
+    public record FileStorageRequest(FileDetailsOfBase64[] FileDetails, string[] RemoveFilePaths);
 
     [HttpPost("files/upload")]
     public async Task<Result> Upload([FromBody] FileStorageRequest request)
@@ -48,14 +45,13 @@ public class FileController : Controller
             {
                 await using MemoryStream ms = fileDetail switch
                 {
-                    FileDetailsOfBytes fileDetailsOfBytes => new MemoryStream(fileDetailsOfBytes.Bytes),
-                    FileDetailsOfBase64 fileDetailsOfBase64 => new MemoryStream(byte.Parse(fileDetailsOfBase64.Base64)),
+                    FileDetailsOfBase64 fileDetailsOfBase64 => new MemoryStream(Convert.FromBase64String(fileDetailsOfBase64.Base64)),
                     _ => throw new Exception()
                 };
 
                 if (ms.Length == 0) throw new Exception("MemoryStream is empty");
 
-                string fullPath = $"C:/FileStorage/AAS/{fileDetail.Path}{fileDetail.Name}{fileDetail.Extension}";
+                string fullPath = $"{Configurations.FileStorage.UploadFolder}/{fileDetail.Path}{fileDetail.Name}{fileDetail.Extension}";
                 string dir = FileSystemSeparator.GetPath(GetDirectory(fullPath));
 
                 if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
@@ -82,7 +78,7 @@ public class FileController : Controller
         {
             try
             {
-                string fullPath = $"C:/FileStorage/AAS/{filePath}";
+                string fullPath = $"{Configurations.FileStorage.UploadFolder}/{filePath}";
                 string dir = FileSystemSeparator.GetPath(GetDirectory(fullPath));
 
                 if (!Directory.Exists(dir)) throw new Exception("Removing file directory is not exist");

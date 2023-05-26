@@ -8,6 +8,9 @@ import 'react-day-picker/dist/style.css';
 import { BidBlank } from '../../../domain/bids/bidBlank';
 import { BidsProvider } from '../../../domain/bids/bidProvider';
 import { BidStatus } from '../../../domain/bids/bidStatus';
+import { FileArea } from '../../../domain/files/enums/fileArea';
+import { FileState } from '../../../domain/files/enums/fileState';
+import { FileBlank } from '../../../domain/files/fileBlank';
 import useDialog from '../../../hooks/useDialog';
 import { SaveButton } from '../../../sharedComponents/buttons/button';
 import { ToggleButtons } from '../../../sharedComponents/buttons/toggleButtons';
@@ -67,12 +70,70 @@ export const BidEditorModal: React.FC<AsyncDialogProps<Props, boolean>> = ({ ope
         handleClose(true);
     }
 
+    async function getFile(fileBlank: FileBlank) {
+        async function getFileUrl(fileBlank: FileBlank): Promise<string | null> {
+            const dataUrl = fileBlank.base64;
+
+            if (String.isNullOrWhitespace(dataUrl)) return null;
+
+            const response = await fetch(dataUrl);
+            const blob = await response.blob();
+
+            if (blob === null) return null;
+
+            return URL.createObjectURL(blob);
+        }
+
+        const fileUrl = fileBlank.state === FileState.Added
+            ? await getFileUrl(fileBlank)
+            : fileBlank.url;
+
+        if (String.isNullOrWhitespace(fileUrl)) return;
+
+        const a = document.createElement('a');
+        a.href = fileUrl;
+        a.download = fileBlank.name;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(fileUrl);
+    }
+
+    function changeBidFileBlanks(fileBlanks: FileBlank[]) {
+        setBidBlank(blank => {
+            const bidBlank = { ...blank };
+            const bidFileBlanks = [...bidBlank.fileBlanks];
+
+            bidBlank.fileBlanks = bidFileBlanks.concat(fileBlanks);
+
+            return bidBlank;
+        })
+    }
+
+    function removeBidFileBlanks(removingFileBlanks: FileBlank[], fileIndex?: number) {
+        setBidBlank(blank => {
+            const bidBlank = { ...blank };
+            const bidFileBlanks = [...bidBlank.fileBlanks]
+
+            bidFileBlanks.map((fileBlank, index) => {
+                if (
+                    (fileIndex === undefined && removingFileBlanks.length === 0) ||
+                    (fileIndex === index && removingFileBlanks.map(removingFileBlank => removingFileBlank.path).includes(fileBlank.path))
+                )
+                    fileBlank.state = FileState.Removed;
+            });
+
+            bidBlank.fileBlanks = bidFileBlanks;
+            return bidBlank;
+        })
+    }
+
     return (
         <Modal isOpen={open} onClose={() => handleClose(false)}>
             <ModalTitle onClose={() => handleClose(false)}>
                 {props.bidId !== null ? "Редактирование" : "Создание"} заявки
             </ModalTitle>
-            <ModalBody sx={{ width: 500 }}>
+            <ModalBody sx={{ width: '40vw', height: '60vh' }}>
                 <Box sx={{
                     display: 'flex',
                     gap: 1.5,
@@ -117,18 +178,17 @@ export const BidEditorModal: React.FC<AsyncDialogProps<Props, boolean>> = ({ ope
                             value={bidBlank.denyDescription}
                             onChange={(denyDescription) => setBidBlank(blank => ({ ...blank, denyDescription }))} />
                     }
-                    <Paper elevation={3}>
-                        <Box>
-                            <InputForm
-                                title="Загрузить файлы"
-                                type="multi-file-input"
-                                extensions={[".jpg", ".jpeg", ".png", ".bmp", ".tif", ".webp", "doc", "docx"]}
-                                fileBlanks={bidBlank.fileBlanks}
-                            onChange={(status) => setBidBlank(blank => ({ ...blank, status }))} />
-                                getFile={(fileBlank) => { }}
-                                removeFile={(fileBlanks, fileIndex) => { }} />
-                        </Box>
-                    </Paper>
+                    <Box sx={{ padding: 1, border: '1px solid #dedede', borderRadius: 1 }}>
+                        <InputForm
+                            title="Загрузить файлы"
+                            type="multi-file-input"
+                            extensions={[".jpg", ".jpeg", ".png", ".bmp", ".tif", ".webp", ".doc", ".docx"]}
+                            fileArea={FileArea.Bid}
+                            fileBlanks={bidBlank.fileBlanks}
+                            onChange={(fileBlanks) => changeBidFileBlanks(fileBlanks)}
+                            getFile={(fileBlank) => getFile(fileBlank)}
+                            removeFile={(fileBlanks, fileIndex) => removeBidFileBlanks(fileBlanks, fileIndex)} />
+                    </Box>
                 </Box>
             </ModalBody>
             <ModalActions>

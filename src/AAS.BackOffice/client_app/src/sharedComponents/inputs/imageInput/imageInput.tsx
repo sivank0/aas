@@ -1,11 +1,13 @@
 import { Avatar, Box, Fade, SvgIconTypeMap, Typography, } from '@mui/material';
 import { OverridableComponent } from '@mui/material/OverridableComponent';
 import React, { ChangeEvent, useEffect, useMemo, useState } from 'react';
+import { FileArea } from '../../../domain/files/enums/fileArea';
+import { FileState } from '../../../domain/files/enums/fileState';
 import { FileBlank } from '../../../domain/files/fileBlank';
-import { FileState } from '../../../domain/files/enums/fileState'; 
 import { CloseIconButton } from '../../buttons/button';
 
 export interface IProps {
+    fileArea: FileArea;
     fileBlank: FileBlank | null;
     acceptTypes?: string;
     addImage: (image: FileBlank) => void;
@@ -58,20 +60,20 @@ export const ImageInput = (props: IProps) => {
         const fileName = file.name.replace(fileExtension, "");
         let fileBase64 = await readFile(file) as string;
 
-        props.addImage(FileBlank.create(fileName, fileBase64))
+        props.addImage(FileBlank.create(fileName, fileBase64, props.fileArea))
     }
 
     function removeImage() {
         if (props.fileBlank === null) return;
-        
+
         let fileBlank: FileBlank | null = props.fileBlank;
 
-        switch(props.fileBlank.state){
-            case FileState.Added:{
+        switch (props.fileBlank.state) {
+            case FileState.Added: {
                 fileBlank = null;
                 break;
             }
-            case FileState.Intact:{
+            case FileState.Intact: {
                 fileBlank.state = FileState.Removed;
                 break;
             }
@@ -143,7 +145,7 @@ export const ImageInput = (props: IProps) => {
                                 backgroundColor: theme.palette.error.contrastText,
                                 opacity: 0.9,
                             }
-                        })}  />
+                        })} />
                 }
             </Box>
         </Fade>

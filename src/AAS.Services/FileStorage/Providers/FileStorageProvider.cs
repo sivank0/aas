@@ -20,7 +20,7 @@ public class FileStorageProvider : IFileStorageProvider
         _jsonSerializer = jsonSerializer;
     }
 
-    public async Task<Result> SendRequest(FileDetailsOfBytes[] fileDetails, String[] removeFilePaths)
+    public async Task<Result> SendRequest(FileDetailsOfBase64[] fileDetails, String[] removeFilePaths)
     {
         try
         {

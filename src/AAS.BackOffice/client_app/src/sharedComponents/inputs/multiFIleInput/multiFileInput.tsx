@@ -1,13 +1,15 @@
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined'
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile'
 import { Box, Button, FormControl, Grid, InputAdornment, InputLabel, OutlinedInput, Typography } from '@mui/material'
 import { SxProps, Theme } from '@mui/material/styles'
 import React, { DragEvent, useEffect, useMemo, useRef, useState } from 'react'
+import { FileArea } from '../../../domain/files/enums/fileArea'
 import { FileState } from '../../../domain/files/enums/fileState'
 import { FileBlank } from '../../../domain/files/fileBlank'
 import useDialog from '../../../hooks/useDialog'
-import { BrowserType } from '../../../tools/browserType'
-import { ConfirmDialogModal } from '../../modals/modal'
 import { readAsDataUrl } from '../../../tools/utils/fileReader'
+import { CloseIconButton } from '../../buttons/button'
+import { ConfirmDialogModal } from '../../modals/modal'
 
 export interface IProps extends FileProps {
     title: string,
@@ -19,13 +21,10 @@ export interface IProps extends FileProps {
 }
 
 interface FileProps {
+    fileArea: FileArea;
     fileBlanks: FileBlank[],
     extensions?: string[],
-    imageWidth?: number,
-    imageHeight?: number,
 }
-
-const imageExtensions = [".jpg", ".jpeg", ".png", ".bmp", ".tif", ".webp"];
 
 export function MultiFileInput(props: IProps) {
     const [isInit, setIsInit] = useState<boolean>(false);
@@ -46,39 +45,23 @@ export function MultiFileInput(props: IProps) {
     }, [props.fileBlanks])
 
     async function parseFile(file: File, props: FileProps): Promise<FileBlank | null> {
-        const { imageWidth, imageHeight, extensions } = props
         const index = file.name.lastIndexOf('.');
 
         const extension = index > 0 ? file.name.slice(index).toLowerCase() : file.type?.split('/')[1]?.toLowerCase()
         const fileName = file.name.replace(extension, "");
 
-        if (extensions !== undefined && extensions.length !== 0 && !extensions.some(ext => ext?.toLowerCase() === extension)) {
+        if (props.extensions !== undefined && props.extensions.length !== 0 && !props.extensions.some(ext => ext?.toLowerCase() === extension)) {
             alert(
-                `Неверное расширение файла ${extension}. Можно загружать файлы с ${extensions.length === 1
-                    ? `расширением ${extensions[0]}`
-                    : `расширениями: ${extensions.map(ext => ext).join(', ')}`}`
+                `Неверное расширение файла ${extension}. Можно загружать файлы с ${props.extensions.length === 1
+                    ? `расширением ${props.extensions[0]}`
+                    : `расширениями: ${props.extensions.map(ext => ext).join(', ')}`}`
             );
             return null;
         }
 
         const base64 = await readAsDataUrl(file)
 
-        if ((imageWidth != null && imageHeight != null) && imageExtensions.includes(extension)) {
-            const checkSize = new Promise<boolean>(resolve => {
-                const image = new Image()
-
-                image.onload = () => resolve(image.width === imageWidth && image.height === imageHeight)
-                image.onerror = () => resolve(false)
-                image.src = base64
-            })
-
-            if (!await checkSize) {
-                alert(`Размер загружаемого файла должен быть ${imageWidth} пикселей на ${imageHeight} пикселей`);
-                return null;
-            }
-        }
-
-        return FileBlank.create(fileName, file.type, base64);
+        return FileBlank.create(fileName, base64, props.fileArea);
     }
 
     async function renderPreview(files: FileList | null) {
@@ -126,7 +109,7 @@ export function MultiFileInput(props: IProps) {
             return files;
         })
     }
-    console.log(props.fileBlanks)
+
     return (
         <FormControl fullWidth>
             <InputLabel shrink htmlFor={props.title}>{props.title}</InputLabel>
@@ -148,16 +131,31 @@ export function MultiFileInput(props: IProps) {
                     {
                         fileBlanks.filter(fileBlank => fileBlank.state !== FileState.Removed).map((fileBlank, index) =>
                             <Grid
-                                item xl={3} lg={4} xs={6}
                                 key={`upload-file--${index} `}
+                                item xl={3} lg={4} xs={6}
                                 sx={{
                                     mb: 0,
                                     display: 'flex',
                                     flexDirection: 'column',
                                     alignItems: 'center'
                                 }}>
-                                <Box>
-                                    <Typography>{fileBlank.name}{fileBlank.extension}</Typography>
+                                <Box
+                                    onClick={() => props.getFile(fileBlank)}
+                                    sx={{
+                                        display: 'flex',
+                                        gap: 1,
+                                        alignItems: 'center',
+                                        border: '1px solid #cbc8c8',
+                                        borderRadius: 1,
+                                        padding: 1,
+                                        cursor: 'pointer',
+                                        ':hover': {
+                                            backgroundColor: '#f1f1f1'
+                                        }
+                                    }}>
+                                    <InsertDriveFileIcon color='primary' />
+                                    <Typography sx={{ lineHeight: 1 }}>{fileBlank.name}</Typography>
+                                    <CloseIconButton title='Удалить файл' sx={{ '& .MuiSvgIcon-root': { color: "#000" } }} onClick={() => removeFile(index)} />
                                 </Box>
                             </Grid>
                         )}

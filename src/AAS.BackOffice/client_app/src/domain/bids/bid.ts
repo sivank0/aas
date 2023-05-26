@@ -1,3 +1,5 @@
+import { File, mapToFiles } from "../files/file";
+
 export class Bid {
     constructor(
         public readonly id: string,
@@ -5,6 +7,7 @@ export class Bid {
         public readonly title: string,
         public readonly description: string,
         public readonly denyDescription: string | null,
+        public readonly files: File[],
         public readonly status: number,
         public readonly acceptanceDate: Date | null,
         public readonly approximateDate: Date | null
@@ -19,6 +22,7 @@ export function toBid(value: any): Bid {
         value.title,
         value.description,
         value.denyDescription,
+        mapToFiles(value.files),
         value.status,
         value.acceptanceDate,
         value.approximateDate,

@@ -2,8 +2,11 @@
 
 using AAS.Domain.Bids;
 using AAS.Domain.Bids.Enums;
+using AAS.Domain.Files;
+using AAS.Domain.Files.Enums;
 using AAS.Domain.Services;
 using AAS.Services.Bids.Repositories;
+using AAS.Tools.Types.Files;
 using AAS.Tools.Types.IDs;
 using AAS.Tools.Types.Results;
 
@@ -14,13 +17,15 @@ namespace AAS.Services.Bids;
 public class BidsService : IBidsService
 {
     private readonly IBidsRepository _bidsRepository;
+    private readonly IFileStorageService _fileStorageService;
 
-    public BidsService(IBidsRepository bidsRepository)
+    public BidsService(IBidsRepository bidsRepository, IFileStorageService fileStorageService)
     {
         _bidsRepository = bidsRepository;
+        _fileStorageService = fileStorageService;
     }
 
-    public Result SaveBid(BidBlank bidBlank, ID systemUserId)
+    public async Task<Result> SaveBid(BidBlank bidBlank, ID systemUserId)
     {
         if (string.IsNullOrWhiteSpace(bidBlank.Title))
             return Result.Fail("Не введен заголовок заявки");
@@ -30,7 +35,23 @@ public class BidsService : IBidsService
 
         bidBlank.Id ??= ID.New();
         bidBlank.Number ??= GetBidsMaxNumber() + 1;
-        _bidsRepository.SaveBid(bidBlank, systemUserId);
+
+        List<String> bidFilePaths = bidBlank.FileBlanks.Where(fileBlank => fileBlank.State == FileState.Intact).Select(fileBlank => fileBlank.Path!).ToList();
+
+        if (bidBlank.FileBlanks.Length != 0)
+        {
+            (FileDetailsOfBase64[] fileDetailsOfBytes, String[] removeFilePaths) =
+                FileBlank.GetBidFileDetails(bidBlank.Id.Value, bidBlank.FileBlanks);
+
+            Result result = await _fileStorageService.SaveAndRemoveFiles(fileDetailsOfBytes, removeFilePaths);
+
+            if (!result.IsSuccess)
+                return Result.Fail(result.Errors[0]);
+
+            bidFilePaths.AddRange(fileDetailsOfBytes.Select(fileDetails => fileDetails.FullPath!));
+        }
+
+        _bidsRepository.SaveBid(bidBlank, bidFilePaths.ToArray(), systemUserId);
 
         return Result.Success();
     }
@@ -77,7 +98,7 @@ public class BidsService : IBidsService
                 return Result.Fail("Необходимо указать причину отказа по заявке");
         }
         else ChangeBidDenyDescription(bidId, canBeBidDenyDescriptionNull: true);
-        
+
         _bidsRepository.ChangeBidStatus(bidId, bidStatus);
 
         return Result.Success();

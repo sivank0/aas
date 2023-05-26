@@ -11,7 +11,7 @@ namespace AAS.Domain.Services;
 
 public interface IBidsService
 {
-    Result SaveBid(BidBlank bidBlank, ID systenUserId);
+    Task<Result> SaveBid(BidBlank bidBlank, ID systenUserId);
     Bid? GetBid(ID id);
     Bid[] GetAllBids();
     Result ChangeBidDenyDescription(ID bidId, String? bidDenyDescription = null, Boolean canBeBidDenyDescriptionNull = false);

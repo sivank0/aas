@@ -14,12 +14,12 @@ public class FileStorageService : IFileStorageService
         _fileStorageProvider = fileStorageProvider;
     }
 
-    public Task<Result> SaveAndRemoveFiles(FileDetailsOfBytes[] fileDetails, String[]? removeFilePaths)
+    public Task<Result> SaveAndRemoveFiles(FileDetailsOfBase64[] fileDetails, String[]? removeFilePaths)
     {
         return SendRequest(fileDetails, removeFilePaths ?? Array.Empty<String>());
     }
 
-    private async Task<Result> SendRequest(FileDetailsOfBytes[] fileDetails, String[] removeFilePaths)
+    private async Task<Result> SendRequest(FileDetailsOfBase64[] fileDetails, String[] removeFilePaths)
     {
         try
         {

@@ -57,10 +57,10 @@ public class FileDetailsOfBytes : FileDetails
 
 public class FileDetailsOfBase64 : FileDetails
 {
-    public string? Base64 { get; }
+    public string Base64 { get; }
 
     [JsonConstructor]
-    public FileDetailsOfBase64(string name, string extension, string? base64 = null, string? contentType = null,
+    public FileDetailsOfBase64(string name, string extension, string base64, string? contentType = null,
         string? path = null)
         : base(name, extension, contentType, path)
     {

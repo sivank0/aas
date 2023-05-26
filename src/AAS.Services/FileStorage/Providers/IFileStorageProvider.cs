@@ -5,5 +5,5 @@ namespace AAS.Services.FileStorage.Providers;
 
 public interface IFileStorageProvider
 {
-    Task<Result> SendRequest(FileDetailsOfBytes[] fileDetails, String[] removeFilePaths);
+    Task<Result> SendRequest(FileDetailsOfBase64[] fileDetails, String[] removeFilePaths);
 }

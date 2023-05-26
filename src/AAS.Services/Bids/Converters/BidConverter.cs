@@ -1,10 +1,7 @@
-﻿#region
-
-using AAS.Domain.Bids;
+﻿using AAS.Domain.Bids;
 using AAS.Services.Bids.Models;
 using AAS.Tools.Types.Results;
-
-#endregion
+using File = AAS.Domain.Files.File;
 
 namespace AAS.Services.Bids.Repositories.Converters;
 
@@ -14,8 +11,11 @@ public static class BidConverter
     {
         DateOnly? acceptanceDate = db.AcceptanceDate != null ? DateOnly.FromDateTime(db.AcceptanceDate.Value) : null;
         DateOnly? approximateDate = db.ApproximateDate != null ? DateOnly.FromDateTime(db.ApproximateDate.Value) : null;
+        File[] files = db.FilePaths is null || db.FilePaths.Length == 0
+            ? Array.Empty<File>()
+            : db.FilePaths.Select(filePath => new File(filePath)).ToArray();
 
-        return new Bid(db.Id, db.Number, db.Title, db.Description, db.DenyDescription, db.Status, acceptanceDate,
+        return new Bid(db.Id, db.Number, db.Title, db.Description, db.DenyDescription, files, db.Status, acceptanceDate,
             approximateDate, db.CreatedUserId);
     }
 
