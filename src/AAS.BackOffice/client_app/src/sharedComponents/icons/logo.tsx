@@ -8,7 +8,7 @@ export const Logo = () => {
             height="100"
             viewBox="0 0 100 100"
         >
-            <path fill="#0c4487" d="M0 0H100V100H0z"></path>
+            <path fill="#009688" d="M0 0H100V100H0z"></path>
             <text
                 x="50"
                 y="63"

@@ -150,9 +150,7 @@ export const UserRolesPage = () => {
     }
 
     return (
-        <Container maxWidth={false}>
-            <Typography variant="h5">Роли пользователей</Typography>
-            <Divider sx={{marginTop: 2, marginBottom: 3}}/>
+        <Container maxWidth={false} sx={{ paddingTop: 2}}>
             {
                 userRoleBlank == null
                     ?

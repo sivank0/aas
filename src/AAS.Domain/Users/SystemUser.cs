@@ -11,13 +11,16 @@ namespace AAS.Domain.Users.SystemUsers;
 public class SystemUser
 {
     public ID Id { get; }
+    public Files.File? Photo { get; }
     public string Email { get; }
     public string FullName { get; }
     public UserAccess Access { get; }
+    
 
     public SystemUser(User user, UserAccess currentAccess)
     {
         Id = user.Id;
+        Photo = user.Photo;
         Email = user.Email;
         FullName = user.FullName;
         Access = currentAccess;

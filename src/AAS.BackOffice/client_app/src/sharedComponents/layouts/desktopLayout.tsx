@@ -1,11 +1,11 @@
-import { Box, CssBaseline, ThemeProvider, createTheme } from "@mui/material";
-import { ruRU } from '@mui/material/locale';
-import React, { PropsWithChildren, useEffect, useState } from "react";
+import {Box, CssBaseline, ThemeProvider, createTheme} from "@mui/material";
+import {ruRU} from '@mui/material/locale';
+import React, {PropsWithChildren, useEffect, useState} from "react";
 import "../../content/desktopMain.css";
 import SystemUser from "../../domain/systemUser";
-import { DesktopAppBar } from "../desktopAppBar";
+import {DesktopAppBar} from "../desktopAppBar";
 import DialogProvider from "../modals/async/DialogProvider";
-import { ThemeMode } from "../themeMode";
+import {ThemeMode} from "../themeMode";
 
 interface LayoutProps {
 }
@@ -21,8 +21,14 @@ export const DesktopLayout = (props: PropsWithChildren<LayoutProps>) => {
             palette: {
                 mode: themeMode === ThemeMode.Light
                     ? 'light'
-                    : 'dark'
-            }
+                    : 'dark',
+                primary: {
+                    main: '#009688',
+                },
+                secondary: {
+                    main: '#9c27b0',
+                },
+            },
         }, ruRU
     );
 
@@ -53,10 +59,10 @@ export const DesktopLayout = (props: PropsWithChildren<LayoutProps>) => {
                 {
                     isInit &&
                     <>
-                        <CssBaseline />
+                        <CssBaseline/>
                         {
                             SystemUser !== null &&
-                            <DesktopAppBar themeMode={themeMode} changeThemeMode={(mode) => changeThemeMode(mode)} />
+                            <DesktopAppBar themeMode={themeMode} changeThemeMode={(mode) => changeThemeMode(mode)}/>
                         }
                         <Box sx={{
                             width: SystemUser === null ? "100%" : "calc(100% - 65px)",

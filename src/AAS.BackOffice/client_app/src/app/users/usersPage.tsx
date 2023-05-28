@@ -26,6 +26,7 @@ import {ConfirmDialogModal} from '../../sharedComponents/modals/modal';
 import {Password} from '@mui/icons-material';
 import {ChangePasswordModal} from './changePasswordModal';
 import { TooltippedAvatar } from '../../sharedComponents/avatar';
+import SystemUser from "../../domain/systemUser";
 
 export const UsersPage = () => {
     const [users, setUsers] = useState<User[]>([]);
@@ -76,11 +77,8 @@ export const UsersPage = () => {
     }
     console.log(users)
     return (
-        <Container maxWidth={false}>
+        <Container maxWidth={false} sx={{ paddingTop: 2}}>
             <Box sx={{display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 3}}>
-                <Typography variant="h5">
-                    Пользователи
-                </Typography>
                 <Button startIcon={<AddIcon/>} variant="outlined" onClick={() => openUserEditorModal()}>
                     Добавить
                 </Button>

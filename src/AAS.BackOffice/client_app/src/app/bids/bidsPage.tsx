@@ -5,7 +5,7 @@ import {
     Divider,
     Paper
 } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import { Bid } from '../../domain/bids/bid';
 import { BidsProvider } from '../../domain/bids/bidProvider';
 import { BidStatus } from "../../domain/bids/bidStatus";
@@ -15,6 +15,7 @@ import { BidCard } from '../../sharedComponents/cards/bidCard';
 import { Enum } from "../../tools/types/enum";
 import { BidDenyDescriptionEditorModal } from "./modals/bidDenyDescriptionEditorModal";
 import { BidEditorModal } from "./modals/bidEditorModal";
+import {ThemeMode} from "../../sharedComponents/themeMode";
 
 type PaginationState = {
     page: number;
@@ -28,8 +29,21 @@ type Column = {
     status: BidStatus;
     bids: Bid[];
 }
+const themeModeKey = 'themeMode'
 
 export const BidsPage = () => {
+    const themeMode = useMemo(()=>{
+        const localThemeMode = localStorage.getItem(themeModeKey)
+
+        if (String.isNullOrWhitespace(localThemeMode)) {
+            return localStorage.setItem(themeModeKey, ThemeMode.getValue(ThemeMode.Light))
+        }
+
+       return localThemeMode === ThemeMode.getValue(ThemeMode.Light)
+            ? ThemeMode.Light
+            : ThemeMode.Dark
+    },[localStorage.getItem(themeModeKey)])
+
     const bidDenyDescriptionEditorModal = useDialog(BidDenyDescriptionEditorModal);
     const bidEditorModal = useDialog(BidEditorModal);
 
@@ -139,7 +153,9 @@ export const BidsPage = () => {
                                     sx={{
                                         padding: 1,
                                         textAlign: 'center',
-                                        backgroundColor: theme => theme.palette.grey[300]
+                                        backgroundColor: theme => themeMode === ThemeMode.Light
+                                            ? theme.palette.grey[300]
+                                            : theme.palette.grey[700],
                                     }}>
                                     {column.title}
                                 </Paper>
@@ -152,7 +168,10 @@ export const BidsPage = () => {
                                                     ref={provided.innerRef}
                                                     sx={{
                                                         height: '100%',
-                                                        border: '1px dashed #000',
+                                                        border: '1px dashed',
+                                                        borderColor: theme => themeMode === ThemeMode.Light
+                                                            ? theme.palette.grey[700]
+                                                            : theme.palette.grey[300],
                                                         borderRadius: 1,
                                                         padding: 1
                                                     }}>

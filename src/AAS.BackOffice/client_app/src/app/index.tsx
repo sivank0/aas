@@ -13,6 +13,8 @@ import {BidsPage} from './bids/bidsPage';
 import {UserRolesPage} from './users/roles/userRolesPage';
 import {HomePage} from '../sharedComponents/homePage';
 import {UserProfile} from './users/userProfile';
+import {InfrastructureLinks} from "./infrastructure/components/infrastructureLinks";
+import {Forbidden} from "./infrastructure/components/forbidden";
 
 const container = document.getElementById('app');
 const root = createRoot(container!);
@@ -27,6 +29,7 @@ root.render(
                 <Route path={UserLinks.userRolesPage} element={<UserRolesPage/>}/>
                 <Route path={UserLinks.userProfile} element={<UserProfile/>}/>
                 <Route path={BidLinks.bidsPage} element={<BidsPage/>}/>
+                <Route path={InfrastructureLinks.forbidden} element={<Forbidden/>}/>
                 <Route path={"/"} element={<HomePage/>}/>
             </Routes>
         </DesktopLayout>

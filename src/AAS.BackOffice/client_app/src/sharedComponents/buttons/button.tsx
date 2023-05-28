@@ -45,7 +45,7 @@ export const SuccessButton = (props: PropsWithChildren<ButtonProps>) => {
             startIcon={
                 <DoneIcon
                     fontSize={props.size}
-                    color={props.color ?? "primary"} />
+                    sx={{ color: '#fff'}}/>
             }
             onClick={props.onClick}>
             {props.children ?? "Подтвердить"}
@@ -64,7 +64,7 @@ export const CancelButton = (props: PropsWithChildren<ButtonProps>) => {
             startIcon={
                 <CancelIcon
                     fontSize={props.size}
-                    color={props.color ?? "error"} />
+                    sx={{ color: '#fff'}} />
             }
             onClick={props.onClick}>
             {props.children ?? "Отменить"}

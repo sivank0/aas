@@ -1,4 +1,4 @@
-import {Box, Button} from '@mui/material';
+import {Box, Button, Typography} from '@mui/material';
 import React, {useEffect, useState} from 'react';
 import {User} from '../../domain/users/user';
 import {UsersProvider} from '../../domain/users/usersProvider';
@@ -55,8 +55,14 @@ export const ChangePasswordModal: React.FC<AsyncDialogProps<Props, boolean>> = (
     return (
         <Modal isOpen={open} onClose={handleClose}>
             <ModalTitle onClose={handleClose}>
-                Изменение пароля пользователя {user?.fullName}
+                Изменение пароля пользователя
             </ModalTitle>
+            <Typography sx={{
+                display: 'flex',
+                paddingLeft: '17px'
+            }}>
+                {user?.fullName}
+            </Typography>
             <ModalBody sx={{width: 500}}>
                 <Box sx={{
                     display: 'flex',
