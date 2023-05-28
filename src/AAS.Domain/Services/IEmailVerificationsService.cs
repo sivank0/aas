@@ -1,0 +1,9 @@
+﻿using AAS.Tools.Types.IDs;
+using AAS.Tools.Types.Results;
+
+namespace AAS.Domain.Services;
+
+public interface IEmailVerificationsService
+{
+    Result SendVerificationMessage(ID userId);
+}

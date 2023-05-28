@@ -13,6 +13,8 @@
         <None Remove="Bids\Repositories\Queries\Bids\Bids_GetPaged.sql" />
         <None Remove="Bids\Repositories\Queries\Bids\Bids_Remove.sql" />
         <None Remove="Bids\Repositories\Queries\Bids\Bids_Save.sql" />
+        <None Remove="EmailVerifications\Repositories\Queries\EmailVerifications_GetByUserId.sql" />
+        <None Remove="EmailVerifications\Repositories\Queries\EmailVerifications_Save.sql" />
         <None Remove="Users\Repositories\Queries\Permissions\UserPermissions_GetByUserId.sql" />
         <None Remove="Users\Repositories\Queries\Permissions\UserPermissions_Save.sql" />
         <None Remove="Users\Repositories\Queries\Roles\UserRoles_GetAll.sql" />
@@ -37,6 +39,8 @@
         <EmbeddedResource Include="Bids\Repositories\Queries\Bids\Bids_GetMaxNumber.sql" />
         <EmbeddedResource Include="Bids\Repositories\Queries\Bids\Bids_Remove.sql" />
         <EmbeddedResource Include="Bids\Repositories\Queries\Bids\Bids_Save.sql" />
+        <EmbeddedResource Include="EmailVerifications\Repositories\Queries\EmailVerifications_GetByUserId.sql" />
+        <EmbeddedResource Include="EmailVerifications\Repositories\Queries\EmailVerifications_Save.sql" />
         <EmbeddedResource Include="Users\Repositories\Queries\Permissions\UserPermissions_GetByUserId.sql" />
         <EmbeddedResource Include="Users\Repositories\Queries\Permissions\UserPermissions_Save.sql" />
         <EmbeddedResource Include="Users\Repositories\Queries\Roles\UserRoles_GetAll.sql" />

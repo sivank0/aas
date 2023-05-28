@@ -64,7 +64,7 @@ public partial class UsersRepository : NpgSqlRepository, IUsersRepository
             : String.IsNullOrWhiteSpace(userRegistrationBlank.FileBlank.Path)
                 ? null
                 : userRegistrationBlank.FileBlank.Path;
-        
+
         SqlParameter[] parameters =
         {
             new("p_id", userRegistrationBlank.Id!.Value),
@@ -82,11 +82,12 @@ public partial class UsersRepository : NpgSqlRepository, IUsersRepository
         Execute(Sql.Users_Save, parameters);
     }
 
-    public User? GetUser(ID userId)
+    public User? GetUser(ID userId, Boolean includeRemoved)
     {
         SqlParameter[] parameters =
         {
-            new("p_id", userId)
+            new("p_id", userId),
+            new("p_includeremoved", includeRemoved)
         };
 
         return Get<UserDb?>(Sql.Users_GetById, parameters)?.ToUser();

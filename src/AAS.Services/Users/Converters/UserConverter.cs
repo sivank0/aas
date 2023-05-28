@@ -17,7 +17,7 @@ public static class UserConverter
             : new Domain.Files.File(db.PhotoPath);
 
         return new User(db.Id, userPhoto, db.FirstName, db.MiddleName, db.LastName, db.Email, db.PasswordHash,
-            db.PhoneNumber);
+            db.PhoneNumber, db.IsRemoved);
     }
 
     public static User[] ToUsers(this UserDb[] dbs)

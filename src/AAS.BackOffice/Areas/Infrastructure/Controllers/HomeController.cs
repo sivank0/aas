@@ -58,4 +58,11 @@ public class HomeController : BaseController
     {
         return ReactApp();
     }
+
+    [Route("/tests")]
+    [IsAuthorized(AccessPolicy.BidsRead)]
+    public ViewResult Tests()
+    {
+        return ReactApp();
+    }
 }

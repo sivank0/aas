@@ -1,31 +1,39 @@
-﻿#region
-
-using AAS.Domain.Services;
+﻿using AAS.Domain.Services;
 using AAS.Domain.Users;
 using AAS.Domain.Users.Roles;
 using AAS.Domain.Users.SystemUsers;
 using AAS.Domain.Users.UserAccesses;
+using AAS.Services.Users.Repositories;
 using AAS.Tools.Managers;
 using AAS.Tools.Types.IDs;
 using AAS.Tools.Types.Results;
 
-#endregion
-
 namespace AAS.Services.Users;
 
-public partial class UsersService : IUsersService // + Authentification
+public class UsersAuthentificationService : IUsersAuthentificationService
 {
+    private readonly IUsersService _usersService;
+    private readonly IUsersRepository _usersRepository;
+    private readonly IEmailVerificationsService _emailVerificationsService;
+
+    public UsersAuthentificationService(IUsersService usersService, IUsersRepository usersRepository, IEmailVerificationsService emailVerificationsService)
+    {
+        _usersService = usersService;
+        _usersRepository = usersRepository;
+        _emailVerificationsService = emailVerificationsService;
+    }
+
     public SystemUser? GetSystemUser(string token)
     {
-        UserToken? userToken = GetUserToken(token);
+        UserToken? userToken = _usersService.GetUserToken(token);
 
         if (userToken is null) return null;
 
-        User? user = GetUser(userToken.UserId);
+        User? user = _usersService.GetUser(userToken.UserId);
 
         if (user is null) return null;
 
-        UserRole? userRole = GetUserRoleByUserId(user.Id);
+        UserRole? userRole = _usersService.GetUserRoleByUserId(user.Id);
 
         if (userRole is null) return null;
 
@@ -51,14 +59,14 @@ public partial class UsersService : IUsersService // + Authentification
         if (string.IsNullOrWhiteSpace(password))
             return DataResult<UserToken?>.Fail("Не введен пароль");
 
-        User? user = GetUser(email, HashManager.DefinePasswordHash(password));
+        User? user = _usersService.GetUser(email, HashManager.DefinePasswordHash(password));
 
         if (user is null)
             return DataResult<UserToken?>.Fail("Пользователь не найден, проверьте правильность введенных данных");
 
         UserToken? userToken = UserToken.New(user.Id);
 
-        Result savingUserTokenResult = SaveUserToken(userToken);
+        Result savingUserTokenResult = _usersService.SaveUserToken(userToken);
 
         if (!savingUserTokenResult.IsSuccess)
             return DataResult<UserToken?>.Fail(savingUserTokenResult.Errors[0].Message);
@@ -94,16 +102,18 @@ public partial class UsersService : IUsersService // + Authentification
         if (userRegistrationBlank.Password != userRegistrationBlank.RePassword)
             return DataResult<UserToken?>.Fail("Пароли не совпадают");
 
-        User? existingUser = GetUser(userRegistrationBlank.Email);
+        User? existingUser = _usersService.GetUser(userRegistrationBlank.Email);
 
         if (existingUser is not null) return DataResult<UserToken?>.Fail("Пользователь с такой почтой существует");
 
         userRegistrationBlank.Id = ID.New();
+
         _usersRepository.RegisterUser(userRegistrationBlank);
+        _emailVerificationsService.SendVerificationMessage(userRegistrationBlank.Id.Value);
 
         UserToken? userToken = UserToken.New(userRegistrationBlank.Id!.Value);
 
-        Result savingUserTokenResult = SaveUserToken(userToken);
+        Result savingUserTokenResult = _usersService.SaveUserToken(userToken);
 
         if (!savingUserTokenResult.IsSuccess)
             return DataResult<UserToken?>.Fail(savingUserTokenResult.Errors[0].Message);

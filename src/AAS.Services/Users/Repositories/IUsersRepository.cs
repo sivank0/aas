@@ -15,7 +15,7 @@ public interface IUsersRepository
 
     public void SaveUser(UserBlank userBlank, ID systemUserId);
     public void RegisterUser(UserRegistrationBlank userRegistrationBlank);
-    public User? GetUser(ID id);
+    public User? GetUser(ID userId, Boolean includeRemoved = false);
     public User? GetUser(string email, string? passwordHash = null);
     public User[] GetUsers();
     public void ChangeUserPassword(ID userId, string passwordHash, ID systemUserId);

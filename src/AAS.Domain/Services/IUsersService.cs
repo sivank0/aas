@@ -13,20 +13,10 @@ namespace AAS.Domain.Services;
 
 public interface IUsersService
 {
-    #region Authentification
-
-    Result Authenticate(string token);
-    SystemUser? GetSystemUser(string token);
-    DataResult<UserToken?> LogIn(string? email, string? password);
-    DataResult<UserToken?> RegisterUser(UserRegistrationBlank userRegistrationBlank);
-    void LogOut(string token);
-
-    #endregion
-
     #region Users
 
     Task<Result> SaveUser(UserBlank userBlank, ID systenUserId);
-    User? GetUser(ID id);
+    User? GetUser(ID userId, Boolean includeRemoved = false);
     User? GetUser(string email, string? password = null);
     User[] GetUsers();
     Result ChangeUserPassword(ID userId, string? password, string? rePassword, ID systemUserId);
@@ -47,6 +37,13 @@ public interface IUsersService
     #region Permissions
 
     UserPermission? GetUserPermission(ID userId);
+
+    #endregion
+
+    #region Tokens
+
+    Result SaveUserToken(UserToken userToken);
+    UserToken? GetUserToken(string token);
 
     #endregion
 }

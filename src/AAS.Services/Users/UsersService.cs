@@ -75,9 +75,9 @@ public partial class UsersService : IUsersService
         return Result.Success();
     }
 
-    public User? GetUser(ID id)
+    public User? GetUser(ID userId, Boolean includeRemoved = false)
     {
-        return _usersRepository.GetUser(id);
+        return _usersRepository.GetUser(userId);
     }
 
     public User? GetUser(string email, string? passwordHash = null)
