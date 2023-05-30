@@ -1,6 +1,7 @@
 import EditIcon from '@mui/icons-material/Edit';
 import {
     Box,
+    Container,
     Divider,
     Fade,
     IconButton,
@@ -15,7 +16,6 @@ import { UserProfileProvider } from '../../domain/users/usersProvider';
 import useDialog from '../../hooks/useDialog';
 import { ChangePasswordModal } from './changePasswordModal';
 import { UserEditorModal } from './userEditorModal';
-import {TooltippedAvatar} from "../../sharedComponents/avatar";
 
 export const UserProfile = () => {
     const [user, setUser] = useState<User | null>(null);
@@ -48,102 +48,102 @@ export const UserProfile = () => {
     }
 
     return (
-        <Container maxWidth={false} sx={{paddingTop: 2}}>
+        <Container maxWidth={false} sx={{ paddingTop: 2 }}>
             <Box sx={{
                 display: 'flex',
                 justifyContent: 'center',
                 width: '100%',
                 minHeight: '500px'
             }}>
-            <Fade in={isInit}>
-                <Paper elevation={3}
-                    sx={{ width: '560px' }}>
-                    <Box sx={{
-                        padding: '10px'
-                    }}>
+                <Fade in={isInit}>
+                    <Paper elevation={3}
+                        sx={{ width: '560px' }}>
                         <Box sx={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            flexDirection: 'row'
-                        }}>
-                            <Typography sx={{
-                                fontSize: '20pt'
-                            }}>
-                                Профиль
-                            </Typography>
-                            <IconButton onClick={() => openUserEditorModal(user?.id ?? null)}>
-                                <EditIcon />
-                            </IconButton>
-                        </Box>
-                        <Divider sx={{ marginY: 1 }} />
-                        <Box sx={{
-                            display: 'flex',
-                            flexDirection: 'column'
+                            padding: '10px'
                         }}>
                             <Box sx={{
                                 display: 'flex',
-                                flexDirection: 'row',
-                                justifyContent: 'space-between'
+                                justifyContent: 'space-between',
+                                flexDirection: 'row'
                             }}>
-                                <Typography>
-                                    Имя:
+                                <Typography sx={{
+                                    fontSize: '20pt'
+                                }}>
+                                    Профиль
                                 </Typography>
-                                <Typography>
-                                    {user?.firstName}
-                                </Typography>
+                                <IconButton onClick={() => openUserEditorModal(user?.id ?? null)}>
+                                    <EditIcon />
+                                </IconButton>
                             </Box>
+                            <Divider sx={{ marginY: 1 }} />
                             <Box sx={{
                                 display: 'flex',
-                                flexDirection: 'row',
-                                justifyContent: 'space-between'
+                                flexDirection: 'column'
                             }}>
-                                <Typography>
-                                    Фамилия:
-                                </Typography>
-                                <Typography>
-                                    {user?.lastName}
-                                </Typography>
-                            </Box>
-                            {user?.middleName != null &&
                                 <Box sx={{
                                     display: 'flex',
                                     flexDirection: 'row',
                                     justifyContent: 'space-between'
                                 }}>
                                     <Typography>
-                                        Отчество:
+                                        Имя:
                                     </Typography>
                                     <Typography>
-                                        {user?.middleName}
+                                        {user?.firstName}
                                     </Typography>
                                 </Box>
-                            }
-                            <Divider sx={{ marginY: 1 }} />
+                                <Box sx={{
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-between'
+                                }}>
+                                    <Typography>
+                                        Фамилия:
+                                    </Typography>
+                                    <Typography>
+                                        {user?.lastName}
+                                    </Typography>
+                                </Box>
+                                {user?.middleName != null &&
+                                    <Box sx={{
+                                        display: 'flex',
+                                        flexDirection: 'row',
+                                        justifyContent: 'space-between'
+                                    }}>
+                                        <Typography>
+                                            Отчество:
+                                        </Typography>
+                                        <Typography>
+                                            {user?.middleName}
+                                        </Typography>
+                                    </Box>
+                                }
+                                <Divider sx={{ marginY: 1 }} />
 
-                            <Box sx={{
-                                display: 'flex',
-                                flexDirection: 'row',
-                                justifyContent: 'space-between'
-                            }}>
-                                <Typography>
-                                    Email:
-                                </Typography>
-                                <Typography>
-                                    {user?.email}
-                                </Typography>
+                                <Box sx={{
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-between'
+                                }}>
+                                    <Typography>
+                                        Email:
+                                    </Typography>
+                                    <Typography>
+                                        {user?.email}
+                                    </Typography>
+                                </Box>
+                                <Link sx={{
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    marginLeft: 'auto'
+                                }}
+                                    onClick={() => openChangePasswordModal(user?.id ?? null)}>
+                                    Сменить пароль
+                                </Link>
                             </Box>
-                            <Link sx={{
-                                cursor: 'pointer',
-                                display: 'flex',
-                                marginLeft: 'auto'
-                            }}
-                                onClick={() => openChangePasswordModal(user?.id ?? null)}>
-                                Сменить пароль
-                            </Link>
                         </Box>
-                    </Box>
-                </Paper>
-            </Fade>
+                    </Paper>
+                </Fade>
             </Box>
         </Container>
     )
