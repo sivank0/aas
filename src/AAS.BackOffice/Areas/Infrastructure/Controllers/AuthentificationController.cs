@@ -42,7 +42,7 @@ public class AuthenticationController : BaseController
         DataResult<UserToken?>
             registrationResult =
                 _usersAuthentificationService.RegisterUser(
-                    userRegistrationBlank); // REFACTORING в DataResult можно добавить атрибут MemberNotNullWhen, чтобы не делать ! или проверку Data на null
+                    userRegistrationBlank);
 
         if (!registrationResult.IsSuccess) return Result.Fail(registrationResult.Errors[0].Message);
 

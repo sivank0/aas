@@ -1,11 +1,17 @@
 import React from "react";
 
-export const Logo = () => {
+interface Props {
+    size?: number,
+    style?: React.CSSProperties
+}
+
+export const Logo = (props: Props) => {
     return (
         <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="100"
-            height="100"
+            width={props.size ?? 100}
+            height={props.size ?? 100}
+            style={props.style}
             viewBox="0 0 100 100"
         >
             <path fill="#0c4487" d="M0 0H100V100H0z"></path>

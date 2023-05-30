@@ -13,56 +13,35 @@ public class HomeController : BaseController
 {
     [Route("/")]
     [IsAuthorized]
-    public ViewResult Index()
-    {
-        return ReactApp();
-    }
+    public ViewResult Index() => ReactApp();
 
     [Route("/error/403")]
     [Route("error/404")]
-    public ViewResult Forbidden()
-    {
-        return ReactApp();
-    }
+    public ViewResult Forbidden() => ReactApp();
 
     [Route("/registration")]
-    public ViewResult Registration()
-    {
-        return ReactApp();
-    }
+    public ViewResult Registration() => ReactApp();
+
+    [Route("/email_verification/{token}")]
+    public ViewResult EmailVerifications() => ReactApp();
 
     [Route("/users")]
     [IsAuthorized(AccessPolicy.UsersRead)]
-    public ViewResult Users()
-    {
-        return ReactApp();
-    }
+    public ViewResult Users() => ReactApp();
 
     [Route("/user_profile")]
     [IsAuthorized(AccessPolicy.UserProfile)]
-    public ViewResult UserProfile()
-    {
-        return ReactApp();
-    }
+    public ViewResult UserProfile() => ReactApp();
 
     [Route("/user_roles")]
     [IsAuthorized(AccessPolicy.UsersRead)]
-    public ViewResult UserRoles()
-    {
-        return ReactApp();
-    }
+    public ViewResult UserRoles() => ReactApp();
 
     [Route("/bids")]
     [IsAuthorized(AccessPolicy.BidsRead)]
-    public ViewResult Bids()
-    {
-        return ReactApp();
-    }
+    public ViewResult Bids() => ReactApp();
 
     [Route("/tests")]
     [IsAuthorized(AccessPolicy.BidsRead)]
-    public ViewResult Tests()
-    {
-        return ReactApp();
-    }
+    public ViewResult Tests() => ReactApp();
 }

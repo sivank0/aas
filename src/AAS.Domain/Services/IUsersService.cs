@@ -1,5 +1,6 @@
 ﻿#region
 
+using AAS.Domain.EmailVerifications;
 using AAS.Domain.Users;
 using AAS.Domain.Users.Permissions;
 using AAS.Domain.Users.Roles;
@@ -17,7 +18,10 @@ public interface IUsersService
 
     Task<Result> SaveUser(UserBlank userBlank, ID systenUserId);
     User? GetUser(ID userId, Boolean includeRemoved = false);
-    User? GetUser(string email, string? password = null);
+    User? GetUser(string email);
+    (User user, EmailVerification emailVerification)? GetUserEmailVerification(ID userId);
+    (User user, EmailVerification emailVerification)? GetUser(string email, string? passwordHash = null);
+    (User user, EmailVerification emailVerification)? GetUserEmailVerification(string userEmailVerificationToken);
     User[] GetUsers();
     Result ChangeUserPassword(ID userId, string? password, string? rePassword, ID systemUserId);
     Result RemoveUser(ID userId, ID systemUserId);

@@ -93,7 +93,7 @@ public class UsersController : BaseController
 
     [HttpGet("users/get_role_by_user_id")]
     [IsAuthorized(AccessPolicy.UsersRead)]
-    public UserRole GetRole(ID userId)
+    public UserRole? GetRole(ID userId)
     {
         return _usersService.GetUserRoleByUserId(userId);
     }

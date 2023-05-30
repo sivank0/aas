@@ -1,12 +1,10 @@
-﻿using AAS.Configurator;
-using AAS.Domain.EmailVerifications;
+﻿using AAS.Domain.EmailVerifications;
 using AAS.Domain.Services;
 using AAS.Domain.Users;
+using AAS.Services.EmailVerifications.Providers;
 using AAS.Services.EmailVerifications.Repositories;
 using AAS.Tools.Types.IDs;
 using AAS.Tools.Types.Results;
-using System.Net;
-using System.Net.Mail;
 
 namespace AAS.Services.EmailVerifications;
 
@@ -14,11 +12,13 @@ public class EmailVerificationsService : IEmailVerificationsService
 {
     private readonly IUsersService _usersService;
     private readonly IEmailVerificationsRepository _emailVerificationsRepository;
+    private readonly IEmailVerificationsProvider _emailVerificationsProvider;
 
-    public EmailVerificationsService(IUsersService usersService, IEmailVerificationsRepository emailVerificationsRepository)
+    public EmailVerificationsService(IUsersService usersService, IEmailVerificationsRepository emailVerificationsRepository, IEmailVerificationsProvider emailVerificationsProvider)
     {
         _usersService = usersService;
         _emailVerificationsRepository = emailVerificationsRepository;
+        _emailVerificationsProvider = emailVerificationsProvider;
     }
 
     public Result SendVerificationMessage(ID userId)
@@ -33,7 +33,25 @@ public class EmailVerificationsService : IEmailVerificationsService
 
         _emailVerificationsRepository.SaveEmailVerification(emailVerification);
 
-        return SendVerificationMessage(emailVerification, existingUser);
+        return _emailVerificationsProvider.SendVerificationMessage(emailVerification, existingUser);
+    }
+
+    public Result ResendEmailVerificationMessage(String? userEmail)
+    {
+        if (String.IsNullOrWhiteSpace(userEmail)) return Result.Fail("Вы не ввели почту");
+
+        User? existingUser = _usersService.GetUser(userEmail);
+
+        if (existingUser is null)
+            return Result.Fail("Пользователь не найден, попробуйте пройти процедуру регистрации ещё раз");
+
+        EmailVerification? emailVerification = GetEmailVerification(existingUser.Id);
+
+        if (emailVerification is null) return SendVerificationMessage(existingUser.Id);
+
+        if (emailVerification.IsVerified) return Result.Fail($"Почта: {userEmail} уже подтверждена");
+
+        return _emailVerificationsProvider.SendVerificationMessage(emailVerification, existingUser);
     }
 
     public EmailVerification? GetEmailVerification(ID userId)
@@ -41,29 +59,18 @@ public class EmailVerificationsService : IEmailVerificationsService
         return _emailVerificationsRepository.GetEmailVerification(userId);
     }
 
-    private Result SendVerificationMessage(EmailVerification emailVerification, User userForVerification)
+    public Result ConfirmEmail(String? userEmailVerificationToken)
     {
-        try
-        {
-            string subject = "Подтверждение Email";
+        if (String.IsNullOrWhiteSpace(userEmailVerificationToken))
+            return Result.Fail("Произошла ошибка при подтверждении, попробуйте сделать запрос ещё раз");
 
-            MailMessage message = new(Configurations.VerificationEmailAuthorization.Login, userForVerification.Email, subject, null);
-            message.IsBodyHtml = true;
-            message.Body += $"Перейдите по следующей ссылке для подтверждения своей почты<br/><a href='{emailVerification.Token}'> Подтвердить.</a>";
+        (User user, EmailVerification emailVerification)? userEmailVerification = _usersService.GetUserEmailVerification(userEmailVerificationToken);
 
-            using SmtpClient client = new("smtp.gmail.com", 587);
+        if (userEmailVerification is null) return Result.Fail("Пользователь не найден");
 
-            client.EnableSsl = true;
-            client.UseDefaultCredentials = false;
-            client.Credentials = new NetworkCredential(Configurations.VerificationEmailAuthorization.Login, Configurations.VerificationEmailAuthorization.Password);
+        if (!userEmailVerification.Value.emailVerification.IsVerified)
+            _emailVerificationsRepository.ConfirmEmail(userEmailVerification.Value.user.Id, userEmailVerification.Value.emailVerification.Token);
 
-            client.Send(message);
-
-            return Result.Success();
-        }
-        catch
-        {
-            return Result.Fail("Не удалось отправить сообщение с подтверждением email адреса");
-        }
+        return Result.Success();
     }
 }

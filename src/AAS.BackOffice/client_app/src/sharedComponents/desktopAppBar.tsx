@@ -1,25 +1,25 @@
-import * as React from 'react';
+import LogoutIcon from '@mui/icons-material/Logout';
+import MenuIcon from '@mui/icons-material/Menu';
+import PersonIcon from '@mui/icons-material/Person';
+import { Button, Link, Menu, MenuItem } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
+import * as React from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { UserLinks } from '../app/users/userLinks';
+import { AccessPolicy } from '../domain/accessPolicies/accessPolicy';
 import SystemUser from '../domain/systemUser';
-import {useEffect, useMemo, useState} from 'react';
-import {UserRole} from '../domain/users/roles/userRole';
-import {AuthenticationProvider, UsersProvider} from '../domain/users/usersProvider';
-import {Sidebar} from './sidebar/sidebar';
-import {default as SidebarModel} from '../tools/types/sidebar/sidebar';
-import {Button, Link, Menu, MenuItem} from '@mui/material';
-import {BrowserType} from '../tools/browserType';
-import PersonIcon from '@mui/icons-material/Person';
-import LogoutIcon from '@mui/icons-material/Logout';
-import {useNavigate} from 'react-router-dom';
-import {UserLinks} from '../app/users/userLinks';
-import DarkModeIcon from '@mui/icons-material/DarkMode';
-import {ThemeMode} from './themeMode';
-import {useLocationName} from "../hooks/useLocationName";
+import { UserRole } from '../domain/users/roles/userRole';
+import { AuthenticationProvider, UsersProvider } from '../domain/users/usersProvider';
+import { useLocationName } from "../hooks/useLocationName";
+import { BrowserType } from '../tools/browserType';
+import { default as SidebarModel } from '../tools/types/sidebar/sidebar';
+import { Sidebar } from './sidebar/sidebar';
+import { ThemeMode } from './themeMode';
 
 interface Props {
     themeMode: ThemeMode,
@@ -34,7 +34,7 @@ type MenuState = {
 export const DesktopAppBar = (props: Props) => {
     const [userRole, setUserRole] = useState<UserRole | null>(null);
     const [isSidebarUncollapsed, setIsSidebarUncollapsed] = useState<boolean>(false);
-    const [menuState, setMenuState] = useState<MenuState>({isOpen: false, achorEl: null});
+    const [menuState, setMenuState] = useState<MenuState>({ isOpen: false, achorEl: null });
 
     const isShowSidebar = useMemo(() => SidebarModel.items.length !== 0, [SidebarModel])
 
@@ -46,13 +46,13 @@ export const DesktopAppBar = (props: Props) => {
             setUserRole(userRole);
         }
 
-        init();
+        if (SystemUser.hasAccess(AccessPolicy.UserRolesRead)) init();
     }, [])
 
     function changeMenuState(isOpen: boolean = false, event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null = null) {
         const achorEl = event?.currentTarget ?? null;
 
-        setMenuState({isOpen, achorEl});
+        setMenuState({ isOpen, achorEl });
     }
 
     function navigateToProfile() {
@@ -75,8 +75,8 @@ export const DesktopAppBar = (props: Props) => {
     }
 
     return (
-        <Box sx={{flexGrow: 1}}>
-            <AppBar sx={{zIndex: 3, height: 65}}>
+        <Box sx={{ flexGrow: 1 }}>
+            <AppBar sx={{ zIndex: 3, height: 65 }}>
                 <Toolbar>
                     {
                         isShowSidebar &&
@@ -85,12 +85,12 @@ export const DesktopAppBar = (props: Props) => {
                             edge="start"
                             color="inherit"
                             aria-label="menu"
-                            sx={{mr: 2}}
+                            sx={{ mr: 2 }}
                             onClick={() => setIsSidebarUncollapsed(!isSidebarUncollapsed)}>
-                            <MenuIcon/>
+                            <MenuIcon />
                         </IconButton>
                     }
-                    <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
+                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         Система приема заявок — {useLocationName()}
                     </Typography>
                     <Box sx={{
@@ -106,12 +106,15 @@ export const DesktopAppBar = (props: Props) => {
                                     marginRight: '10px',
                                     color: 'white'
                                 }}>
-                                <Typography sx={{textTransform: "none"}}>
+                                <Typography sx={{ textTransform: "none" }}>
                                     {SystemUser.fullName}
                                 </Typography>
-                                <Typography sx={{textTransform: "none"}}>
-                                    {userRole?.name}
-                                </Typography>
+                                {
+                                    userRole !== null &&
+                                    <Typography sx={{ textTransform: "none" }}>
+                                        {userRole?.name}
+                                    </Typography>
+                                }
                             </Box>
                         </Button>
                         <IconButton size='small' onClick={() => changeThemeMode(props.themeMode)}>
@@ -126,7 +129,7 @@ export const DesktopAppBar = (props: Props) => {
                 isShowSidebar &&
                 <Sidebar
                     isSidebarUncollapsed={isSidebarUncollapsed}
-                    changeIsNavigationOpen={(isUnCollapsed) => setIsSidebarUncollapsed(isUnCollapsed)}/>
+                    changeIsNavigationOpen={(isUnCollapsed) => setIsSidebarUncollapsed(isUnCollapsed)} />
             }
             <Menu
                 keepMounted
@@ -151,13 +154,13 @@ export const DesktopAppBar = (props: Props) => {
                     textDecoration: "none",
                     color: "inherit"
                 }}>
-                    <MenuItem sx={{gap: 1}}>
-                        <PersonIcon/>
+                    <MenuItem sx={{ gap: 1 }}>
+                        <PersonIcon />
                         <Typography component="span">Профиль</Typography>
                     </MenuItem>
                 </Link>
-                <MenuItem onClick={logOut} sx={{gap: 1}}>
-                    <LogoutIcon/>
+                <MenuItem onClick={logOut} sx={{ gap: 1 }}>
+                    <LogoutIcon />
                     <Typography component="span">Выйти</Typography>
                 </MenuItem>
             </Menu>

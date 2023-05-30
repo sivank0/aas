@@ -15,7 +15,6 @@ public class EmailVerificationsRepository : NpgSqlRepository, IEmailVerification
 
     public void SaveEmailVerification(EmailVerification emailVerification)
     {
-
         SqlParameter[] parameters =
         {
             new("p_userid", emailVerification.UserId),
@@ -35,5 +34,16 @@ public class EmailVerificationsRepository : NpgSqlRepository, IEmailVerification
         };
 
         return Get<EmailVerificationDb?>(Sql.EmailVerifications_GetByUserId, parameters)?.ToEmailVerification();
+    }
+
+    public void ConfirmEmail(ID userId, String userEmailVerificationToken)
+    {
+        SqlParameter[] parameters =
+{
+            new("p_userid", userId),
+            new("p_token", userEmailVerificationToken),
+        };
+
+        Execute(Sql.EmailVerifications_ConfirmEmail, parameters);
     }
 }

@@ -1,4 +1,6 @@
-﻿using AAS.Domain.Services;
+﻿using AAS.Configurator;
+using AAS.Domain.EmailVerifications;
+using AAS.Domain.Services;
 using AAS.Domain.Users;
 using AAS.Domain.Users.Roles;
 using AAS.Domain.Users.SystemUsers;
@@ -25,28 +27,40 @@ public class UsersAuthentificationService : IUsersAuthentificationService
 
     public SystemUser? GetSystemUser(string token)
     {
+        DataResult<SystemUser?> systemUserResult = GetSystemUserWithDataResult(token);
+
+        if (!systemUserResult.IsSuccess) return null;
+
+        return systemUserResult.Data;
+    }
+
+    private DataResult<SystemUser?> GetSystemUserWithDataResult(string token)
+    {
         UserToken? userToken = _usersService.GetUserToken(token);
 
-        if (userToken is null) return null;
+        if (userToken is null) return DataResult<SystemUser?>.Fail("Пользователь не существует");
 
-        User? user = _usersService.GetUser(userToken.UserId);
+        (User user, EmailVerification emailVerification)? userEmailVerification = _usersService.GetUserEmailVerification(userToken.UserId);
 
-        if (user is null) return null;
+        if (userEmailVerification is null) return DataResult<SystemUser?>.Fail("Пользователь не найден");
 
-        UserRole? userRole = _usersService.GetUserRoleByUserId(user.Id);
+        if (!userEmailVerification.Value.emailVerification.IsVerified)
+            return DataResult<SystemUser?>.Fail("Для того, чтобы пользоваться сервисом необходимо подтвердить почту");
 
-        if (userRole is null) return null;
+        UserRole? userRole = _usersService.GetUserRoleByUserId(userEmailVerification.Value.user.Id);
+
+        if (userRole is null) return DataResult<SystemUser?>.Fail("Вам не назначена роль");
 
         UserAccess userAccess = new UserAccess(userRole.AccessPolicies);
 
-        return new SystemUser(user, userAccess);
+        return DataResult<SystemUser?>.Success(new SystemUser(userEmailVerification.Value.user, userAccess));
     }
 
     public Result Authenticate(string token)
     {
-        SystemUser? systemUser = GetSystemUser(token);
+        DataResult<SystemUser?> systemUserResult = GetSystemUserWithDataResult(token);
 
-        if (systemUser is null) return Result.Fail("Пользователь не найден");
+        if (!systemUserResult.IsSuccess) return Result.Fail(systemUserResult.Errors[0].Message);
 
         return Result.Success();
     }
@@ -59,12 +73,15 @@ public class UsersAuthentificationService : IUsersAuthentificationService
         if (string.IsNullOrWhiteSpace(password))
             return DataResult<UserToken?>.Fail("Не введен пароль");
 
-        User? user = _usersService.GetUser(email, HashManager.DefinePasswordHash(password));
+        (User user, EmailVerification emailVerification)? userEmailVerification = _usersService.GetUser(email, HashManager.DefinePasswordHash(password));
 
-        if (user is null)
+        if (userEmailVerification is null)
             return DataResult<UserToken?>.Fail("Пользователь не найден, проверьте правильность введенных данных");
 
-        UserToken? userToken = UserToken.New(user.Id);
+        if (!userEmailVerification.Value.emailVerification.IsVerified)
+            return DataResult<UserToken?>.Fail("Вы не подтвердили почту");
+
+        UserToken? userToken = UserToken.New(userEmailVerification.Value.user.Id);
 
         Result savingUserTokenResult = _usersService.SaveUserToken(userToken);
 
@@ -108,7 +125,7 @@ public class UsersAuthentificationService : IUsersAuthentificationService
 
         userRegistrationBlank.Id = ID.New();
 
-        _usersRepository.RegisterUser(userRegistrationBlank);
+        _usersRepository.RegisterUser(userRegistrationBlank, Configurations.BackOffice.DefaultRoleId);
         _emailVerificationsService.SendVerificationMessage(userRegistrationBlank.Id.Value);
 
         UserToken? userToken = UserToken.New(userRegistrationBlank.Id!.Value);

@@ -7,4 +7,5 @@ public interface IEmailVerificationsRepository
 {
     void SaveEmailVerification(EmailVerification emailVerification);
     EmailVerification? GetEmailVerification(ID userId);
+    void ConfirmEmail(ID userId, String userEmailVerificationToken);
 }

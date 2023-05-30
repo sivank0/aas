@@ -4,6 +4,7 @@ using AAS.Domain.Services;
 using AAS.Services.Bids;
 using AAS.Services.Bids.Repositories;
 using AAS.Services.EmailVerifications;
+using AAS.Services.EmailVerifications.Providers;
 using AAS.Services.EmailVerifications.Repositories;
 using AAS.Services.FileStorage;
 using AAS.Services.FileStorage.Providers;
@@ -32,6 +33,7 @@ public static class ServicesConfigurator
         #region Providers
 
         services.AddHttpClient<IFileStorageProvider, FileStorageProvider>();
+        services.AddSingleton<IEmailVerificationsProvider, EmailVerificationsProvider>();
 
         #endregion
 

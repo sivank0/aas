@@ -10,4 +10,5 @@ internal static class Sql
 {
     public static string EmailVerifications_Save => SqlFileProvider.GetQuery();
     public static string EmailVerifications_GetByUserId => SqlFileProvider.GetQuery();
+    public static string EmailVerifications_ConfirmEmail => SqlFileProvider.GetQuery();
 }
