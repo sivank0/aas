@@ -1,5 +1,6 @@
 ﻿#region
 
+using AAS.Domain.EmailVerifications;
 using AAS.Domain.Users;
 using AAS.Domain.Users.Permissions;
 using AAS.Domain.Users.Roles;
@@ -14,9 +15,12 @@ public interface IUsersRepository
     #region Users
 
     public void SaveUser(UserBlank userBlank, ID systemUserId);
-    public void RegisterUser(UserRegistrationBlank userRegistrationBlank);
-    public User? GetUser(ID id);
-    public User? GetUser(string email, string? passwordHash = null);
+    public void RegisterUser(UserRegistrationBlank userRegistrationBlank, ID defaultRoleId);
+    public User? GetUser(ID userId, Boolean includeRemoved = false);
+    public User? GetUser(string email);
+    public (User user, EmailVerification emailVerification)? GetUserEmailVerification(ID userId);
+    public (User user, EmailVerification emailVerification)? GetUser(string email, string? passwordHash = null);
+    public (User user, EmailVerification emailVerification)? GetUserEmailVerification(string userEmailVerificationToken);
     public User[] GetUsers();
     public void ChangeUserPassword(ID userId, string passwordHash, ID systemUserId);
     public void RemoveUser(ID userId, ID systemUserId);

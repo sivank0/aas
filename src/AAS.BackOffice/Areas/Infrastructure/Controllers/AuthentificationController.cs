@@ -15,11 +15,11 @@ namespace AAS.BackOffice.Areas.Infrastructure.Controllers;
 
 public class AuthenticationController : BaseController
 {
-    private readonly IUsersService _usersService;
+    private readonly IUsersAuthentificationService _usersAuthentificationService;
 
-    public AuthenticationController(IUsersService usersService)
+    public AuthenticationController(IUsersAuthentificationService usersAuthentificationService)
     {
-        _usersService = usersService;
+        _usersAuthentificationService = usersAuthentificationService;
     }
 
     [HttpGet("/authentication")]
@@ -29,7 +29,7 @@ public class AuthenticationController : BaseController
 
         if (string.IsNullOrWhiteSpace(token)) return ReactApp();
 
-        Result authenticationResult = _usersService.Authenticate(token);
+        Result authenticationResult = _usersAuthentificationService.Authenticate(token);
 
         if (!authenticationResult.IsSuccess) return ReactApp();
 
@@ -41,12 +41,12 @@ public class AuthenticationController : BaseController
     {
         DataResult<UserToken?>
             registrationResult =
-                _usersService.RegisterUser(
-                    userRegistrationBlank); // REFACTORING в DataResult можно добавить атрибут MemberNotNullWhen, чтобы не делать ! или проверку Data на null
+                _usersAuthentificationService.RegisterUser(
+                    userRegistrationBlank);
 
         if (!registrationResult.IsSuccess) return Result.Fail(registrationResult.Errors[0].Message);
 
-        Result authenticationResult = _usersService.Authenticate(registrationResult.Data!.Token);
+        Result authenticationResult = _usersAuthentificationService.Authenticate(registrationResult.Data!.Token);
 
         if (registrationResult.IsSuccess && !authenticationResult.IsSuccess)
             return Result.Fail("Обратитесь к администратору для того, чтобы начать пользоваться сервисом");
@@ -65,7 +65,7 @@ public class AuthenticationController : BaseController
         if (!string.IsNullOrWhiteSpace(oldToken)) return DataResult<string?>.Success(oldToken);
 
         DataResult<UserToken?> authentificationResult =
-            _usersService.LogIn(userAuthenticationRequest.Email, userAuthenticationRequest.Password);
+            _usersAuthentificationService.LogIn(userAuthenticationRequest.Email, userAuthenticationRequest.Password);
 
         if (!authentificationResult.IsSuccess)
             return DataResult<string?>.Fail(authentificationResult.Errors[0].Message);
@@ -85,7 +85,7 @@ public class AuthenticationController : BaseController
 
         if (token is null) return Result.Fail("Токен не найден");
 
-        _usersService.LogOut(token);
+        _usersAuthentificationService.LogOut(token);
         CookieManager.Delete(Response, CookieNames.Token);
         return Result.Success();
     }

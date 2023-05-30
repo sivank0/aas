@@ -1,5 +1,6 @@
 ﻿#region
 
+using AAS.Domain.EmailVerifications;
 using AAS.Domain.Users;
 using AAS.Domain.Users.Permissions;
 using AAS.Domain.Users.Roles;
@@ -13,21 +14,14 @@ namespace AAS.Domain.Services;
 
 public interface IUsersService
 {
-    #region Authentification
-
-    Result Authenticate(string token);
-    SystemUser? GetSystemUser(string token);
-    DataResult<UserToken?> LogIn(string? email, string? password);
-    DataResult<UserToken?> RegisterUser(UserRegistrationBlank userRegistrationBlank);
-    void LogOut(string token);
-
-    #endregion
-
     #region Users
 
     Task<Result> SaveUser(UserBlank userBlank, ID systenUserId);
-    User? GetUser(ID id);
-    User? GetUser(string email, string? password = null);
+    User? GetUser(ID userId, Boolean includeRemoved = false);
+    User? GetUser(string email);
+    (User user, EmailVerification emailVerification)? GetUserEmailVerification(ID userId);
+    (User user, EmailVerification emailVerification)? GetUser(string email, string? passwordHash = null);
+    (User user, EmailVerification emailVerification)? GetUserEmailVerification(string userEmailVerificationToken);
     User[] GetUsers();
     Result ChangeUserPassword(ID userId, string? password, string? rePassword, ID systemUserId);
     Result RemoveUser(ID userId, ID systemUserId);
@@ -47,6 +41,13 @@ public interface IUsersService
     #region Permissions
 
     UserPermission? GetUserPermission(ID userId);
+
+    #endregion
+
+    #region Tokens
+
+    Result SaveUserToken(UserToken userToken);
+    UserToken? GetUserToken(string token);
 
     #endregion
 }

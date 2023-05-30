@@ -1,6 +1,5 @@
-﻿#region
-
-using AAS.Domain.AccessPolicies.Extensions;
+﻿using AAS.Domain.AccessPolicies.Extensions;
+using AAS.Domain.EmailVerifications;
 using AAS.Domain.Users;
 using AAS.Domain.Users.Permissions;
 using AAS.Domain.Users.Roles;
@@ -9,8 +8,6 @@ using AAS.Services.Users.Models;
 using AAS.Services.Users.Repositories.Queries;
 using AAS.Tools.DB;
 using AAS.Tools.Types.IDs;
-
-#endregion
 
 namespace AAS.Services.Users.Repositories;
 
@@ -57,14 +54,14 @@ public partial class UsersRepository : NpgSqlRepository, IUsersRepository
         });
     }
 
-    public void RegisterUser(UserRegistrationBlank userRegistrationBlank)
+    public void RegisterUser(UserRegistrationBlank userRegistrationBlank, ID defaultRoleId)
     {
         String? userPhotoPath = userRegistrationBlank.FileBlank is null
             ? null
             : String.IsNullOrWhiteSpace(userRegistrationBlank.FileBlank.Path)
                 ? null
                 : userRegistrationBlank.FileBlank.Path;
-        
+
         SqlParameter[] parameters =
         {
             new("p_id", userRegistrationBlank.Id!.Value),
@@ -79,20 +76,52 @@ public partial class UsersRepository : NpgSqlRepository, IUsersRepository
             new("p_currentdatetimeutc", DateTime.UtcNow)
         };
 
-        Execute(Sql.Users_Save, parameters);
+
+        SqlParameter[] saveUserPermissionParameters =
+{
+            new("p_userid", userRegistrationBlank.Id!.Value),
+            new("p_userroleid", defaultRoleId)
+        };
+
+        ExecutionInTransaction(command =>
+        {
+            command.Execute(Sql.Users_Save, parameters);
+            command.Execute(Sql.UserPermissions_Save, saveUserPermissionParameters);
+        });
     }
 
-    public User? GetUser(ID userId)
+    public User? GetUser(ID userId, Boolean includeRemoved)
     {
         SqlParameter[] parameters =
         {
-            new("p_id", userId)
+            new("p_id", userId),
+            new("p_includeremoved", includeRemoved)
         };
 
         return Get<UserDb?>(Sql.Users_GetById, parameters)?.ToUser();
     }
 
-    public User? GetUser(string email, string? passwordHash)
+    public User? GetUser(string email)
+    {
+        SqlParameter[] parameters =
+        {
+            new("p_email", email)
+        };
+
+        return Get<UserDb?>(Sql.Users_GetByEmail, parameters)?.ToUser();
+    }
+
+    public (User user, EmailVerification emailVerification)? GetUserEmailVerification(ID userId)
+    {
+        SqlParameter[] parameters =
+        {
+            new("p_userid", userId),
+        };
+
+        return Get<UserEmailVerificationJDb?>(Sql.Users_GetUserEmailVerificationByUserId, parameters)?.ToUserEmailVerification();
+    }
+
+    public (User user, EmailVerification emailVerification)? GetUser(string email, string? passwordHash)
     {
         SqlParameter[] parameters =
         {
@@ -100,7 +129,17 @@ public partial class UsersRepository : NpgSqlRepository, IUsersRepository
             new("p_passwordHash", passwordHash)
         };
 
-        return Get<UserDb?>(Sql.Users_GetByEmailAndPassword, parameters)?.ToUser();
+        return Get<UserEmailVerificationJDb?>(Sql.Users_GetVerifiedByEmailAndPassword, parameters)?.ToUserEmailVerification();
+    }
+
+    public (User user, EmailVerification emailVerification)? GetUserEmailVerification(string userEmailVerificationToken)
+    {
+        SqlParameter[] parameters =
+        {
+            new("p_emailverificationtoken", userEmailVerificationToken)
+        };
+
+        return Get<UserEmailVerificationJDb?>(Sql.Users_GetByEmailVerificationToken, parameters)?.ToUserEmailVerification();
     }
 
     public User[] GetUsers()

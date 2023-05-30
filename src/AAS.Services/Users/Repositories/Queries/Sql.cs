@@ -12,8 +12,10 @@ internal static class Sql
 
     public static string Users_Save => SqlFileProvider.GetQuery(folder: "Users");
     public static string Users_GetById => SqlFileProvider.GetQuery(folder: "Users");
-    public static string Users_GetByEmailAndPassword => SqlFileProvider.GetQuery(folder: "Users");
-    public static string Users_GetByEmailAndPass => SqlFileProvider.GetQuery(folder: "Users");
+    public static string Users_GetByEmail => SqlFileProvider.GetQuery(folder: "Users");
+    public static string Users_GetUserEmailVerificationByUserId => SqlFileProvider.GetQuery(folder: "Users");
+    public static string Users_GetVerifiedByEmailAndPassword => SqlFileProvider.GetQuery(folder: "Users");
+    public static string Users_GetByEmailVerificationToken => SqlFileProvider.GetQuery(folder: "Users");
     public static string Users_GetAll => SqlFileProvider.GetQuery(folder: "Users");
     public static string Users_ChangePassword => SqlFileProvider.GetQuery(folder: "Users");
     public static string Users_Remove => SqlFileProvider.GetQuery(folder: "Users");

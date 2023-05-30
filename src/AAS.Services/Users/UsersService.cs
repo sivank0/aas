@@ -1,5 +1,6 @@
 ﻿#region
 
+using AAS.Domain.EmailVerifications;
 using AAS.Domain.Files;
 using AAS.Domain.Services;
 using AAS.Domain.Users;
@@ -75,14 +76,29 @@ public partial class UsersService : IUsersService
         return Result.Success();
     }
 
-    public User? GetUser(ID id)
+    public User? GetUser(ID userId, Boolean includeRemoved = false)
     {
-        return _usersRepository.GetUser(id);
+        return _usersRepository.GetUser(userId);
+    }
+    
+    public User? GetUser(string email)
+    {
+        return _usersRepository.GetUser(email);
     }
 
-    public User? GetUser(string email, string? passwordHash = null)
+    public (User user, EmailVerification emailVerification)? GetUserEmailVerification(ID userId)
+    {
+        return _usersRepository.GetUserEmailVerification(userId);
+    }
+
+    public (User user, EmailVerification emailVerification)? GetUser(string email, string? passwordHash)
     {
         return _usersRepository.GetUser(email, passwordHash);
+    }
+
+    public (User user, EmailVerification emailVerification)? GetUserEmailVerification(string userEmailVerificationToken)
+    {
+        return _usersRepository.GetUserEmailVerification(userEmailVerificationToken);
     }
 
     public User[] GetUsers()

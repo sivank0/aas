@@ -1,22 +1,19 @@
-﻿#region
-
+﻿using AAS.Tools.Types.IDs;
 using System.Text.Json.Serialization;
-using AAS.Domain.Files;
-using AAS.Tools.Types.IDs;
-
-#endregion
+using File = AAS.Domain.Files.File;
 
 namespace AAS.Domain.Users;
 
 public class User
 {
     public ID Id { get; }
-    public Files.File? Photo { get; }
+    public File? Photo { get; }
     public string FirstName { get; }
     public string? MiddleName { get; }
     public string LastName { get; }
     public string Email { get; }
     public string PhoneNumber { get; }
+    public Boolean IsRemoved { get; }
 
     public string FullName => string.IsNullOrWhiteSpace(MiddleName)
         ? $"{LastName} {FirstName}"
@@ -24,8 +21,8 @@ public class User
 
     [JsonIgnore] public string PasswordHash { get; }
 
-    public User(ID id, Files.File? photo, string firstName, string? middleName, string lastName, string email,
-        string passwordHash, string phoneNumber)
+    public User(ID id, File? photo, string firstName, string? middleName, string lastName, string email,
+        string phoneNumber, string passwordHash, Boolean isRemoved)
     {
         Id = id;
         Photo = photo;
@@ -35,5 +32,6 @@ public class User
         Email = email;
         PasswordHash = passwordHash;
         PhoneNumber = phoneNumber;
+        IsRemoved = isRemoved;
     }
 }

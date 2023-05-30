@@ -14,11 +14,11 @@ export class User {
     }
 }
 
-export function toUser(value: any): User {
+export function mapToUser(value: any): User {
     return new User(
         value.id,
-        value.photo === null 
-            ? null 
+        value.photo === null
+            ? null
             : mapToFile(value.photo),
         value.firstName,
         value.middleName,
@@ -29,6 +29,6 @@ export function toUser(value: any): User {
     )
 }
 
-export function toUsers(values: any[]): User[] {
-    return values.map(toUser);
+export function mapToUsers(values: any[]): User[] {
+    return values.map(mapToUser);
 }

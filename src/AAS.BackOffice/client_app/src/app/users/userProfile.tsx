@@ -1,32 +1,20 @@
+import EditIcon from '@mui/icons-material/Edit';
 import {
     Box,
-    Button,
-    Container,
     Divider,
+    Fade,
     IconButton,
     Link,
     Paper,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    Tooltip,
     Typography
 } from '@mui/material';
-import React, {useEffect, useState} from 'react';
-import {User} from '../../domain/users/user';
-import {UsersProvider} from '../../domain/users/usersProvider';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import AddIcon from '@mui/icons-material/Add';
-import useDialog from '../../hooks/useDialog';
-import {UserEditorModal} from './userEditorModal';
-import {ConfirmDialogModal} from '../../sharedComponents/modals/modal';
-import {Password} from '@mui/icons-material';
-import {ChangePasswordModal} from './changePasswordModal';
+import React, { useEffect, useState } from 'react';
 import SystemUser from '../../domain/systemUser';
+import { User } from '../../domain/users/user';
+import { UserProfileProvider } from '../../domain/users/usersProvider';
+import useDialog from '../../hooks/useDialog';
+import { ChangePasswordModal } from './changePasswordModal';
+import { UserEditorModal } from './userEditorModal';
 import {TooltippedAvatar} from "../../sharedComponents/avatar";
 
 export const UserProfile = () => {
@@ -35,26 +23,28 @@ export const UserProfile = () => {
 
     const userEditorModal = useDialog(UserEditorModal);
     const changePasswordModal = useDialog(ChangePasswordModal);
-    const confirmationDialog = useDialog(ConfirmDialogModal);
 
     useEffect(() => {
         async function init() {
-            const user = await UsersProvider.getUserById(SystemUser.id);
-            setUser(user!);
+            const user = await UserProfileProvider.getUserProfileById(SystemUser.id);
+
+            if (user === null) return;
+
+            setUser(user);
             setIsInit(true);
         }
 
         init();
-    })
+    }, [])
 
     function openUserEditorModal(userId: string | null) {
         if (userId === null) return;
-        userEditorModal.show({userId});
+        userEditorModal.show({ userId });
     }
 
     function openChangePasswordModal(userId: string | null) {
         if (userId === null) return;
-        changePasswordModal.show({userId});
+        changePasswordModal.show({ userId });
     }
 
     return (
@@ -65,8 +55,9 @@ export const UserProfile = () => {
                 width: '100%',
                 minHeight: '500px'
             }}>
+            <Fade in={isInit}>
                 <Paper elevation={3}
-                       sx={{width: '560px'}}>
+                    sx={{ width: '560px' }}>
                     <Box sx={{
                         padding: '10px'
                     }}>
@@ -75,12 +66,16 @@ export const UserProfile = () => {
                             justifyContent: 'space-between',
                             flexDirection: 'row'
                         }}>
-                            <TooltippedAvatar imageSrc={SystemUser.photo?.url} title={SystemUser.fullName}/>
+                            <Typography sx={{
+                                fontSize: '20pt'
+                            }}>
+                                Профиль
+                            </Typography>
                             <IconButton onClick={() => openUserEditorModal(user?.id ?? null)}>
-                                <EditIcon/>
+                                <EditIcon />
                             </IconButton>
                         </Box>
-                        <Divider sx={{marginY: 1}}/>
+                        <Divider sx={{ marginY: 1 }} />
                         <Box sx={{
                             display: 'flex',
                             flexDirection: 'column'
@@ -123,7 +118,7 @@ export const UserProfile = () => {
                                     </Typography>
                                 </Box>
                             }
-                            <Divider sx={{marginY: 1}}/>
+                            <Divider sx={{ marginY: 1 }} />
 
                             <Box sx={{
                                 display: 'flex',
@@ -142,12 +137,13 @@ export const UserProfile = () => {
                                 display: 'flex',
                                 marginLeft: 'auto'
                             }}
-                                  onClick={() => openChangePasswordModal(user?.id ?? null)}>
+                                onClick={() => openChangePasswordModal(user?.id ?? null)}>
                                 Сменить пароль
                             </Link>
                         </Box>
                     </Box>
                 </Paper>
+            </Fade>
             </Box>
         </Container>
     )

@@ -23,7 +23,7 @@ internal class IsAuthorizedAttribute : ActionFilterAttribute
         AccessPolicies = policies;
     }
 
-    public void OnActionExecuting(ActionExecutingContext context, IUsersService usersService)
+    public void OnActionExecuting(ActionExecutingContext context, IUsersAuthentificationService usersAuthentificationService)
     {
         try
         {
@@ -35,7 +35,7 @@ internal class IsAuthorizedAttribute : ActionFilterAttribute
             string? token = cookies[CookieNames.Token];
             if (token is null) throw new UnauthenticatedException();
 
-            SystemUser? systemUser = usersService.GetSystemUser(token);
+            SystemUser? systemUser = usersAuthentificationService.GetSystemUser(token);
             if (systemUser is null) throw new UnauthenticatedException();
             if (!IsAuthorized(systemUser)) throw new UnauthorizedException();
 
@@ -96,11 +96,11 @@ internal class IsAuthorizedAttribute : ActionFilterAttribute
 
 public class IsAuthorizedFilter : IActionFilter
 {
-    private readonly IUsersService _usersService;
+    private readonly IUsersAuthentificationService _usersAuthentificationService;
 
-    public IsAuthorizedFilter(IUsersService usersService)
+    public IsAuthorizedFilter(IUsersAuthentificationService usersAuthentificationService)
     {
-        _usersService = usersService;
+        _usersAuthentificationService = usersAuthentificationService;
     }
 
     public void OnActionExecuting(ActionExecutingContext context)
@@ -111,7 +111,7 @@ public class IsAuthorizedFilter : IActionFilter
             .OfType<IsAuthorizedAttribute>()
             .FirstOrDefault();
 
-        authAttribute?.OnActionExecuting(context, _usersService);
+        authAttribute?.OnActionExecuting(context, _usersAuthentificationService);
     }
 
     public void OnActionExecuted(ActionExecutedContext context)
