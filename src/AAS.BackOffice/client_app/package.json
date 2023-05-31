@@ -30,6 +30,7 @@
     "webpack-merge": "5.9.0"
   },
   "scripts": {
-    "development": "webpack --config webpack.config.development.js --progress"
+    "development": "webpack --config webpack.config.development.js --progress",
+    "production": "webpack --config webpack.config.production.js"
   }
 }

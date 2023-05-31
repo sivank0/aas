@@ -8,6 +8,11 @@ namespace AAS.FileStorage.Areas;
 
 public class FileController : Controller
 {
+    [HttpGet("fstest")]
+    public string Test()
+    {
+        return "Я ваыва";
+    }
     private string GetDirectory(string path)
     {
         int rightPositionSeparator = path.Length;

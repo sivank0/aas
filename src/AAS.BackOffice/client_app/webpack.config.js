@@ -1,10 +1,9 @@
 const path = require('path');
-const webpack = require("webpack")
 
 module.exports = (env) => {
     return {
         entry: {
-            desktop: "./src/app/index.tsx",
+            desktop: "./src/app/index.tsx"
         },
         output: {
             path: path.join(__dirname, '../wwwroot/dist'),

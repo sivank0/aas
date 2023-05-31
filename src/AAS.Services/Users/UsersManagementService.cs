@@ -28,7 +28,7 @@ public class UsersManagementService : IUsersManagementService
         _fileStorageService = fileStorageService;
     }
 
-    private Result ValidateEmail(String? userEmail)
+    private Result ValidateEmail(String? userEmail, Boolean isNewUser = false)
     {
         if (String.IsNullOrWhiteSpace(userEmail))
             return Result.Fail("Вы не ввели адрес электронной почты");
@@ -41,11 +41,13 @@ public class UsersManagementService : IUsersManagementService
         if (!emailRegex.IsMatch(userEmail))
             return Result.Fail("Введенный адрес электронной почты имеет не действительный формат");
 
-        User? existingUser = _usersService.GetUser(userEmail);
+        if (isNewUser)
+        {
+            User? existingUser = _usersService.GetUser(userEmail);
 
-        if (existingUser is not null)
-            return Result.Fail("Пользователь с такой почтой существует");
-
+            if (existingUser is not null)
+                return Result.Fail("Пользователь с такой почтой существует");
+        }
         return Result.Success();
     }
 
@@ -118,7 +120,7 @@ public class UsersManagementService : IUsersManagementService
         if (String.IsNullOrWhiteSpace(userBlank.PhoneNumber))
             return Result.Fail("Не введнен номер телефона");
 
-        Result emailValidationResult = ValidateEmail(userBlank.Email);
+        Result emailValidationResult = ValidateEmail(userBlank.Email, isNewUser);
 
         if (!emailValidationResult.IsSuccess)
             return Result.Fail(emailValidationResult.Errors[0].Message);
