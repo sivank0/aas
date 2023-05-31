@@ -10,7 +10,8 @@ export class Bid {
         public readonly files: File[],
         public readonly status: number,
         public readonly acceptanceDate: Date | null,
-        public readonly approximateDate: Date | null
+        public readonly approximateDate: Date | null,
+        public readonly createdUserId: string
     ) {
     }
 }
@@ -26,6 +27,7 @@ export function toBid(value: any): Bid {
         value.status,
         value.acceptanceDate,
         value.approximateDate,
+        value.createdUserId
     )
 }
 

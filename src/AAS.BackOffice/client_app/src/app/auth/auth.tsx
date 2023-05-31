@@ -20,6 +20,7 @@ export const Auth = () => {
         if (String.isNullOrWhitespace(emailVerificationMessage)) return;
 
         alert(emailVerificationMessage);
+        sessionStorage.clear();
     }, [sessionStorage.getItem('emailVerificationMessage')])
 
     const navigate = useNavigate()

@@ -1,6 +1,7 @@
 ﻿#region
 
 using AAS.Domain.AccessPolicies.Utils;
+using AAS.Domain.Users.UserAccesses;
 
 #endregion
 
@@ -26,5 +27,12 @@ public static class AccessPolicyExtensions
     public static AccessPolicyDetails[] ToDetails(this AccessPolicy[] accessPolicies)
     {
         return accessPolicies.Select(ToDetails).ToArray();
+    }
+
+    public static Boolean UserHasPermission(this AccessPolicy accessPolicy, UserAccess? userAccess)
+    {
+        if (userAccess is null) return false;
+
+        return userAccess.AccessPolicies.Any(ap => ap.Key() == accessPolicy.Key());
     }
 }

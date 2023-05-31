@@ -6,20 +6,19 @@ import { mapToUser, mapToUsers, User } from "./user";
 import { UserBlank } from "./userBlank";
 import { UserRegistrationBlank } from "./userRegistrationBlank";
 
-export class UsersProvider {
-    public static async saveUser(userBlank: UserBlank): Promise<Result> {
+export namespace UsersProvider {
+    export async function saveUser(userBlank: UserBlank): Promise<Result> {
         const result = await HttpClient.postJsonAsync("/users/save", userBlank);
         return mapToResult(result);
     }
 
-    public static async getUserById(id: string): Promise<User | null> {
+    export async function getUserById(id: string): Promise<User | null> {
         const user = await HttpClient.getJsonAsync("/users/get_by_id", { id });
         return mapToUser(user);
     }
 
-    public static async getUserDetailsForEditor(userId: string): Promise<{
+    export async function getUserDetailsForEditor(userId: string): Promise<{
         user: User,
-        userRoles: UserRole[],
         userPermission: UserPermission | null
     } | null> {
         const details = await HttpClient.getJsonAsync("/users/get_details_for_editor", { userId });
@@ -28,35 +27,38 @@ export class UsersProvider {
 
         return {
             user: mapToUser(details.user),
-            userRoles: mapToUserRoles(details.userRoles),
             userPermission: details.userPermission === null
                 ? null
                 : mapToUserPermission(details.userPermission)
         };
     }
 
-    public static async getUsers(): Promise<User[]> {
+    export async function getUsers(): Promise<User[]> {
         const users = await HttpClient.getJsonAsync("users/get_all");
         return mapToUsers(users);
     }
 
-    public static async changeUserPassword(userId: string, password: string | null, rePassword: string | null): Promise<Result> {
-        const result = await HttpClient.getJsonAsync("users/change_password", { userId, password, rePassword });
+    export async function changeUserPassword(userId: string, password: string | null, rePassword: string | null): Promise<Result> {
+        const result = await HttpClient.postJsonAsync("users/change_password", { userId, password, rePassword });
         return mapToResult(result);
     }
 
-    public static async removeUser(userId: string): Promise<Result> {
+    export async function removeUser(userId: string): Promise<Result> {
         const result = await HttpClient.getJsonAsync("users/remove", { userId });
         return mapToResult(result);
     }
 
     //UserRoles
-    public static async getUserRole(userId: string): Promise<UserRole | null> {
+    export async function getUserRole(userId: string): Promise<UserRole | null> {
         const userRole = await HttpClient.getJsonAsync("users/get_role_by_user_id", { userId });
+        return userRole === null
+            ? null
+            : mapToUserRole(userRole);
+    }
 
-        if (userRole === null) return null;
-
-        return mapToUserRole(userRole);
+    export async function getUserRoles(): Promise<UserRole[]> {
+        const userRoles = await HttpClient.getJsonAsync("users/get_all_roles");
+        return mapToUserRoles(userRoles);
     }
 }
 

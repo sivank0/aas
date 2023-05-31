@@ -48,7 +48,7 @@ public static class ServicesConfigurator
         #region Services
 
         services.AddSingleton<IUsersService, UsersService>();
-        services.AddSingleton<IUsersAuthentificationService, UsersAuthentificationService>();
+        services.AddSingleton<IUsersManagementService, UsersManagementService>();
         services.AddSingleton<IFileStorageService, FileStorageService>();
         services.AddSingleton<IBidsService, BidsService>();
         services.AddSingleton<IEmailVerificationsService, EmailVerificationsService>();

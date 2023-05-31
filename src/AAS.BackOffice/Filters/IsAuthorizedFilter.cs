@@ -1,6 +1,5 @@
 #region
 
-using System.Net;
 using AAS.BackOffice.Infrastructure;
 using AAS.Domain.AccessPolicies;
 using AAS.Domain.Services;
@@ -8,6 +7,7 @@ using AAS.Domain.Users.SystemUsers;
 using AAS.Tools.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using System.Net;
 
 #endregion
 
@@ -23,7 +23,7 @@ internal class IsAuthorizedAttribute : ActionFilterAttribute
         AccessPolicies = policies;
     }
 
-    public void OnActionExecuting(ActionExecutingContext context, IUsersAuthentificationService usersAuthentificationService)
+    public void OnActionExecuting(ActionExecutingContext context, IUsersService usersService)
     {
         try
         {
@@ -35,7 +35,7 @@ internal class IsAuthorizedAttribute : ActionFilterAttribute
             string? token = cookies[CookieNames.Token];
             if (token is null) throw new UnauthenticatedException();
 
-            SystemUser? systemUser = usersAuthentificationService.GetSystemUser(token);
+            SystemUser? systemUser = usersService.GetSystemUser(token);
             if (systemUser is null) throw new UnauthenticatedException();
             if (!IsAuthorized(systemUser)) throw new UnauthorizedException();
 
@@ -57,7 +57,7 @@ internal class IsAuthorizedAttribute : ActionFilterAttribute
     {
         if (AccessPolicies.Length == 0) return true;
 
-        return AccessPolicies.Any(policy => systemUser.HasAccess(policy));
+        return AccessPolicies.Any(systemUser.HasAccess);
     }
 
     private void SetUnauthenticated(ActionExecutingContext context)
@@ -96,11 +96,11 @@ internal class IsAuthorizedAttribute : ActionFilterAttribute
 
 public class IsAuthorizedFilter : IActionFilter
 {
-    private readonly IUsersAuthentificationService _usersAuthentificationService;
+    private readonly IUsersService _usersService;
 
-    public IsAuthorizedFilter(IUsersAuthentificationService usersAuthentificationService)
+    public IsAuthorizedFilter(IUsersService usersService)
     {
-        _usersAuthentificationService = usersAuthentificationService;
+        _usersService = usersService;
     }
 
     public void OnActionExecuting(ActionExecutingContext context)
@@ -111,7 +111,7 @@ public class IsAuthorizedFilter : IActionFilter
             .OfType<IsAuthorizedAttribute>()
             .FirstOrDefault();
 
-        authAttribute?.OnActionExecuting(context, _usersAuthentificationService);
+        authAttribute?.OnActionExecuting(context, _usersService);
     }
 
     public void OnActionExecuted(ActionExecutedContext context)

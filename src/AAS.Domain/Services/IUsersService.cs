@@ -14,16 +14,23 @@ namespace AAS.Domain.Services;
 
 public interface IUsersService
 {
+    #region Authentification
+
+    Result Authenticate(string token);
+    SystemUser? GetSystemUser(string token);
+    DataResult<UserToken?> LogIn(string? email, string? password);
+    void LogOut(string token);
+
+    #endregion
+
     #region Users
 
-    Task<Result> SaveUser(UserBlank userBlank, ID systenUserId);
     User? GetUser(ID userId, Boolean includeRemoved = false);
     User? GetUser(string email);
     (User user, EmailVerification emailVerification)? GetUserEmailVerification(ID userId);
     (User user, EmailVerification emailVerification)? GetUser(string email, string? passwordHash = null);
     (User user, EmailVerification emailVerification)? GetUserEmailVerification(string userEmailVerificationToken);
     User[] GetUsers();
-    Result ChangeUserPassword(ID userId, string? password, string? rePassword, ID systemUserId);
     Result RemoveUser(ID userId, ID systemUserId);
 
     #endregion

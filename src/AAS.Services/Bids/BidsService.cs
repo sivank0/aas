@@ -1,10 +1,12 @@
 ﻿#region
 
+using AAS.Domain.AccessPolicies;
 using AAS.Domain.Bids;
 using AAS.Domain.Bids.Enums;
 using AAS.Domain.Files;
 using AAS.Domain.Files.Enums;
 using AAS.Domain.Services;
+using AAS.Domain.Users.SystemUsers;
 using AAS.Services.Bids.Repositories;
 using AAS.Tools.Types.Files;
 using AAS.Tools.Types.IDs;
@@ -25,13 +27,16 @@ public class BidsService : IBidsService
         _fileStorageService = fileStorageService;
     }
 
-    public async Task<Result> SaveBid(BidBlank bidBlank, ID systemUserId)
+    public async Task<Result> SaveBid(BidBlank bidBlank, SystemUser systemUser)
     {
-        if (string.IsNullOrWhiteSpace(bidBlank.Title))
-            return Result.Fail("Не введен заголовок заявки");
+        if (!systemUser.HasAccess(AccessPolicy.BidsUpdate) && bidBlank.CreatedUserId != systemUser.Id)
+            return Result.Fail("Вы не имеете доступ к редактированию этой заявки");
+
+        if (String.IsNullOrWhiteSpace(bidBlank.Title))
+            return Result.Fail("Вы не ввели заголовок заявки");
 
         if (bidBlank.Status == BidStatus.Denied && string.IsNullOrWhiteSpace(bidBlank.DenyDescription))
-            return Result.Fail("Не введена причина отказа");
+            return Result.Fail("Вы не ввели причину отказа");
 
         bidBlank.Id ??= ID.New();
         bidBlank.Number ??= GetBidsMaxNumber() + 1;
@@ -51,7 +56,7 @@ public class BidsService : IBidsService
             bidFilePaths.AddRange(fileDetailsOfBytes.Select(fileDetails => fileDetails.FullPath!));
         }
 
-        _bidsRepository.SaveBid(bidBlank, bidFilePaths.ToArray(), systemUserId);
+        _bidsRepository.SaveBid(bidBlank, bidFilePaths.ToArray(), systemUser.Id);
 
         return Result.Success();
     }

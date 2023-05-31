@@ -21,6 +21,16 @@ export const UserEditorModal: React.FC<AsyncDialogProps<Props, boolean>> = ({ op
     const [userRoles, setUserRoles] = useState<UserRole[]>([]);
 
     useEffect(() => {
+        async function loadUserRoles() {
+            const userRoles = await UsersProvider.getUserRoles();
+            setUserRoles(userRoles);
+        }
+
+        if (SystemUser.hasAccess(AccessPolicy.UserRolesRead))
+            loadUserRoles()
+    }, [])
+
+    useEffect(() => {
         async function init() {
             if (props.userId === null) return setUserBlank(UserBlank.getDefault());
 
@@ -29,9 +39,6 @@ export const UserEditorModal: React.FC<AsyncDialogProps<Props, boolean>> = ({ op
             if (details === null) return;
 
             setUserBlank(UserBlank.fromUser(details.user, details.userPermission?.roleId));
-
-            if (SystemUser.hasAccess(AccessPolicy.UserRolesRead))
-                setUserRoles(details.userRoles);
         }
 
         if (open) init();
@@ -107,7 +114,7 @@ export const UserEditorModal: React.FC<AsyncDialogProps<Props, boolean>> = ({ op
                         value={userBlank.email}
                         onChange={(email) => setUserBlank(blank => ({ ...blank, email }))} />
                     {
-                        props.userId === null &&
+                        userBlank.id === null &&
                         <>
                             <InputForm
                                 type="password"

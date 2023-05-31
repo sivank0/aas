@@ -11,11 +11,12 @@ export interface BidBlank {
     status: BidStatus,
     acceptanceDate: Date | null,
     approximateDate: string | Date | null | undefined,
-    fileBlanks: FileBlank[]
+    fileBlanks: FileBlank[],
+    createdUserId: string
 }
 
 export namespace BidBlank {
-    export function getDefault(): BidBlank {
+    export function getDefault(systemUserId: string): BidBlank {
         return {
             id: null,
             number: null,
@@ -26,6 +27,7 @@ export namespace BidBlank {
             acceptanceDate: null,
             approximateDate: null,
             fileBlanks: [],
+            createdUserId: systemUserId
         }
     }
 
@@ -39,7 +41,8 @@ export namespace BidBlank {
             status: bid.status,
             acceptanceDate: bid.acceptanceDate,
             approximateDate: bid.approximateDate,
-            fileBlanks: bid.files.map(file => FileBlank.fromFile(file))
+            fileBlanks: bid.files.map(file => FileBlank.fromFile(file)),
+            createdUserId: bid.createdUserId
         }
     }
 }

@@ -12,17 +12,18 @@ namespace AAS.BackOffice.Areas.Users.Controllers;
 public class UserProfileController : BaseController
 {
     private readonly IUsersService _usersService;
-
-    public UserProfileController(IUsersService usersService)
+    private readonly IUsersManagementService _usersManagementService;
+    public UserProfileController(IUsersService usersService, IUsersManagementService usersManagementService)
     {
         _usersService = usersService;
+        _usersManagementService = usersManagementService;
     }
 
     [HttpPost("user_profile/save")]
     [IsAuthorized(AccessPolicy.UserProfile)]
     public Task<Result> SaveUser([FromBody] UserBlank userBlank)
     {
-        return _usersService.SaveUser(userBlank, SystemUser.Id);
+        return _usersManagementService.SaveUser(userBlank, SystemUser.Id);
     }
 
     [HttpGet("user_profile/get_by_id")]

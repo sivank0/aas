@@ -1,6 +1,6 @@
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined'
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile'
-import { Box, Button, FormControl, Grid, InputAdornment, InputLabel, OutlinedInput, Typography } from '@mui/material'
+import { Box, Button, FormControl, InputAdornment, InputLabel, OutlinedInput, Tooltip, Typography } from '@mui/material'
 import { SxProps, Theme } from '@mui/material/styles'
 import React, { DragEvent, useEffect, useMemo, useRef, useState } from 'react'
 import { FileArea } from '../../../domain/files/enums/fileArea'
@@ -10,6 +10,7 @@ import useDialog from '../../../hooks/useDialog'
 import { readAsDataUrl } from '../../../tools/utils/fileReader'
 import { CloseIconButton } from '../../buttons/button'
 import { ConfirmDialogModal } from '../../modals/modal'
+import { MultiFileInputStyles } from './multiFileInputStyles'
 
 export interface IProps extends FileProps {
     title: string,
@@ -65,7 +66,7 @@ export function MultiFileInput(props: IProps) {
     }
 
     async function renderPreview(files: FileList | null) {
-        if (files === null) return;
+        if (files === null || props.disabled) return;
 
         const newFileBlanks = new Array<FileBlank>()
 
@@ -84,6 +85,8 @@ export function MultiFileInput(props: IProps) {
     }
 
     async function removeFile(index?: number) {
+        if (props.disabled) return;
+
         if (index === undefined) {
             const isConfirmed = await confirmationDialog.show({ title: "Вы действительно хотите удалить  все файлы?" })
 
@@ -111,60 +114,79 @@ export function MultiFileInput(props: IProps) {
     }
 
     return (
-        <FormControl fullWidth>
+        <FormControl sx={MultiFileInputStyles} fullWidth disabled={props.disabled}>
             <InputLabel shrink htmlFor={props.title}>{props.title}</InputLabel>
             <OutlinedInput
                 {...dropProps}
                 id={props.title}
                 label={props.title}
+                disabled={props.disabled}
                 title={props.title}
-                sx={{ userSelect: "none", cursor: "pointer", height: 130, "& .MuiInputBase-input": { userSelect: "none", cursor: "pointer" } }}
+                className={
+                    props.disabled
+                        ? 'disabledOutlinedInput'
+                        : 'outlinedInput'
+                }
                 onClick={() => inputRef.current?.click()}
                 startAdornment={<InputAdornment position="start"><FileUploadOutlinedIcon /></InputAdornment>}
                 value='Перетащите сюда файл или нажмите здесь чтобы загрузить его'
                 multiline
                 readOnly />
-            <input type="file" accept={props.extensions?.join(',')} hidden ref={inputRef} multiple onChange={e => renderPreview(e.target.files)} />
+            <input
+                type="file"
+                disabled={props.disabled}
+                accept={props.extensions?.join(',')}
+                hidden
+                ref={inputRef}
+                multiple
+                onChange={e => renderPreview(e.target.files)} />
             {
                 (isInit && fileBlanks.length !== 0) &&
-                <Grid container spacing={2} sx={{ marginTop: 0 }}>
+                <Box className='filesContainer'>
                     {
                         fileBlanks.filter(fileBlank => fileBlank.state !== FileState.Removed).map((fileBlank, index) =>
-                            <Grid
+                            <Box
                                 key={`upload-file--${index} `}
-                                item xl={3} lg={4} xs={6}
-                                sx={{
-                                    mb: 0,
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    alignItems: 'center'
-                                }}>
-                                <Box
-                                    onClick={() => props.getFile(fileBlank)}
-                                    sx={{
-                                        display: 'flex',
-                                        gap: 1,
-                                        alignItems: 'center',
-                                        border: '1px solid #cbc8c8',
-                                        borderRadius: 1,
-                                        padding: 1,
-                                        cursor: 'pointer',
-                                        ':hover': {
-                                            backgroundColor: '#f1f1f1'
-                                        }
-                                    }}>
+                                className={
+                                    props.disabled
+                                        ? 'disabledFileCard'
+                                        : 'fileCard'
+                                }
+                                onClick={() =>
+                                    props.disabled
+                                        ? undefined
+                                        : props.getFile(fileBlank)
+                                } >
+                                <Box className='mergedContainer'>
                                     <InsertDriveFileIcon color='primary' />
-                                    <Typography sx={{ lineHeight: 1 }}>{fileBlank.name}</Typography>
-                                    <CloseIconButton title='Удалить файл' sx={{ '& .MuiSvgIcon-root': { color: "#000" } }} onClick={() => removeFile(index)} />
+                                    <Box className='croppedTitleContainer'>
+                                        <Tooltip title={fileBlank.name}>
+                                            <Typography className='croppedTitle' noWrap>
+                                                {fileBlank.name}
+                                            </Typography>
+                                        </Tooltip>
+                                    </Box>
                                 </Box>
-                            </Grid>
+                                {
+                                    !props.disabled &&
+                                    <CloseIconButton
+                                        title='Удалить файл'
+                                        className='darkClosedIconButton'
+                                        onClick={() => removeFile(index)} />
+                                }
+                            </Box>
                         )}
-                </Grid>
+                </Box>
             }
             {
                 fileBlanks.filter(fileBlank => fileBlank.state !== FileState.Removed).length !== 0 &&
                 <Typography component="div" align="right" sx={{ mt: 1 }}>
-                    <Button size="small" disabled={props.disabled} onClick={() => removeFile()}>Удалить всё</Button>
+                    <Button
+                        size="small"
+                        disabled={props.disabled}
+                        onClick={() => removeFile()}>
+                        Удалить всё
+                    </Button>
                 </Typography>
             }
         </FormControl>

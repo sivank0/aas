@@ -2,15 +2,17 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { Box, IconButton, Tooltip } from '@mui/material';
 import { endOfDay } from "date-fns";
 import { ru } from 'date-fns/locale';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/dist/style.css';
+import { AccessPolicy } from '../../../domain/accessPolicies/accessPolicy';
 import { BidBlank } from '../../../domain/bids/bidBlank';
 import { BidsProvider } from '../../../domain/bids/bidProvider';
 import { BidStatus } from '../../../domain/bids/bidStatus';
 import { FileArea } from '../../../domain/files/enums/fileArea';
 import { FileState } from '../../../domain/files/enums/fileState';
 import { FileBlank } from '../../../domain/files/fileBlank';
+import SystemUser from '../../../domain/systemUser';
 import useDialog from '../../../hooks/useDialog';
 import { SaveButton } from '../../../sharedComponents/buttons/button';
 import { ToggleButtons } from '../../../sharedComponents/buttons/toggleButtons';
@@ -24,12 +26,20 @@ interface Props {
 }
 
 export const BidEditorModal: React.FC<AsyncDialogProps<Props, boolean>> = ({ open, handleClose, data: props }) => {
-    const [bidBlank, setBidBlank] = useState<BidBlank>(BidBlank.getDefault());
+    const [bidBlank, setBidBlank] = useState<BidBlank>(BidBlank.getDefault(SystemUser.id));
     const confirmationDialog = useDialog(ConfirmDialogModal)
+
+    const canUserUpdateBid = useMemo(() => {
+        if (SystemUser.hasAccess(AccessPolicy.BidsUpdate)) return true
+
+        if (bidBlank.createdUserId === SystemUser.id) return true;
+
+        return false;
+    }, [bidBlank])
 
     useEffect(() => {
         async function init() {
-            if (props.bidId === null) return setBidBlank(BidBlank.getDefault());
+            if (props.bidId === null) return setBidBlank(BidBlank.getDefault(SystemUser.id));
 
             const bid = await BidsProvider.getBidById(props.bidId);
 
@@ -41,11 +51,12 @@ export const BidEditorModal: React.FC<AsyncDialogProps<Props, boolean>> = ({ ope
 
         if (open) init();
 
-        return () => setBidBlank(BidBlank.getDefault());
+        return () => setBidBlank(BidBlank.getDefault(SystemUser.id));
     }, [props.bidId, open])
 
-
     async function saveBidBlank() {
+        if (!canUserUpdateBid) return;
+
         bidBlank.approximateDate = endOfDay(new Date(bidBlank.approximateDate!))
 
         const result = await BidsProvider.saveBid(bidBlank)
@@ -143,6 +154,7 @@ export const BidEditorModal: React.FC<AsyncDialogProps<Props, boolean>> = ({ ope
                         sx={{ marginRight: 2 }}
                         type="text"
                         label='Тема'
+                        disabled={!canUserUpdateBid}
                         placeholder='Введите тему'
                         value={bidBlank.title}
                         onChange={(title) => setBidBlank(blank => ({ ...blank, title }))} />
@@ -150,12 +162,14 @@ export const BidEditorModal: React.FC<AsyncDialogProps<Props, boolean>> = ({ ope
                         type="text-area"
                         label='Описание'
                         placeholder='Введите описание'
+                        disabled={!canUserUpdateBid}
                         minRows={3}
                         value={bidBlank.description}
                         onChange={(description) => setBidBlank(blank => ({ ...blank, description }))} />
                     <DayPicker locale={ru}
                         ISOWeek mode="single"
                         showOutsideDays
+                        disabled={!canUserUpdateBid}
                         footer={'Выберите дату окончания разработки'}
                         selected={new Date(bidBlank.approximateDate!)}
                         onSelect={(approximateDate) => setBidBlank(blank => ({ ...blank, approximateDate }))} />
@@ -164,6 +178,7 @@ export const BidEditorModal: React.FC<AsyncDialogProps<Props, boolean>> = ({ ope
                         <ToggleButtons
                             value={bidBlank.status}
                             exclusive={true}
+                            disabled={!canUserUpdateBid}
                             options={Enum.getNumberValues<BidStatus>(BidStatus)}
                             getOptionLabel={(option) => BidStatus.getDisplayName(option)}
                             onChange={(status) => setBidBlank(blank => ({ ...blank, status }))} />
@@ -173,6 +188,7 @@ export const BidEditorModal: React.FC<AsyncDialogProps<Props, boolean>> = ({ ope
                         <InputForm
                             type="text-area"
                             label='Причина отклонения'
+                            disabled={!canUserUpdateBid}
                             placeholder='Введите причину отклонения'
                             minRows={3}
                             value={bidBlank.denyDescription}
@@ -183,6 +199,7 @@ export const BidEditorModal: React.FC<AsyncDialogProps<Props, boolean>> = ({ ope
                             title="Загрузить файлы"
                             type="multi-file-input"
                             extensions={[".jpg", ".jpeg", ".png", ".bmp", ".tif", ".webp", ".doc", ".docx"]}
+                            disabled={!canUserUpdateBid}
                             fileArea={FileArea.Bid}
                             fileBlanks={bidBlank.fileBlanks}
                             onChange={(fileBlanks) => changeBidFileBlanks(fileBlanks)}
@@ -191,19 +208,22 @@ export const BidEditorModal: React.FC<AsyncDialogProps<Props, boolean>> = ({ ope
                     </Box>
                 </Box>
             </ModalBody>
-            <ModalActions>
-                {
-                    props.bidId !== null &&
-                    <Tooltip title="Удалить">
-                        <IconButton onClick={() => removeBid(props.bidId)}>
-                            <DeleteIcon />
-                        </IconButton>
-                    </Tooltip>
-                }
-                <SaveButton
-                    variant="contained"
-                    onClick={() => saveBidBlank()} />
-            </ModalActions>
+            {
+                canUserUpdateBid &&
+                <ModalActions>
+                    {
+                        props.bidId !== null &&
+                        <Tooltip title="Удалить">
+                            <IconButton onClick={() => removeBid(props.bidId)}>
+                                <DeleteIcon />
+                            </IconButton>
+                        </Tooltip>
+                    }
+                    <SaveButton
+                        variant="contained"
+                        onClick={() => saveBidBlank()} />
+                </ModalActions>
+            }
         </Modal>
     )
 }

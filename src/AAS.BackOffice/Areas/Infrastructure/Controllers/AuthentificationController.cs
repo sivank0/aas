@@ -15,11 +15,13 @@ namespace AAS.BackOffice.Areas.Infrastructure.Controllers;
 
 public class AuthenticationController : BaseController
 {
-    private readonly IUsersAuthentificationService _usersAuthentificationService;
+    private readonly IUsersService _usersService;
+    private readonly IUsersManagementService _usersManagementService;
 
-    public AuthenticationController(IUsersAuthentificationService usersAuthentificationService)
+    public AuthenticationController(IUsersService usersService, IUsersManagementService usersManagementService)
     {
-        _usersAuthentificationService = usersAuthentificationService;
+        _usersService = usersService;
+        _usersManagementService = usersManagementService;
     }
 
     [HttpGet("/authentication")]
@@ -29,7 +31,7 @@ public class AuthenticationController : BaseController
 
         if (string.IsNullOrWhiteSpace(token)) return ReactApp();
 
-        Result authenticationResult = _usersAuthentificationService.Authenticate(token);
+        Result authenticationResult = _usersService.Authenticate(token);
 
         if (!authenticationResult.IsSuccess) return ReactApp();
 
@@ -39,17 +41,14 @@ public class AuthenticationController : BaseController
     [HttpPost("authentication/register_user")]
     public Result RegisterUser([FromBody] UserRegistrationBlank userRegistrationBlank)
     {
-        DataResult<UserToken?>
-            registrationResult =
-                _usersAuthentificationService.RegisterUser(
-                    userRegistrationBlank);
+        DataResult<UserToken?> registrationResult = _usersManagementService.RegisterUser(userRegistrationBlank);
 
         if (!registrationResult.IsSuccess) return Result.Fail(registrationResult.Errors[0].Message);
 
-        Result authenticationResult = _usersAuthentificationService.Authenticate(registrationResult.Data!.Token);
+        Result authenticationResult = _usersService.Authenticate(registrationResult.Data!.Token);
 
         if (registrationResult.IsSuccess && !authenticationResult.IsSuccess)
-            return Result.Fail("Обратитесь к администратору для того, чтобы начать пользоваться сервисом");
+            return Result.Fail("Подтвердите свой адрес электронной почты, чтобы начать пользоваться сервисом");
 
         CookieManager.Write(Response, new Cookie(CookieNames.Token, registrationResult.Data!.Token), DateTime.MaxValue);
         return Result.Success();
@@ -65,7 +64,7 @@ public class AuthenticationController : BaseController
         if (!string.IsNullOrWhiteSpace(oldToken)) return DataResult<string?>.Success(oldToken);
 
         DataResult<UserToken?> authentificationResult =
-            _usersAuthentificationService.LogIn(userAuthenticationRequest.Email, userAuthenticationRequest.Password);
+            _usersService.LogIn(userAuthenticationRequest.Email, userAuthenticationRequest.Password);
 
         if (!authentificationResult.IsSuccess)
             return DataResult<string?>.Fail(authentificationResult.Errors[0].Message);
@@ -85,7 +84,7 @@ public class AuthenticationController : BaseController
 
         if (token is null) return Result.Fail("Токен не найден");
 
-        _usersAuthentificationService.LogOut(token);
+        _usersService.LogOut(token);
         CookieManager.Delete(Response, CookieNames.Token);
         return Result.Success();
     }

@@ -18,10 +18,12 @@ namespace AAS.BackOffice.Areas.Users.Controllers;
 public class UsersController : BaseController
 {
     private readonly IUsersService _usersService;
+    private readonly IUsersManagementService _usersManagementService;
 
-    public UsersController(IUsersService usersService)
+    public UsersController(IUsersService usersService, IUsersManagementService usersManagementService)
     {
         _usersService = usersService;
+        _usersManagementService = usersManagementService;
     }
 
     #region Users
@@ -30,7 +32,7 @@ public class UsersController : BaseController
     [IsAuthorized(AccessPolicy.UsersRead)]
     public Task<Result> SaveUser([FromBody] UserBlank userBlank)
     {
-        return _usersService.SaveUser(userBlank, SystemUser.Id);
+        return _usersManagementService.SaveUser(userBlank, SystemUser.Id);
     }
 
     [HttpGet("users/get_by_id")]
@@ -48,17 +50,11 @@ public class UsersController : BaseController
 
         if (user is null) return null;
 
-        bool hasUserRolesReadAccess = SystemUser.HasAccess(AccessPolicy.UserRolesRead);
-
-        UserRole[] userRoles = hasUserRolesReadAccess
-            ? _usersService.GetUserRoles()
-            : Array.Empty<UserRole>();
-
-        UserPermission? userPermission = hasUserRolesReadAccess
+        UserPermission? userPermission = SystemUser.HasAccess(AccessPolicy.UserRolesRead)
             ? _usersService.GetUserPermission(userId)
             : null;
 
-        return new { user, userRoles, userPermission };
+        return new { user, userPermission };
     }
 
     [HttpGet("users/get_all")]
@@ -70,11 +66,11 @@ public class UsersController : BaseController
 
     public record ChangeUserPasswordRequest(ID UserId, string? Password, string? RePassword);
 
-    [HttpGet("users/change_password")]
+    [HttpPost("users/change_password")]
     [IsAuthorized(AccessPolicy.UsersUpdate)]
     public Result ChangeUserPassword(ChangeUserPasswordRequest changeUserPasswordRequest)
     {
-        return _usersService.ChangeUserPassword(
+        return _usersManagementService.ChangeUserPassword(
             changeUserPasswordRequest.UserId,
             changeUserPasswordRequest.Password,
             changeUserPasswordRequest.RePassword,
@@ -90,6 +86,13 @@ public class UsersController : BaseController
     }
 
     #endregion
+
+    [HttpGet("users/get_all_roles")]
+    [IsAuthorized(AccessPolicy.UserRolesRead)]
+    public UserRole[] GetUserRoles()
+    {
+        return _usersService.GetUserRoles();
+    }
 
     [HttpGet("users/get_role_by_user_id")]
     [IsAuthorized(AccessPolicy.UsersRead)]

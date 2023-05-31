@@ -45,7 +45,7 @@ export const SuccessButton = (props: PropsWithChildren<ButtonProps>) => {
             startIcon={
                 <DoneIcon
                     fontSize={props.size}
-                    sx={{ color: '#fff'}}/>
+                    sx={{ color: '#fff' }} />
             }
             onClick={props.onClick}>
             {props.children ?? "Подтвердить"}
@@ -64,7 +64,7 @@ export const CancelButton = (props: PropsWithChildren<ButtonProps>) => {
             startIcon={
                 <CancelIcon
                     fontSize={props.size}
-                    sx={{ color: '#fff'}} />
+                    sx={{ color: '#fff' }} />
             }
             onClick={props.onClick}>
             {props.children ?? "Отменить"}
@@ -94,6 +94,7 @@ export const AddButton = (props: PropsWithChildren<ButtonProps>) => {
 
 interface IconButtonProps extends ButtonProps {
     title: string;
+    className?: string;
 }
 
 export const CloseIconButton = (props: IconButtonProps) => {
@@ -102,6 +103,7 @@ export const CloseIconButton = (props: IconButtonProps) => {
             <IconButton
                 disabled={props.disabled}
                 sx={props.sx}
+                className={props.className}
                 size={props.size}
                 onClick={props.onClick}>
                 <CloseIcon

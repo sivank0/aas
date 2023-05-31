@@ -2,6 +2,7 @@
 
 using AAS.Domain.Bids;
 using AAS.Domain.Bids.Enums;
+using AAS.Domain.Users.SystemUsers;
 using AAS.Tools.Types.IDs;
 using AAS.Tools.Types.Results;
 
@@ -11,7 +12,7 @@ namespace AAS.Domain.Services;
 
 public interface IBidsService
 {
-    Task<Result> SaveBid(BidBlank bidBlank, ID systenUserId);
+    Task<Result> SaveBid(BidBlank bidBlank, SystemUser systenUser);
     Bid? GetBid(ID id);
     Bid[] GetAllBids();
     Result ChangeBidDenyDescription(ID bidId, String? bidDenyDescription = null, Boolean canBeBidDenyDescriptionNull = false);

@@ -18,9 +18,10 @@ public class BidBlank
     public FileBlank[] FileBlanks { get; set; }
     public BidStatus Status { get; set; }
     public DateOnly? ApproximateDate { get; set; }
+    public ID CreatedUserId { get; set; }
 
     public BidBlank(ID? id, int? number, string? title, string? description, string? denyDescription, FileBlank[] fileBlanks, BidStatus status,
-        DateOnly? approximateDate)
+        DateOnly? approximateDate, ID createdUserId)
     {
         Id = id;
         Number = number;
@@ -30,5 +31,6 @@ public class BidBlank
         FileBlanks = fileBlanks;
         Status = status;
         ApproximateDate = approximateDate;
+        CreatedUserId = createdUserId;
     }
 }

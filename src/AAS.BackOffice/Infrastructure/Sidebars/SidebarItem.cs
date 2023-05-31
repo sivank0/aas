@@ -1,12 +1,9 @@
-#region
-
 using AAS.BackOffice.Areas.Infrastructure.Models;
 using AAS.Domain.AccessPolicies;
 using AAS.Domain.Users.UserAccesses;
 using AAS.Tools.Types.IDs;
 using Microsoft.AspNetCore.Mvc;
-
-#endregion
+using AAS.Domain.AccessPolicies.Extensions;
 
 namespace AAS.BackOffice.Infrastructure.Sidebars;
 
@@ -61,8 +58,7 @@ public class SidebarItem
     {
         if (access is null) return false;
 
-        //return AvailableForAccessPolicies.Any(p => p.UserHasPermission(access));
-        return true;
+        return AvailableForAccessPolicies.Any(p => p.UserHasPermission(access));
     }
 
     public SidebarItem Clone()
