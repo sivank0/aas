@@ -16,6 +16,7 @@ import { UserProfileProvider } from '../../domain/users/usersProvider';
 import useDialog from '../../hooks/useDialog';
 import { ChangePasswordModal } from './changePasswordModal';
 import { UserEditorModal } from './userEditorModal';
+import {TooltippedAvatar} from "../../sharedComponents/avatar";
 
 export const UserProfile = () => {
     const [user, setUser] = useState<User | null>(null);
@@ -66,11 +67,7 @@ export const UserProfile = () => {
                                 justifyContent: 'space-between',
                                 flexDirection: 'row'
                             }}>
-                                <Typography sx={{
-                                    fontSize: '20pt'
-                                }}>
-                                    Профиль
-                                </Typography>
+                                <TooltippedAvatar imageSrc={SystemUser.photo?.url} title={SystemUser.fullName} />
                                 <IconButton onClick={() => openUserEditorModal(user?.id ?? null)}>
                                     <EditIcon />
                                 </IconButton>

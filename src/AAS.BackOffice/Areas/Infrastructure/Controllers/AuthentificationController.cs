@@ -49,7 +49,7 @@ public class AuthenticationController : BaseController
         Result authenticationResult = _usersAuthentificationService.Authenticate(registrationResult.Data!.Token);
 
         if (registrationResult.IsSuccess && !authenticationResult.IsSuccess)
-            return Result.Fail("Обратитесь к администратору для того, чтобы начать пользоваться сервисом");
+            return Result.Fail("Подтвердите почту, чтобы пользоваться сервисом");
 
         CookieManager.Write(Response, new Cookie(CookieNames.Token, registrationResult.Data!.Token), DateTime.MaxValue);
         return Result.Success();
