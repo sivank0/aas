@@ -1,21 +1,23 @@
-import { DragDropContext, Draggable, DropResult, Droppable } from "@hello-pangea/dnd";
+import {DragDropContext, Draggable, DropResult, Droppable} from "@hello-pangea/dnd";
 import {
-    Box,
+    Box, Button,
     Container,
     Divider,
-    Paper
+    Paper, TextField
 } from '@mui/material';
 import React, {useEffect, useMemo, useState} from 'react';
-import { Bid } from '../../domain/bids/bid';
-import { BidsProvider } from '../../domain/bids/bidProvider';
-import { BidStatus } from "../../domain/bids/bidStatus";
+import {Bid} from '../../domain/bids/bid';
+import {BidsProvider} from '../../domain/bids/bidProvider';
+import {BidStatus} from "../../domain/bids/bidStatus";
 import useDialog from "../../hooks/useDialog";
-import { AddButton } from '../../sharedComponents/buttons/button';
-import { BidCard } from '../../sharedComponents/cards/bidCard';
-import { Enum } from "../../tools/types/enum";
-import { BidDenyDescriptionEditorModal } from "./modals/bidDenyDescriptionEditorModal";
-import { BidEditorModal } from "./modals/bidEditorModal";
+import {AddButton} from '../../sharedComponents/buttons/button';
+import {BidCard} from '../../sharedComponents/cards/bidCard';
+import {Enum} from "../../tools/types/enum";
+import {BidDenyDescriptionEditorModal} from "./modals/bidDenyDescriptionEditorModal";
+import {BidEditorModal} from "./modals/bidEditorModal";
 import {ThemeMode} from "../../sharedComponents/themeMode";
+import SearchIcon from '@mui/icons-material/Search';
+import {InputForm} from "../../sharedComponents/inputs/inputForm";
 
 type PaginationState = {
     page: number;
@@ -32,17 +34,17 @@ type Column = {
 const themeModeKey = 'themeMode'
 
 export const BidsPage = () => {
-    const themeMode = useMemo(()=>{
+    const themeMode = useMemo(() => {
         const localThemeMode = localStorage.getItem(themeModeKey)
 
         if (String.isNullOrWhitespace(localThemeMode)) {
             return localStorage.setItem(themeModeKey, ThemeMode.getValue(ThemeMode.Light))
         }
 
-       return localThemeMode === ThemeMode.getValue(ThemeMode.Light)
+        return localThemeMode === ThemeMode.getValue(ThemeMode.Light)
             ? ThemeMode.Light
             : ThemeMode.Dark
-    },[localStorage.getItem(themeModeKey)])
+    }, [localStorage.getItem(themeModeKey)])
 
     const bidDenyDescriptionEditorModal = useDialog(BidDenyDescriptionEditorModal);
     const bidEditorModal = useDialog(BidEditorModal);
@@ -50,6 +52,7 @@ export const BidsPage = () => {
     const [columns, setColumns] = useState<Column[]>([]);
     const [bids, setBids] = useState<Bid[]>([]);
     const [isInit, setIsInit] = useState<boolean>(false);
+    const [searchText, setSearchText] = useState<string | null>(null);
 
     useEffect(() => {
         try {
@@ -84,7 +87,7 @@ export const BidsPage = () => {
     async function onDragEnd(result: DropResult) {
         if (!result.destination) return;
 
-        const { source, destination, draggableId } = result;
+        const {source, destination, draggableId} = result;
 
         if (source.droppableId === destination.droppableId) return;
 
@@ -105,7 +108,7 @@ export const BidsPage = () => {
 
     async function changeBidStatus(bidId: string, bidStatus: BidStatus) {
         if (bidStatus === BidStatus.Denied) {
-            const isEdited = await bidDenyDescriptionEditorModal.show({ bidId });
+            const isEdited = await bidDenyDescriptionEditorModal.show({bidId});
 
             if (!isEdited) {
                 loadBids();
@@ -121,21 +124,47 @@ export const BidsPage = () => {
     }
 
     async function openBidEditorModal(bidId: string | null = null) {
-        const isEdited = await bidEditorModal.show({ bidId });
+        const isEdited = await bidEditorModal.show({bidId});
 
         if (!isEdited) return;
 
         loadBids();
     }
 
+    async function searchClick(){
+
+        if (searchText === null) {
+            loadBids();
+            return;
+        }
+        const bids = await BidsProvider.getBidsBySearch(searchText);
+        setBids(bids);
+    }
+
     return (
-        <Container maxWidth={false} sx={{ paddingTop: 2, height: '100%' }}>
-            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                <AddButton onClick={() => openBidEditorModal()}>
+        <Container maxWidth={false} sx={{paddingTop: 2, height: '100%'}}>
+            <Box sx={{display: "flex", justifyContent: "space-between"}}>
+                <AddButton onClick={() => openBidEditorModal()} sx={{minWidth: '200px', maxHeight: '90%'}}>
                     Создать заявку
                 </AddButton>
+                <InputForm sx={{
+                    marginLeft: '10px'
+                }}
+                           label='Поиск'
+                           type='text'
+                           placeholder="Введите искомый текст"
+                           value={searchText}
+                           onChange={(searchText) => setSearchText(searchText)}/>
+                <Button variant='contained' sx={{
+                    marginLeft: '10px',
+                    maxHeight: '85%',
+                    maxWidth: '85%'
+                }}
+                    onClick={searchClick}>
+                    <SearchIcon/>
+                </Button>
             </Box>
-            <Divider sx={{ marginY: 3 }} />
+            <Divider sx={{marginY: 3}}/>
             <DragDropContext onDragEnd={(result) => onDragEnd(result)}>
                 <Box sx={{
                     display: 'grid',
@@ -147,7 +176,7 @@ export const BidsPage = () => {
                 }}>
                     {
                         columns.map(column =>
-                            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                            <Box sx={{display: 'flex', flexDirection: 'column', gap: 2}}>
                                 <Paper
                                     key={`head--${column.id}`}
                                     sx={{
@@ -191,7 +220,7 @@ export const BidsPage = () => {
                                                                                     ':last-child': {
                                                                                         marginBottom: 0
                                                                                     }
-                                                                                }} />
+                                                                                }}/>
                                                                         )
                                                                     }
                                                                 }

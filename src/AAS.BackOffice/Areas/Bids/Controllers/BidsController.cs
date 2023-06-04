@@ -43,6 +43,13 @@ public class BidsController : BaseController
     {
         return _bidsService.GetAllBids();
     }
+    
+    [HttpGet("bids/get_by_search")]
+    [IsAuthorized(AccessPolicy.BidsRead)]
+    public Bid[] GetBidsBySearch(string searchableText)
+    {
+        return _bidsService.GetBySearch(searchableText);
+    }
 
     [HttpGet("bids/change_bid_deny_description")]
     [IsAuthorized(AccessPolicy.BidsUpdate)]

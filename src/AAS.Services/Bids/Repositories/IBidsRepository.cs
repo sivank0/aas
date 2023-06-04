@@ -14,6 +14,7 @@ public interface IBidsRepository
     public void SaveBid(BidBlank bidBlank,String[] bidFilePaths, ID systemUserId);
     public Bid? GetBid(ID id);
     public Bid[] GetAllBids();
+    public Bid[] GetBySearch(string searchableText);
     public int GetBidsMaxNumber();
     public void ChangeBidDenyDescription(ID bidId, String bidDenyDescription);
     public void ChangeBidStatus(ID bidId, BidStatus bidStatus);

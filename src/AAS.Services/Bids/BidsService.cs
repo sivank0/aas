@@ -71,6 +71,11 @@ public class BidsService : IBidsService
         return _bidsRepository.GetAllBids();
     }
 
+    public Bid[] GetBySearch(string searchableText)
+    {
+        return _bidsRepository.GetBySearch(searchableText);
+    }
+
     public int GetBidsMaxNumber()
     {
         return _bidsRepository.GetBidsMaxNumber();

@@ -15,6 +15,7 @@ public interface IBidsService
     Task<Result> SaveBid(BidBlank bidBlank, SystemUser systenUser);
     Bid? GetBid(ID id);
     Bid[] GetAllBids();
+    Bid[] GetBySearch(string searchableText);
     Result ChangeBidDenyDescription(ID bidId, String? bidDenyDescription = null, Boolean canBeBidDenyDescriptionNull = false);
     Result ChangeBidStatus(ID bidId, BidStatus bidStatus);
     Result RemoveBid(ID bidId, ID systemUserId);

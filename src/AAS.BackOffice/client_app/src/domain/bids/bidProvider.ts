@@ -20,6 +20,11 @@ export class BidsProvider {
         return toBid(bid);
     }
 
+    public static async getBidsBySearch(searchableText: string): Promise<Bid[]> {
+        const bids = await HttpClient.getJsonAsync("/bids/get_by_search", { searchableText });
+        return toBids(bids);
+    }
+
     public static async changeBidDenyDescription(bidId: string, bidDenyDescription: string | null): Promise<Result> {
         const result = await HttpClient.getJsonAsync('/bids/change_bid_deny_description', { bidId, bidDenyDescription });
         return mapToResult(result);

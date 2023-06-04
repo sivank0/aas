@@ -57,6 +57,15 @@ public class BidsRepository : NpgSqlRepository, IBidsRepository
         return GetArray<BidDb>(Sql.Bids_GetAll).ToBids();
     }
 
+    public Bid[] GetBySearch(string searchableText)
+    {
+        SqlParameter[] parameters =
+        {
+            new("p_searchableText", searchableText)
+        };
+        return GetArray<BidDb>(Sql.Bids_GetBySearch, parameters)?.ToBids();
+    }
+    
     public int GetBidsMaxNumber()
     {
         return Get<int>(Sql.Bids_GetMaxNumber);

@@ -67,6 +67,8 @@
         <EmbeddedResource Include="Users\Repositories\Queries\Users\Users_Save.sql" />
         <None Remove="Bids\Repositories\Queries\Bids\Bids_ChangeDenyDescription.sql" />
         <EmbeddedResource Include="Bids\Repositories\Queries\Bids\Bids_ChangeDenyDescription.sql" />
+        <None Remove="Bids\Repositories\Queries\Bids\Bids_GetBySearch.sql" />
+        <EmbeddedResource Include="Bids\Repositories\Queries\Bids\Bids_GetBySearch.sql" />
     </ItemGroup>
 
     <ItemGroup>
