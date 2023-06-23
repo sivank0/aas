@@ -21,14 +21,11 @@ public class UpdatesController : BaseController
     [HttpGet("updates/create_default_role")]
     [IsAuthorized(AccessPolicy.UserRolesUpdate)]
     public String CreateDefaultRole()
-    {
+    { 
         UserRoleBlank userRoleBlank = new(
             Configurations.BackOffice.DefaultRoleId,
-            "Пользователь",
-            new AccessPolicy[] {
-                AccessPolicy.UserProfile,
-                AccessPolicy.BidsRead
-            }
+            "Администратор",
+            Enum.GetValues<AccessPolicy>()
         );
 
         _usersService.SaveUserRole(userRoleBlank, SystemUser.Id);
